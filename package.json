@@ -1,0 +1,31 @@
+{
+  "name": "slideshow-map",
+  "version": "1.0.0",
+  "description": "slideshow map for fr",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-serve --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/yuqianma/slideshow-map.git"
+  },
+  "keywords": [
+    "map",
+    "3d"
+  ],
+  "author": "Yuqian Ma",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yuqianma/slideshow-map/issues"
+  },
+  "homepage": "https://github.com/yuqianma/slideshow-map#readme",
+  "devDependencies": {
+    "internal-ip": "^3.0.1",
+    "webpack": "^4.5.0",
+    "webpack-serve": "^0.3.1"
+  },
+  "dependencies": {
+    "three": "^0.91.0"
+  }
+}
