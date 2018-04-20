@@ -4,12 +4,14 @@ import OrbitControls from 'three-orbitcontrols';
 const THREE = Object.assign(three, {OrbitControls});
 
 var scene = new THREE.Scene();
-// scene.fog = new THREE.Fog(0x000000, 300, 800);
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 2000 );
+scene.fog = new THREE.Fog(0x000000, 300, 800);
+var camera = new THREE.PerspectiveCamera( 36, window.innerWidth / window.innerHeight, 1, 2000 );
 camera.position.x = 10;
 camera.position.y = 20;
 camera.position.z = 30;
 camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+console.log(camera);
 
 var renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
@@ -95,6 +97,24 @@ function updateGroupGeometry( mesh, geometry ) {
     // these do not update nicely together if shared
 
 }
+
+function boxs (Num) {
+    const mat = new THREE.MeshPhongMaterial();
+
+    let i = -Num / 2;
+    while (++i < Num / 2) {
+        let j = -Num / 2;
+        while(++j < Num / 2) {
+            const box = new THREE.BoxGeometry(1, 1, 1);
+            box.translate(i * 20, 0, j * 20);
+            mesh.add(new THREE.Mesh(box, mat));
+        }
+    }
+}
+
+// boxs(50);
+
+
 
 var render = function () {
     requestAnimationFrame( render );
