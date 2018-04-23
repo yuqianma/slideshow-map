@@ -3,25 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>slideshow Map</title>
+    <link href="node_modules/mapbox-gl/dist/mapbox-gl.css" rel='stylesheet'/>
     <style>
-        html,body {
+        body {
             margin: 0;
+            padding: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            background: #ccc;
+
+        }
+
+        .map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #overlay {
+            pointer-events: none;
         }
 
         .tip {
-            position: absolute;
+            position: fixed;
             color: #ccc;
         }
     </style>
 </head>
 <body>
+<div id="map" class="map"></div>
+<div id="overlay" class="map"></div>
+
 <span class="tip">
-    The X axis is <span style="color: red">red</span>.
-    The Y axis is <span style="color: green">green</span>.
-    The Z axis is <span style="color: blue">blue</span>.
+    X <span style="color: red">red</span>.
+    Y <span style="color: green">green</span>.
+    Z <span style="color: blue">blue</span>.
 </span>
 
 </body>
