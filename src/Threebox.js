@@ -20,12 +20,23 @@ function Threebox(map){
     //this.renderer.domElement.style["transform"] = "scale(1,-1)";
 
     var _this = this;
-    this.map.on("resize", function() { _this.renderer.setSize(_this.map.transform.width, _this.map.transform.height); } );
+    this.map.on("resize", function() {
+        _this.renderer.setSize(_this.map.transform.width, _this.map.transform.height);
+    } );
 
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera( 28, window.innerWidth / window.innerHeight, 0.000001, 5000000000);
+    this.camera = new THREE.PerspectiveCamera(
+      26,
+      this.map.transform.width / this.map.transform.height,
+      0.000001,
+      5000000000
+    );
     this.layers = [];
+    if (__DEV__) {
+      var axesHelper = new THREE.AxesHelper(10000);
+      // this.scene.add(axesHelper);
+    }
 
     // The CameraSync object will keep the Mapbox and THREE.js camera movements in sync.
     // It requires a world group to scale as we zoom in. Rotation is handled in the camera's
@@ -50,8 +61,7 @@ Threebox.prototype = {
         this.renderer.render( this.scene, this.camera );
 
         // Run this again next frame
-        var thisthis = this;
-        requestAnimationFrame(function(timestamp) { thisthis.update(timestamp); } );
+        requestAnimationFrame((timestamp) => { this.update(timestamp); } );
     },
 
     projectToWorld: function (coords){
