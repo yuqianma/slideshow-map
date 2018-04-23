@@ -1,4 +1,4 @@
-import * as THREE from '../src/three';
+// import * as THREE from '../src/three';
 import SlideshowMap from '../src/index';
 import mapboxgl from 'mapbox-gl';
 

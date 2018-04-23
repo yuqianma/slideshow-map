@@ -4,7 +4,7 @@
  * @author angelxuanchang
  */
 
-import * as THREE from '../three';
+// import * as THREE from '../three';
 
 const MTLLoader = function ( manager ) {
 

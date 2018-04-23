@@ -1,4 +1,4 @@
-import * as THREE from './three';
+// import * as THREE from './three';
 import * as ThreeboxConstants from './constants'
 import * as utils from './Utils/Utils';
 import CameraSync from './Camera/CameraSync';

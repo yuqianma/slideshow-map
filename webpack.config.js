@@ -27,6 +27,10 @@ const config = {
     new webpack.DefinePlugin({
       '__DEV__': JSON.stringify(true),
     }),
+    new webpack.ProvidePlugin({
+      // THREE: [path.join(__dirname, 'src/three.js'), 'default'],
+      THREE: 'three'
+    }),
   ]
 };
 

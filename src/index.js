@@ -1,3 +1,4 @@
+import './three';
 import Threebox from './Threebox';
 import mapboxgl from 'mapbox-gl';
 import config from '../config';

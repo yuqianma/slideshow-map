@@ -1,4 +1,4 @@
-import * as THREE from '../three';
+// import * as THREE from '../three';
 
 export function prettyPrintMatrix(uglymatrix){
     for (var s=0;s<4;s++){
