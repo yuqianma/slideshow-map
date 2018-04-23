@@ -85,7 +85,7 @@ SymbolLayer3D.prototype = {
 
         if(absolute) {
             // Check for any features that are not have not been updated and remove them from the scene
-            for(key in this.features) {
+            for(let key in this.features) {
                 if(!key in oldFeatures) {
                     this.removeFeature(key);
                 }
@@ -138,7 +138,7 @@ SymbolLayer3D.prototype = {
             }
         }
 
-        for (m in this.models) {
+        for (let m in this.models) {
             // TODO: Support formats other than OBJ/MTL
             const objLoader = new OBJLoader();
             const materialLoader = new MTLLoader();
@@ -148,7 +148,7 @@ SymbolLayer3D.prototype = {
                 if(materials) {
                     materials.preload();
 
-                    for(material in (materials.materials)) {
+                    for(let material in (materials.materials)) {
                         materials.materials[material].shininess /= 50;  // Shininess exported by Blender is way too high
                     }
                     
@@ -178,7 +178,7 @@ SymbolLayer3D.prototype = {
         }
     },
     _addOrUpdateFeatures: function(features) {
-        for (key in features) {
+        for (let key in features) {
             const f = features[key];
             const position = f.geojson.geometry.coordinates;
             const scale = this.scaleGen(f.geojson);
