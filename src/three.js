@@ -10,4 +10,12 @@ import 'three/examples/js/postprocessing/RenderPass';
 import 'three/examples/js/postprocessing/ShaderPass';
 import 'three/examples/js/postprocessing/OutlinePass';
 
+import 'three/examples/js/lines/LineSegmentsGeometry';
+import 'three/examples/js/lines/LineGeometry';
+import 'three/examples/js/lines/WireframeGeometry2';
+import 'three/examples/js/lines/LineMaterial';
+import 'three/examples/js/lines/LineSegments2';
+import 'three/examples/js/lines/Line2';
+import 'three/examples/js/lines/Wireframe';
+
 export default three

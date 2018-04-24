@@ -37,20 +37,22 @@ window.flyTo = {
 //   unit: 'metric'
 // }));
 
-function init () {
-  const geometry = new THREE.BoxGeometry(200, 200, 400, 1, 1, 1);
-  geometry.translate(0, 0, geometry.parameters.depth / 2);
-  const blueMaterial = new THREE.MeshPhongMaterial({
-    color: 0x156289,
-    emissive: 0x072534,
-    side: THREE.DoubleSide,
-    flatShading: true
-  });
+slideshowMap.installObjects();
 
-  // const cube = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), blueMaterial);
-  const cube = new THREE.Mesh(geometry, blueMaterial);
-  cube.userData.name = 'Blue cube';
-  slideshowMap.threebox.addAtCoordinate(cube, [118.78, 32.04, 0], {preScale: 1});
+function init () {
+  // const geometry = new THREE.BoxGeometry(200, 200, 400, 1, 1, 1);
+  // geometry.translate(0, 0, geometry.parameters.depth / 2);
+  // const blueMaterial = new THREE.MeshPhongMaterial({
+  //   color: 0x156289,
+  //   emissive: 0x072534,
+  //   side: THREE.DoubleSide,
+  //   flatShading: true
+  // });
+  //
+  // // const cube = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), blueMaterial);
+  // const cube = new THREE.Mesh(geometry, blueMaterial);
+  // cube.userData.name = 'Blue cube';
+  // slideshowMap.threebox.addAtCoordinate(cube, [118.78, 32.04, 0], {preScale: 1});
 
 }
 

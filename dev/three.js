@@ -1,7 +1,6 @@
-import * as three from 'three';
+// import * as three from 'three';
+import '../src/three';
 import OrbitControls from 'three-orbitcontrols';
-
-const THREE = Object.assign(three, {OrbitControls});
 
 var scene = new THREE.Scene();
 // scene.fog = new THREE.Fog(0x000000, 300, 800);
@@ -39,119 +38,152 @@ scene.add(lights[2]);
 var axesHelper = new THREE.AxesHelper(1000);
 scene.add(axesHelper);
 
-var mesh = new THREE.Object3D();
 
-mesh.add(new THREE.LineSegments(
-  new THREE.Geometry(),
-  new THREE.LineBasicMaterial({
-    color: 0xffffff,
-    transparent: true,
-    opacity: 0.5
-  })
-));
-mesh.add(new THREE.Mesh(
-  new THREE.Geometry(),
-  new THREE.MeshPhongMaterial({
-    color: 0x156289,
-    emissive: 0x072534,
-    side: THREE.DoubleSide,
-    flatShading: true
-  })
-));
+function segmentBox () {
+  var mesh = new THREE.Object3D();
 
-var options = {
-  fixed: false,
-};
+  mesh.add(new THREE.LineSegments(
+    new THREE.Geometry(),
+    new THREE.LineBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.5
+    })
+  ));
+  mesh.add(new THREE.Mesh(
+    new THREE.Geometry(),
+    new THREE.MeshPhongMaterial({
+      color: 0x156289,
+      emissive: 0x072534,
+      side: THREE.DoubleSide,
+      flatShading: true
+    })
+  ));
 
-scene.add(mesh);
+  var options = {
+    fixed: false,
+  };
 
-var data = {
-  width: 5,
-  height: 10,
-  depth: 5,
-  widthSegments: 1,
-  heightSegments: 1,
-  depthSegments: 1
-};
+  scene.add(mesh);
 
-function generateGeometry() {
+  var data = {
+    width: 5,
+    height: 10,
+    depth: 5,
+    widthSegments: 1,
+    heightSegments: 1,
+    depthSegments: 1
+  };
 
-  updateGroupGeometry(mesh,
-    new THREE.BoxGeometry(
-      data.width, data.height, data.depth, data.widthSegments, data.heightSegments, data.depthSegments
-    )
-  );
+  function generateGeometry() {
 
-}
+    updateGroupGeometry(mesh,
+      new THREE.BoxGeometry(
+        data.width, data.height, data.depth, data.widthSegments, data.heightSegments, data.depthSegments
+      )
+    );
+
+  }
 
 // generateGeometry();
 
-function updateGroupGeometry(mesh, geometry) {
+  function updateGroupGeometry(mesh, geometry) {
 
-  mesh.children[0].geometry.dispose();
-  mesh.children[1].geometry.dispose();
+    mesh.children[0].geometry.dispose();
+    mesh.children[1].geometry.dispose();
 
-  mesh.children[0].geometry = new THREE.WireframeGeometry(geometry);
-  mesh.children[1].geometry = geometry;
+    mesh.children[0].geometry = new THREE.WireframeGeometry(geometry);
+    mesh.children[1].geometry = geometry;
 
-  // these do not update nicely together if shared
+    // these do not update nicely together if shared
 
-}
+  }
 
-function boxs(Num) {
-  const mat = new THREE.MeshPhongMaterial();
+  function boxs(Num) {
+    const mat = new THREE.MeshPhongMaterial();
 
-  let i = -Num / 2;
-  while (++i < Num / 2) {
-    let j = -Num / 2;
-    while (++j < Num / 2) {
-      const box = new THREE.BoxGeometry(1, 1, 1);
-      box.translate(i * 20, 0, j * 20);
-      mesh.add(new THREE.Mesh(box, mat));
+    let i = -Num / 2;
+    while (++i < Num / 2) {
+      let j = -Num / 2;
+      while (++j < Num / 2) {
+        const box = new THREE.BoxGeometry(1, 1, 1);
+        box.translate(i * 20, 0, j * 20);
+        mesh.add(new THREE.Mesh(box, mat));
+      }
     }
   }
-}
 
 // boxs(50);
+}
 
-// var loader = new THREE.JSONLoader();
+
+function loadBlender () {
+  // var loader = new THREE.JSONLoader();
 // loader.load('./dev/node_bloom.json', function(geometry, material) {
 //   mesh = new THREE.Mesh(geometry, material);
 //   scene.add(mesh);
 // });
 
-var loader = new THREE.ObjectLoader();
+  var loader = new THREE.ObjectLoader();
 
-loader.load(
-  // resource URL
-  "./dev/node_bloom_scene.json",
+  loader.load(
+    // resource URL
+    "./dev/node_bloom_scene.json",
 
-  // onLoad callback
-  // Here the loaded data is assumed to be an object
-  function ( obj ) {
-    // Add the loaded object to the scene
-    scene.add( obj );
-  },
+    // onLoad callback
+    // Here the loaded data is assumed to be an object
+    function ( obj ) {
+      // Add the loaded object to the scene
+      scene.add( obj );
+    },
 
-  // onProgress callback
-  function ( xhr ) {
-    console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-  },
+    // onProgress callback
+    function ( xhr ) {
+      console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+    },
 
-  // onError callback
-  function ( err ) {
-    console.error( 'An error happened' );
-  }
-);
+    // onError callback
+    function ( err ) {
+      console.error( 'An error happened' );
+    }
+  );
+}
 
+
+function fatLine () {
+
+  const box = new THREE.BoxGeometry(20, 20, 20);
+  const wire = new THREE.WireframeGeometry(box);
+
+  var geometry = new THREE.LineGeometry();
+  geometry.setPositions( wire.attributes.position.array );
+  geometry.setColors( new THREE.Color('#fff') );
+
+  const matLine = new THREE.LineMaterial( {
+
+    color: 0xffffff,
+    linewidth: 0.002, // in pixels
+    // vertexColors: THREE.VertexColors,
+    //resolution:  // to be set by renderer, eventually
+    dashed: false
+
+  } );
+
+  const line = new THREE.Line2( geometry, matLine );
+  // line.computeLineDistances();
+  // line.scale.set( 1, 1, 1 );
+  scene.add( line );
+}
+
+fatLine();
 
 var render = function () {
   requestAnimationFrame(render);
-  if (!options.fixed) {
+  // if (!options.fixed) {
     // mesh.rotation.x += Math.PI * 30 / 180;
     // mesh.rotation.y += 0.005;
     // mesh.rotation.z += 0.005;
-  }
+  // }
   renderer.render(scene, camera);
 };
 
