@@ -24,5 +24,23 @@ export default class SlideshowMap {
     });
 
     this.threebox.addAtCoordinate(box, DEV_NANJING);
+
+
+    const background = new THREE.Shape();
+
+    background.moveTo(100, 100);
+    background.lineTo(200, 100);
+    background.lineTo(200, 200);
+    background.lineTo(100, 200);
+    // background.lineTo(100, 100);
+
+    var geometry = new THREE.ShapeGeometry( background );
+    var material = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
+    var mesh = new THREE.Mesh( geometry, material ) ;
+
+    mesh.rotation.y = -1;
+    mesh.rotation.x = -1;
+
+    this.threebox.addAtCoordinate(mesh, DEV_NANJING);
   }
 }

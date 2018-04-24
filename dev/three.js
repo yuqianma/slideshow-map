@@ -119,34 +119,34 @@ function segmentBox () {
 
 function loadBlender () {
   // var loader = new THREE.JSONLoader();
-// loader.load('./dev/node_bloom.json', function(geometry, material) {
-//   mesh = new THREE.Mesh(geometry, material);
-//   scene.add(mesh);
-// });
+  // loader.load('./dev/circle_rotate.json', function(geometry, material) {
+  //   mesh = new THREE.Mesh(geometry, material);
+  //   scene.add(mesh);
+  // });
 
-  var loader = new THREE.ObjectLoader();
-
-  loader.load(
-    // resource URL
-    "./dev/node_bloom_scene.json",
-
-    // onLoad callback
-    // Here the loaded data is assumed to be an object
-    function ( obj ) {
-      // Add the loaded object to the scene
-      scene.add( obj );
-    },
-
-    // onProgress callback
-    function ( xhr ) {
-      console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-    },
-
-    // onError callback
-    function ( err ) {
-      console.error( 'An error happened' );
-    }
-  );
+  // var loader = new THREE.ObjectLoader();
+  //
+  // loader.load(
+  //   // resource URL
+  //   "./dev/node_bloom_scene.json",
+  //
+  //   // onLoad callback
+  //   // Here the loaded data is assumed to be an object
+  //   function ( obj ) {
+  //     // Add the loaded object to the scene
+  //     scene.add( obj );
+  //   },
+  //
+  //   // onProgress callback
+  //   function ( xhr ) {
+  //     console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+  //   },
+  //
+  //   // onError callback
+  //   function ( err ) {
+  //     console.error( 'An error happened' );
+  //   }
+  // );
 }
 
 
@@ -175,7 +175,25 @@ function fatLine () {
   scene.add( line );
 }
 
-fatLine();
+function drawShapePath () {
+  var x = 0, y = 0;
+
+  var heartShape = new THREE.Shape();
+
+  heartShape.moveTo( x + 5, y + 5 );
+  heartShape.lineTo( 20, 20 );
+  heartShape.lineTo( 40, 40 );
+  heartShape.lineTo( 5, 5 );
+  // heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+
+  var geometry = new THREE.ShapeGeometry( heartShape );
+  var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  var mesh = new THREE.Line( geometry, material ) ;
+  scene.add( mesh );
+
+}
+
+drawShapePath();
 
 var render = function () {
   requestAnimationFrame(render);
