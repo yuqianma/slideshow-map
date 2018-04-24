@@ -4,7 +4,7 @@ import OrbitControls from 'three-orbitcontrols';
 const THREE = Object.assign(three, {OrbitControls});
 
 var scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0x000000, 300, 800);
+// scene.fog = new THREE.Fog(0x000000, 300, 800);
 var camera = new THREE.PerspectiveCamera(36, window.innerWidth / window.innerHeight, 1, 2000);
 camera.position.x = 10;
 camera.position.y = 20;
@@ -84,7 +84,7 @@ function generateGeometry() {
 
 }
 
-generateGeometry();
+// generateGeometry();
 
 function updateGroupGeometry(mesh, geometry) {
 
@@ -113,6 +113,36 @@ function boxs(Num) {
 }
 
 // boxs(50);
+
+// var loader = new THREE.JSONLoader();
+// loader.load('./dev/node_bloom.json', function(geometry, material) {
+//   mesh = new THREE.Mesh(geometry, material);
+//   scene.add(mesh);
+// });
+
+var loader = new THREE.ObjectLoader();
+
+loader.load(
+  // resource URL
+  "./dev/node_bloom_scene.json",
+
+  // onLoad callback
+  // Here the loaded data is assumed to be an object
+  function ( obj ) {
+    // Add the loaded object to the scene
+    scene.add( obj );
+  },
+
+  // onProgress callback
+  function ( xhr ) {
+    console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+  },
+
+  // onError callback
+  function ( err ) {
+    console.error( 'An error happened' );
+  }
+);
 
 
 var render = function () {
