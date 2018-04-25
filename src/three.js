@@ -2,6 +2,8 @@
 
 const three = THREE;
 
+__DEV__ && (window.THREE = three);
+
 // `THREE` will be replaced by `three.js`, thus we prevent js in examples using `window.THREE`
 import 'three/examples/js/shaders/CopyShader';
 import 'three/examples/js/shaders/FXAAShader';

@@ -5,8 +5,8 @@ import OrbitControls from 'three-orbitcontrols';
 var scene = new THREE.Scene();
 // scene.fog = new THREE.Fog(0x000000, 300, 800);
 var camera = new THREE.PerspectiveCamera(36, window.innerWidth / window.innerHeight, 1, 2000);
-camera.position.x = 10;
-camera.position.y = 20;
+// camera.position.x = 10;
+// camera.position.y = 20;
 camera.position.z = 30;
 camera.lookAt(new THREE.Vector3(0, 0, 0));
 

@@ -35,8 +35,10 @@ function Threebox(map) {
   );
   this.layers = [];
   if (__DEV__) {
+    window.camera = this.camera;
+    window.threebox = this;
     var axesHelper = new THREE.AxesHelper(10000);
-    // this.scene.add(axesHelper);
+    this.scene.add(axesHelper);
   }
 
   // The CameraSync object will keep the Mapbox and THREE.js camera movements in sync.
@@ -45,7 +47,11 @@ function Threebox(map) {
   // It automatically registers to listen for move events on the map so we don't need to do that here
   this.world = new THREE.Group();
   this.scene.add(this.world);
-  this.cameraSynchronizer = new CameraSync(this.map, this.camera, this.world);
+
+  this.plane = new THREE.Group();
+  this.scene.add(this.plane);
+
+  this.cameraSynchronizer = new CameraSync(this.map, this.camera, this.world, this.plane);
 
   //this.animationManager = new AnimationManager();
   this.update();
