@@ -1,12 +1,12 @@
 import './three';
 import config from '../config';
-import { Link } from "./constants";
 import Threebox from './Threebox';
 import mapboxgl from 'mapbox-gl';
-import Box from './Components/Box';
 import {
-  timeline
-} from 'popmotion';
+  Box,
+  Link
+} from './Components';
+import { timeline } from 'popmotion';
 
 mapboxgl.accessToken = config.accessToken;
 
@@ -24,8 +24,8 @@ export default class SlideshowMap extends Threebox {
 
     this.setupDefaultLights();
 
-    this.map.on('moveend', () => {
-      this.animateComponents();
+    this.map.on('moveend', (ev) => {
+      this.animateComponents(ev);
     });
   }
 
@@ -53,6 +53,20 @@ export default class SlideshowMap extends Threebox {
     return vector;
   }
 
+  addToMap (name, component, lntLat = [ 0, 0 ]) {
+    this.components[name] = component;
+    this.addAtCoordinate(component.obj, lntLat);
+  }
+
+  addToPlane (name, component, coords = [ 0, 0 ]) {
+    this.components[name] = component;
+    this.plane.add(component.obj);
+  }
+
+  getComponent (name) {
+    return this.components[name];
+  }
+
   installComponents () {
     if (this.__installed) {
       console.error('Cannot install Objects twice!');
@@ -60,95 +74,92 @@ export default class SlideshowMap extends Threebox {
     }
     this.__installed = true;
 
-    const box = Box({
+    const box = new Box({
       width: 200,
       height: 200,
       depth: 400,
     });
 
-    this.addAtCoordinate(box, DEV_NANJING);
+    this.addToMap('box', box, DEV_NANJING);
 
-    this.components.box = box;
+    this.addToPlane('link', new Link({}));
 
-    const width = 200, height = 100;
 
-    const background = new THREE.Shape();
 
-    background.moveTo(0, 0);
-    background.lineTo(width, 0);
-    background.lineTo(width, height);
-    background.lineTo(0, height);
-    background.lineTo(0, 0);
-
-    var geometry = new THREE.ShapeGeometry( background);
-    var material = new THREE.MeshPhongMaterial( {
-      transparent: true,
-      opacity: 0.5,
-      color: 0x00eeee,
-      // depthTest: false,
-      // side: THREE.DoubleSide
-    } );
-    var mesh = new THREE.Mesh( geometry, material ) ;
-
-    // geometry.rotateX(- Math.PI / 2);
-    // geometry.translate(-1000, 0, 1000);
-
-    this.plane.add(mesh);
-
-    const lineGeometry = new THREE.Geometry();
-    lineGeometry.vertices.push(
-      new THREE.Vector3( 0, 0, 0 ),
-      new THREE.Vector3( 0, 0, 0 )
-    );
-
-    const link = new THREE.Line( lineGeometry, new THREE.LineBasicMaterial({
-      color: Link.Color
-    }) );
-
-    this.plane.add( link );
-    this.components.link = link;
+    // const width = 200, height = 100;
+    //
+    // const background = new THREE.Shape();
+    //
+    // background.moveTo(0, 0);
+    // background.lineTo(width, 0);
+    // background.lineTo(width, height);
+    // background.lineTo(0, height);
+    // background.lineTo(0, 0);
+    //
+    // var geometry = new THREE.ShapeGeometry( background);
+    // var material = new THREE.MeshPhongMaterial( {
+    //   transparent: true,
+    //   opacity: 0.5,
+    //   color: 0x00eeee,
+    //   // depthTest: false,
+    //   // side: THREE.DoubleSide
+    // } );
+    // var mesh = new THREE.Mesh( geometry, material ) ;
+    //
+    // // geometry.rotateX(- Math.PI / 2);
+    // // geometry.translate(-1000, 0, 1000);
+    //
+    // this.plane.add(mesh);
+    //
+    //
+    //
+    // this.plane.add( link );
+    // this.components.link = link;
   }
 
-  flyTo ({
-    areaName,
-    content,
-    description,
-    lngLat,
-    zoom
-         }) {
+  flyTo (options) {
 
+    const {
+      areaName,
+      content,
+      description,
+      lngLat,
+      zoom
+    } = options;
+
+    this.visible = false;
+
+    this.map.flyTo({
+      center: lngLat,
+      zoom,
+    }, {
+      options
+    })
   }
 
-  animateComponents () {
-    // todo, get coords
-    const coords = DEV_NANJING.slice();
+  set visible (v) {
+    this.scene.visible = v;
+  }
+
+  get visible () {
+    return this.scene.visible
+  }
+
+  animateComponents ({ options }) {
+    if (!options) {
+      return
+    }
+
+    const coords = options.lngLat.slice();
     coords[2] = 400;
     const vector = this.projectToPlane(coords);
 
-    const linkGeometry = this.components.link.geometry;
-    linkGeometry.vertices[0].copy(vector);
-    linkGeometry.vertices[1].copy(vector);
-    linkGeometry.verticesNeedUpdate = true;
+    const box = this.getComponent('box');
+    this.moveToCoordinate(box.obj, options.lngLat);
 
-    timeline([
-      Link.Durations[0],
-      {
-        track: 'v',
-        from: {
-          x: vector.x,
-          y: vector.y,
-        },
-        to: {
-          x: vector.x + 100,
-          y: vector.y + 200,
-        },
-        duration: Link.Durations[1]
-      }
-      // Link.Durations[2],
-    ]).start(({v}) => {
-      linkGeometry.vertices[1].setX(v.x);
-      linkGeometry.vertices[1].setY(v.y);
-      linkGeometry.verticesNeedUpdate = true;
-    })
+    box.update(options);
+    // this.getComponent('link').update(vector);
+
+    this.visible = true;
   }
 }

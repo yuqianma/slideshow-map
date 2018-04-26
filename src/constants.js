@@ -11,11 +11,14 @@ const SPF = 1000 / 60;
 const MainColor = 0x00fffc;
 
 // components
-export const Link = {
-  Color: MainColor,
-  Durations: [ 0, 16 * SPF, 206 * SPF, 16 * SPF ]
-};
 
 export const Box = {
   Color: MainColor,
+  Durations: [ 30 * SPF, 232 * SPF, 30 * SPF ]
 };
+
+export const Link = {
+  Color: MainColor,
+  Durations: [ 30 * SPF, 16 * SPF, 206 * SPF, 16 * SPF ]
+};
+
