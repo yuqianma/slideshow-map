@@ -2,12 +2,15 @@
  * Created by Jeffrey on 2018/4/24.
  */
 
+import { Box as Default } from '../constants';
+
 const SEGMENTS = 1;
 
 export default function Box ({
   width = 20,
   height = 20,
-  depth = 20
+  depth = 20,
+  color = Default.Color
 }) {
   const mesh = new THREE.Object3D();
 
@@ -20,9 +23,9 @@ export default function Box ({
   mesh.add(new THREE.LineSegments2(
     new THREE.WireframeGeometry2(box),
     new THREE.LineMaterial({
-      color: 0x0090ff,
-      transparent: true,
-      opacity: 0.1,
+      color,
+      // transparent: true,
+      // opacity: 0.1,
       linewidth: 0.0015,
     })
   ));
@@ -30,9 +33,9 @@ export default function Box ({
   mesh.add(new THREE.Mesh(
     box,
     new THREE.MeshPhongMaterial({
-      color: 0x004173,
+      color,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.8,
       // shininess: 0,
       // emissive: 0xffffff,
       // side: THREE.DoubleSide,

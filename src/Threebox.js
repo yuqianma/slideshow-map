@@ -11,6 +11,7 @@ function Threebox(map) {
 
   // Set up a THREE.js scene
   this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
+  this.renderer.setPixelRatio(window.devicePixelRatio || 1);
   this.renderer.setSize(this.map.transform.width, this.map.transform.height);
   this.renderer.shadowMap.enabled = true;
 

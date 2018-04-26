@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "mapbox-gl": "^0.44.2",
+    "popmotion": "^8.1.22",
     "three": "^0.92.0",
     "three-orbitcontrols": "^2.0.0"
   }

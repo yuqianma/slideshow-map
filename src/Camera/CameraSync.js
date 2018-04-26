@@ -85,9 +85,11 @@ CameraSync.prototype = {
     
     // ... I'm a bit confused by matrix & worldMatrix...
     const planeMatrix = new THREE.Matrix4;
+    // const _cameraTranslateZ = new THREE.Matrix4().makeTranslation(0, 0, 0);
     const _cameraRotateX = new THREE.Matrix4().makeRotationX(this.map.transform._pitch);
     const _cameraRotateZ = new THREE.Matrix4().makeRotationZ(this.map.transform.angle);
     planeMatrix
+      // .premultiply(_cameraTranslateZ)
       .premultiply(_cameraRotateX)
       .premultiply(_cameraRotateZ);
 
