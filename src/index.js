@@ -158,7 +158,7 @@ export default class SlideshowMap extends Threebox {
     this.moveToCoordinate(box.obj, options.lngLat);
 
     box.update(options);
-    // this.getComponent('link').update(vector);
+    this.getComponent('link').update(vector);
 
     this.visible = true;
   }

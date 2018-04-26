@@ -3,6 +3,8 @@ import * as ThreeboxConstants from './constants'
 import * as utils from './Utils/Utils';
 import CameraSync from './Camera/CameraSync';
 import SymbolLayer3D from './Layers/SymbolLayer3D';
+import { EffectComposer, BloomPass, RenderPass, KernelSize } from 'postprocessing';
+
 
 //var AnimationManager = require("./Animation/AnimationManager.js");
 
@@ -54,6 +56,8 @@ function Threebox(map) {
 
   this.cameraSynchronizer = new CameraSync(this.map, this.camera, this.world, this.plane);
 
+  this.clock = new THREE.Clock();
+  this.installPass();
   //this.animationManager = new AnimationManager();
   this.update();
 }
@@ -72,6 +76,92 @@ Threebox.prototype = {
     requestAnimationFrame((timestamp) => {
       this.update(timestamp);
     });
+
+    this.composer.render(this.clock.getDelta());
+  },
+
+  installPass () {
+    const composer = this.composer = new EffectComposer(this.renderer, {
+      stencilBuffer: true,
+      depthTexture: true
+    });
+
+    composer.addPass(new RenderPass(this.scene, this.camera));
+
+    const pass = new BloomPass({
+      resolutionScale: 0.37,
+      intensity: 0.64,
+      distinction: 1.3,
+      kernelSize: 5,
+    });
+    pass.combineMaterial.setScreenModeEnabled(false);
+    pass.renderToScreen = true;
+    composer.addPass(pass);
+
+    this.bloomPass = pass;
+
+    this.registerOptions();
+  },
+
+  registerOptions () {
+
+    const menu = new dat.GUI();
+
+    const composer = this.composer;
+    const pass = this.bloomPass;
+
+    const params = {
+      "resolution": pass.resolutionScale,
+      "kernel size": pass.kernelSize,
+      "intensity": pass.intensity,
+      "distinction": pass.distinction,
+      "blend": true,
+      "blend mode": "screen"
+    };
+
+    menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+      pass.resolutionScale = params.resolution;
+      composer.setSize();
+
+    });
+
+    menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
+
+      pass.kernelSize = params["kernel size"];
+
+    });
+
+    menu.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function() {
+
+      pass.intensity = params.intensity;
+
+    });
+
+    const folder = menu.addFolder("Luminance");
+
+    folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() {
+
+      pass.distinction = params.distinction;
+
+    });
+
+    folder.open();
+
+    menu.add(params, "blend").onChange(function() {
+
+      pass.combineMaterial.uniforms.opacity1.value = params.blend ? 1.0 : 0.0;
+
+    });
+
+    menu.add(pass, "dithering");
+
+    menu.add(params, "blend mode", ["add", "screen"]).onChange(function() {
+
+      pass.combineMaterial.setScreenModeEnabled((params["blend mode"] !== "add"));
+
+    });
+
   },
 
   projectToWorld: function (coords) {
