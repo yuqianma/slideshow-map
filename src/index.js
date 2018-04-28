@@ -182,6 +182,9 @@ export default class SlideshowMap extends Threebox {
     this.moveToCoordinate(radioWave.obj, options.lngLat);
     radioWave.update();
 
+    box.visible = !!options.pillar;
+    radioWave.visible = !options.pillar;
+
     this.visible = true;
   }
 }
