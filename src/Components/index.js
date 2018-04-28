@@ -4,8 +4,10 @@
 
 import Box from './Box';
 import Link from './Link';
+import RadioWave from './RadioWave';
 
 export {
   Box,
-  Link
+  Link,
+  RadioWave
 }

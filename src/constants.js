@@ -22,3 +22,7 @@ export const Link = {
   Durations: [ 30 * SPF, 16 * SPF, 206 * SPF, 16 * SPF ]
 };
 
+export const RadioWave = {
+  Color: MainColor
+};
+

@@ -4,7 +4,8 @@ import Threebox from './Threebox';
 import mapboxgl from 'mapbox-gl';
 import {
   Box,
-  Link
+  Link,
+  RadioWave
 } from './Components';
 import { timeline } from 'popmotion';
 
@@ -84,22 +85,24 @@ export default class SlideshowMap extends Threebox {
 
     this.addToPlane('link', new Link({}));
 
-    const video = document.getElementById( 'video' );
+    this.addToMap('radioWave', new RadioWave({}), DEV_NANJING);
 
-    const texture = new THREE.VideoTexture( video );
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-    // texture.format = THREE.RGBFormat;
-
-    var mat = new THREE.MeshBasicMaterial({
-      transparent: true,
-      map: texture
-    });
-
-    var geometry = new THREE.PlaneGeometry( 2000, 2000, 1 );
-    var circle = new THREE.Mesh( geometry, mat );
-
-    this.addAtCoordinate(circle, DEV_NANJING);
+    // const video = document.getElementById( 'video' );
+    //
+    // const texture = new THREE.VideoTexture( video );
+    // texture.minFilter = THREE.LinearFilter;
+    // texture.magFilter = THREE.LinearFilter;
+    // // texture.format = THREE.RGBFormat;
+    //
+    // var mat = new THREE.MeshBasicMaterial({
+    //   transparent: true,
+    //   map: texture
+    // });
+    //
+    // var geometry = new THREE.PlaneGeometry( 2000, 2000, 1 );
+    // var circle = new THREE.Mesh( geometry, mat );
+    //
+    // this.addAtCoordinate(circle, DEV_NANJING);
 
     // const width = 200, height = 100;
     //
@@ -174,6 +177,10 @@ export default class SlideshowMap extends Threebox {
 
     box.update(options);
     this.getComponent('link').update(vector);
+
+    const radioWave = this.getComponent('radioWave');
+    this.moveToCoordinate(radioWave.obj, options.lngLat);
+    radioWave.update();
 
     this.visible = true;
   }
