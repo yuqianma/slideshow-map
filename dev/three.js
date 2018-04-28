@@ -5,8 +5,8 @@ import OrbitControls from 'three-orbitcontrols';
 var scene = new THREE.Scene();
 // scene.fog = new THREE.Fog(0x000000, 300, 800);
 var camera = new THREE.PerspectiveCamera(36, window.innerWidth / window.innerHeight, 1, 2000);
-// camera.position.x = 10;
-// camera.position.y = 20;
+camera.position.x = 10;
+camera.position.y = 20;
 camera.position.z = 30;
 camera.lookAt(new THREE.Vector3(0, 0, 0));
 
@@ -21,19 +21,39 @@ document.body.appendChild(renderer.domElement);
 var orbit = new OrbitControls(camera, renderer.domElement);
 // orbit.enableZoom = false;
 
-var gridHelper = new THREE.GridHelper(1000, 100);
+var gridHelper = new THREE.GridHelper(1000, 10);
 scene.add(gridHelper);
 
 var lights = [];
 lights[0] = new THREE.PointLight(0xffffff, 1, 0);
 lights[1] = new THREE.PointLight(0xffffff, 1, 0);
 lights[2] = new THREE.PointLight(0xffffff, 1, 0);
+// lights[3] = new THREE.PointLight(0xffffff, 2, 0);
 lights[0].position.set(0, 200, 0);
 lights[1].position.set(100, 200, 100);
 lights[2].position.set(-100, -200, -100);
+// lights[3].position.set(0, 2, 2);
 scene.add(lights[0]);
 scene.add(lights[1]);
 scene.add(lights[2]);
+// scene.add(lights[3]);
+
+lights.map(l => {
+  var pointLightHelper = new THREE.PointLightHelper( l, 1 );
+  scene.add( pointLightHelper );
+});
+
+// var spotLight = new THREE.SpotLight( 0xffffff );
+// // spotLight.decay = 1;
+// spotLight.angle = 0.1;
+// spotLight.intensity = 2;
+// spotLight.penumbra = 0.5;
+// spotLight.distance = 40;
+// spotLight.position.set( 0, 10, 10 );
+// scene.add( spotLight );
+//
+// var spotLightHelper = new THREE.SpotLightHelper( spotLight );
+// scene.add( spotLightHelper );
 
 var axesHelper = new THREE.AxesHelper(1000);
 scene.add(axesHelper);
@@ -193,7 +213,31 @@ function drawShapePath () {
 
 }
 
-drawShapePath();
+function glow () {
+  const box = new THREE.BoxGeometry(2, 2, 2);
+  const mat = new THREE.MeshPhongMaterial({ color: 0x00bbdd });
+
+  // const mat = new THREE.ShaderMaterial( {
+  //
+  //   uniforms: {
+  //     amplitude: { value: 1.0 },
+  //     color:     { value: new THREE.Color( 0xffffff ) },
+  //   },
+  //   vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+  //   fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+  //
+  //   blending:       THREE.AdditiveBlending,
+  //   depthTest:      false,
+  //   transparent:    true
+  //
+  // });
+
+  const mesh = new THREE.Mesh(box, mat);
+
+  scene.add(mesh);
+}
+
+glow();
 
 var render = function () {
   requestAnimationFrame(render);

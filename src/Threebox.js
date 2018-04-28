@@ -57,7 +57,7 @@ function Threebox(map) {
   this.cameraSynchronizer = new CameraSync(this.map, this.camera, this.world, this.plane);
 
   this.clock = new THREE.Clock();
-  this.installPass();
+  // this.installPass();
   //this.animationManager = new AnimationManager();
   this.update();
 }
@@ -77,7 +77,7 @@ Threebox.prototype = {
       this.update(timestamp);
     });
 
-    this.composer.render(this.clock.getDelta());
+    // this.composer.render(this.clock.getDelta());
   },
 
   installPass () {

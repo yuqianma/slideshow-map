@@ -84,7 +84,22 @@ export default class SlideshowMap extends Threebox {
 
     this.addToPlane('link', new Link({}));
 
+    const video = document.getElementById( 'video' );
 
+    const texture = new THREE.VideoTexture( video );
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    // texture.format = THREE.RGBFormat;
+
+    var mat = new THREE.MeshBasicMaterial({
+      transparent: true,
+      map: texture
+    });
+
+    var geometry = new THREE.PlaneGeometry( 2000, 2000, 1 );
+    var circle = new THREE.Mesh( geometry, mat );
+
+    this.addAtCoordinate(circle, DEV_NANJING);
 
     // const width = 200, height = 100;
     //
