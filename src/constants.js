@@ -26,3 +26,6 @@ export const RadioWave = {
   Color: MainColor
 };
 
+export const Card = {
+  Color: MainColor,
+};

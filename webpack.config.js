@@ -28,8 +28,8 @@ const config = {
       '__DEV__': JSON.stringify(true),
     }),
     new webpack.ProvidePlugin({
-      // THREE: [path.join(__dirname, 'src/three.js'), 'default'],
-      THREE: 'three'
+      THREE: [path.join(__dirname, 'src/LibThree.js'), 'THREE'],
+      // THREE: 'three'
     }),
   ]
 };

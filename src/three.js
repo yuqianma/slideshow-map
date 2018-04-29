@@ -2,9 +2,10 @@
 
 const three = THREE;
 
-__DEV__ && (window.THREE = three);
+// `THREE` will be replaced by `LibThree.js`, thus we prevent js in examples using `window.THREE`
+import 'three/examples/js/renderers/Projector.js';
+import 'three/examples/js/renderers/SVGRenderer.js';
 
-// `THREE` will be replaced by `three.js`, thus we prevent js in examples using `window.THREE`
 import 'three/examples/js/shaders/CopyShader';
 import 'three/examples/js/shaders/FXAAShader';
 import 'three/examples/js/postprocessing/EffectComposer';
@@ -19,5 +20,7 @@ import 'three/examples/js/lines/LineMaterial';
 import 'three/examples/js/lines/LineSegments2';
 import 'three/examples/js/lines/Line2';
 import 'three/examples/js/lines/Wireframe';
+
+__DEV__ && (window.THREE = three);
 
 export default three

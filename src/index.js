@@ -87,6 +87,17 @@ export default class SlideshowMap extends Threebox {
 
     this.addToMap('radioWave', new RadioWave({}), DEV_NANJING);
 
+    const mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 100, 100 ),
+      new THREE.MeshBasicMaterial( {
+        transparent: true,
+        opacity: 0.5,
+        color: 0x00fffc,
+        side: THREE.DoubleSide
+      } )
+    );
+    mesh.scale.x = mesh.scale.y = mesh.scale.z = 2;
+    this.plane.add(mesh);
+
     // const video = document.getElementById( 'video' );
     //
     // const texture = new THREE.VideoTexture( video );
@@ -157,10 +168,11 @@ export default class SlideshowMap extends Threebox {
 
   set visible (v) {
     this.scene.visible = v;
+    this.svgScene.visible = v;
   }
 
   get visible () {
-    return this.scene.visible
+    return this.world.visible
   }
 
   animateComponents ({ options }) {

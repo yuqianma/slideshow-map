@@ -18,18 +18,28 @@ function Threebox(map) {
   this.renderer.shadowMap.enabled = true;
 
   this.map._container.appendChild(this.renderer.domElement);
-  this.renderer.domElement.style["position"] = "relative";
+  this.renderer.domElement.style["position"] = "absolute";
   this.renderer.domElement.style["pointer-events"] = "none";
   this.renderer.domElement.style["z-index"] = 1000;
   //this.renderer.domElement.style["transform"] = "scale(1,-1)";
 
+  this.svgRenderer = new THREE.SVGRenderer();
+  this.svgRenderer.setSize(this.map.transform.width, this.map.transform.height);
+  this.svgRenderer.setClearColor(0x000000, 0);
+  this.map._container.appendChild(this.svgRenderer.domElement);
+  this.svgRenderer.domElement.style["position"] = "absolute";
+  this.svgRenderer.domElement.style["pointer-events"] = "none";
+  this.svgRenderer.domElement.style["z-index"] = 1001;
+
   var _this = this;
   this.map.on("resize", function () {
     _this.renderer.setSize(_this.map.transform.width, _this.map.transform.height);
+    _this.svgRenderer.setSize(_this.map.transform.width, _this.map.transform.height);
   });
 
 
   this.scene = new THREE.Scene();
+  this.svgScene = new THREE.Scene();
   this.camera = new THREE.PerspectiveCamera(
     26,
     this.map.transform.width / this.map.transform.height,
@@ -52,7 +62,7 @@ function Threebox(map) {
   this.scene.add(this.world);
 
   this.plane = new THREE.Group();
-  this.scene.add(this.plane);
+  this.svgScene.add(this.plane);
 
   this.cameraSynchronizer = new CameraSync(this.map, this.camera, this.world, this.plane);
 
@@ -71,9 +81,10 @@ Threebox.prototype = {
 
     // Render the scene
     this.renderer.render(this.scene, this.camera);
+    this.svgRenderer.render(this.svgScene, this.camera);
 
     // Run this again next frame
-    requestAnimationFrame((timestamp) => {
+    this._updateid = requestAnimationFrame((timestamp) => {
       this.update(timestamp);
     });
 
