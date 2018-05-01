@@ -18,26 +18,31 @@ export default class Title extends Component {
     const group = svgObject('g')();
     
     const rect = svg('rect');
-    const path = svg('path');
     const text = svg('text');
 
     this.mainBackground = rect({
-      fill: 'url(#title-mainBackground-g)'
+      fill: 'url(#title-main-background-g)'
     });
     this.mainText = text({
-      fill: 'url(#title-mainText-g)'
+      fill: 'url(#title-main-text-g)',
+      'path-clip': 'url(#title-main-text-clip)'
     });
     this.hollowBackground = rect({
-      fill: '#000'
+      fill: '#000',
+      'path-clip': 'url(#title-hollow-clip)'
     });
-    this.hollowText = text();
-    this.bottomLine = path();
+    this.hollowText = text({
+      'path-clip': 'url(#title-hollow-clip)'
+    });
+    this.bottomLine = rect({
+      fill: 'url(#title-main-background-g)',
+    });
 
     group.node.appendChild(this.mainBackground);
     group.node.appendChild(this.mainText);
     // group.node.appendChild(this.hollowBackground);
     // group.node.appendChild(this.hollowText);
-    // group.node.appendChild(this.bottomLine);
+    group.node.appendChild(this.bottomLine);
 
     this.obj = group;
 
@@ -58,8 +63,8 @@ export default class Title extends Component {
   _createGradient () {
     const defs = this.defs;
     this._gradients = {
-      mainBackground: linearGradient(defs)('title-mainBackground-g'),
-      mainText: linearGradient(defs)('title-mainText-g'),
+      mainBackground: linearGradient(defs)('title-main-background-g'),
+      mainText: linearGradient(defs)('title-main-text-g'),
     };
   }
 
@@ -132,9 +137,12 @@ export default class Title extends Component {
       fill: getColorStr(backgroundColor2)
     });
 
-    // animate
-    // attr(this.bottomLine.node)({
-    // });
+    // todo, animate
+    attr(this.bottomLine)({
+      y: height + 5,
+      width,
+      height: 1.5
+    });
   }
 
   enter () {
