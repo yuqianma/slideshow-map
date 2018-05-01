@@ -8,10 +8,9 @@ import { svg, svgObject, attr, linearGradient, createRectClip } from '../../Util
 import { timeline } from 'popmotion';
 
 export default class Title extends Component {
-  constructor ({
+  create ({
     defs,
   }) {
-    super();
 
     this.defs = defs;
 
@@ -44,10 +43,10 @@ export default class Title extends Component {
     // group.node.appendChild(this.hollowText);
     group.node.appendChild(this.bottomLine);
 
-    this.obj = group;
-
     this._createGradient();
     this._createClip();
+
+    return group
   }
 
   _createClip () {

@@ -4,9 +4,13 @@
 
 export default class Component {
   constructor (props) {
-    // this.props = props;
+    this.props = props || {};
 
-    this.obj = null;
+    this.obj = this.create(this.props);
+  }
+
+  create () {
+    console.error('empty component.create');
   }
 
   get visible () {

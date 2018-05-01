@@ -84,9 +84,9 @@ export default class SlideshowMap extends Threebox {
 
     this.addToMap('box', box, DEV_NANJING);
 
-    this.addToPlane('link', new Link({}));
+    this.addToPlane('link', new Link());
 
-    this.addToMap('radioWave', new RadioWave({}), DEV_NANJING);
+    this.addToMap('radioWave', new RadioWave(), DEV_NANJING);
 
     this.addToPlane('card', new Card({ defs: this.defs }));
 

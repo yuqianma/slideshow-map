@@ -12,12 +12,11 @@ const {
 } = Default;
 
 export default class Link extends Component {
-  constructor ({
+  create ({
     a = [0, 0, 0],
     b = [0, 0, 0],
     color = Default.Color
   }) {
-    super();
 
     const lineGeometry = new THREE.Geometry();
     lineGeometry.vertices.push(
@@ -29,7 +28,7 @@ export default class Link extends Component {
       color
     }) );
 
-    this.obj = link;
+    return link;
   }
 
   update (vector) {

@@ -33,11 +33,9 @@ d |
 */
 
 export default class Card extends Component {
-  constructor ({
+  create ({
     defs,
-
   }) {
-    super();
 
     this.defs = defs;
 
@@ -54,9 +52,9 @@ export default class Card extends Component {
     group.add(this.frame.obj);
     group.add(this.title.obj);
 
-    this.obj = group;
-
     this._createClip();
+
+    return group
   }
 
   _createClip () {

@@ -12,8 +12,7 @@ import { timeline } from 'popmotion';
  */
 
 export default class Frame extends Component {
-  constructor ({ defs }) {
-    super();
+  create ({ defs }) {
 
     this.defs = defs;
 
@@ -33,9 +32,9 @@ export default class Frame extends Component {
     group.node.appendChild(this.background);
     group.node.appendChild(this.frame);
 
-    this.obj = group;
-
     this._createGradient();
+
+    return group
   }
 
   _createGradient () {

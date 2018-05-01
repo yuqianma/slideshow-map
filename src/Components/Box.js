@@ -14,13 +14,12 @@ const {
 const SEGMENTS = 1;
 
 export default class Box extends Component {
-  constructor ({
+  create ({
     width = 20,
     height = 20,
     depth = 20,
     color = Color
   }) {
-    super();
 
     const mesh = new THREE.Object3D();
 
@@ -53,7 +52,7 @@ export default class Box extends Component {
       })
     ));
 
-    this.obj = mesh;
+    return mesh;
   }
 
   update (options) {

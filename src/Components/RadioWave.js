@@ -14,10 +14,9 @@ const RING_NUM = 3;
 const LIFE_SPAN = 3 * 1000;
 
 export default class RadioWave extends Component {
-  constructor ({
+  create ({
     color = Color
   }) {
-    super();
     const group = new THREE.Object3D();
 
     const material = new THREE.MeshBasicMaterial( {
@@ -37,20 +36,20 @@ export default class RadioWave extends Component {
       group.add(ring);
     }
 
-    this.obj = group;
+    this.animation = this._animate(group);
 
-    this._animate();
+    return group
   }
 
-  _animate () {
-    const rings = this.obj.children;
+  _animate (group) {
+    const rings = group.children;
     const animations = rings.map(ring => tween({
       duration: LIFE_SPAN,
-      ease: easing.easeIn,
+      ease: easing.linear,
       loop: Infinity,
     }).pipe((v) => ring.morphTargetInfluences[0] = v || 0));
 
-    this.animation = stagger(animations, LIFE_SPAN / RING_NUM)
+    return stagger(animations, LIFE_SPAN / RING_NUM * 2)
   }
 
   _startAnimate () {
