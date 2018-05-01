@@ -3,7 +3,9 @@
  */
 
 export default class Component {
-  constructor () {
+  constructor (props) {
+    // this.props = props;
+
     this.obj = null;
   }
 

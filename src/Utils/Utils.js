@@ -57,3 +57,5 @@ export function radify(deg) {
 export function degreeify(rad) {
   return 360 * rad / (Math.PI * 2)
 }
+
+export const getColorStr = color => new THREE.Color(color).getStyle();

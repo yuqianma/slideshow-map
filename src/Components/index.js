@@ -5,9 +5,11 @@
 import Box from './Box';
 import Link from './Link';
 import RadioWave from './RadioWave';
+import Card from './Card';
 
 export {
   Box,
   Link,
-  RadioWave
+  RadioWave,
+  Card
 }

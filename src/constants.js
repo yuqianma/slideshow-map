@@ -28,4 +28,5 @@ export const RadioWave = {
 
 export const Card = {
   Color: MainColor,
+  Gradient: [MainColor, 0x358bff]
 };
