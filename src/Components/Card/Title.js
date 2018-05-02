@@ -6,6 +6,7 @@ import Component from '../Component';
 import { getColorStr } from '../../Utils/Utils';
 import { svg, svgObject, attr, linearGradient, createRectClip } from '../../Utils/Svg';
 import { timeline } from 'popmotion';
+import { SPF } from '../../constants';
 
 export default class Title extends Component {
   create ({
@@ -26,14 +27,14 @@ export default class Title extends Component {
     });
     this.mainText = text({
       fill: 'url(#title-main-text-g)',
-      'path-clip': 'url(#title-main-text-clip)'
+      'clip-path': 'url(#title-main-text-clip)'
     });
     this.hollowBackground = rect({
       fill: '#000',
-      'path-clip': 'url(#title-hollow-clip)'
+      // 'clip-path': 'url(#title-hollow-clip)'
     });
     this.hollowText = text({
-      'path-clip': 'url(#title-hollow-clip)'
+      'clip-path': 'url(#title-hollow-clip)'
     });
     this.bottomLine = rect({
       fill: 'url(#title-main-background-g)',
@@ -41,8 +42,8 @@ export default class Title extends Component {
 
     group.node.appendChild(this.mainBackground);
     group.node.appendChild(this.mainText);
-    // group.node.appendChild(this.hollowBackground);
-    // group.node.appendChild(this.hollowText);
+    group.node.appendChild(this.hollowBackground);
+    group.node.appendChild(this.hollowText);
     group.node.appendChild(this.bottomLine);
 
     this._createGradient();
@@ -114,12 +115,12 @@ export default class Title extends Component {
     this._updateGradient(props);
 
     attr(this.mainBackground)({
-      width,
+      width: 0,
       height
     });
 
     attr(this.hollowBackground)({
-      width,
+      width: 0,
       height
     });
 
@@ -144,9 +145,76 @@ export default class Title extends Component {
       width,
       height: 1.5
     });
+
+    this.enter(props);
   }
 
-  enter () {
+  enter ({
+    width,
+    indent
+  }) {
+
+    const mainBackground = attr(this.mainBackground);
+    const hollowBackground = attr(this.hollowBackground);
+    const mainText = attr(this.mainText);
+    const hollowText = attr(this.hollowText);
+
+    const mainTextClip = attr(this._clips.mainText);
+    const hollowTextClip = attr(this._clips.hollow);
+
+    hollowTextClip({
+      height: 40
+    });
+
+    timeline([
+      {
+        track: 'width',
+        from: 0,
+        to: width,
+        duration: 60 * SPF
+      }
+    ]).start((v) => {
+      mainBackground(v);
+    });
+
+    timeline([
+      [{
+        track: 'width',
+        from: 0,
+        to: width / 2,
+        duration: 30 * SPF
+      }, {
+        track: 'x',
+        from: 0,
+        to: width,
+        duration: 60 * SPF
+      }],
+      [{
+        track: 'width',
+        to: 0,
+        duration: 30 * SPF
+      }]
+    ]).start((v) => {
+      mainTextClip({
+        x: indent,
+        height: 40,
+        width: v.x
+      });
+      hollowBackground(v);
+      hollowTextClip(v);
+    });
+
+    timeline([
+      {
+        track: 'x',
+        from: width,
+        to: indent,
+        duration: 60 * SPF
+      }
+    ]).start((v) => {
+      mainText(v);
+      hollowText(v);
+    });
 
   }
 
