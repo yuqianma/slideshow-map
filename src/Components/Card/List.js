@@ -56,8 +56,10 @@ export default class List extends Component {
 
     const defs = this.defs;
 
+    const lastItmes = this.items;
+
     this.items = contents.map((text, i) => {
-      const item = this.items[i] || new Item({ defs });
+      const item = lastItmes.pop() || new Item({ defs });
       item.update({
         text,
         height: rowHeight,
@@ -70,5 +72,11 @@ export default class List extends Component {
 
       return item
     });
+
+    if (lastItmes.length) {
+      lastItmes.forEach(item => {
+        this.obj.remove(item.obj);
+      });
+    }
   }
 }
