@@ -14,7 +14,9 @@ export default class Title extends Component {
 
     this.defs = defs;
 
-    const group = svgObject('g')();
+    const group = svgObject('g')({
+      'class': 'dev-title-g'
+    });
     
     const rect = svg('rect');
     const text = svg('text');
@@ -128,7 +130,7 @@ export default class Title extends Component {
         x: indent,
         y: height / 2,
         // 'text-anchor': 'middle',
-        style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: central`,
+        style: `font-weight: bold; font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: central`,
       });
     });
 

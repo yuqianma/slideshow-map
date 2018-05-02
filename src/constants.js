@@ -8,7 +8,7 @@ export const EARTH_CIRCUMFERENCE = 40075000; // In meters
 
 const SPF = 1000 / 60;
 
-const MainColor = 0x00fffc;
+export const MainColor = 0x00fffc;
 
 // components
 

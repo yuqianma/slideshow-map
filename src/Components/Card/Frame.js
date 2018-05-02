@@ -16,7 +16,9 @@ export default class Frame extends Component {
 
     this.defs = defs;
 
-    const group = svgObject('g')();
+    const group = svgObject('g')({
+      'class': 'dev-frame-g'
+    });
 
     const path = svg('path');
 

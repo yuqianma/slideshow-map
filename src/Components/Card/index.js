@@ -10,6 +10,7 @@ import { svg, svgObject, attr, createRectClip, measureText } from '../../Utils/S
 
 import Frame from './Frame';
 import Title from './Title';
+import { default as List, calcContentsSize } from './List';
 
 const {
   Color,
@@ -18,7 +19,7 @@ const {
 
 const tan = Math.tan;
 
-const LINE_HEIGHT = 1.5;
+const LINE_HEIGHT = 1.2;
 
 const ANGLE = 45 / 180 * Math.PI;
 
@@ -39,11 +40,13 @@ export default class Card extends Component {
 
     this.defs = defs;
 
-    const group = svgObject('g')();
+    const group = new THREE.Group();
 
     this.frame = new Frame({ defs });
 
     this.title = new Title({ defs });
+
+    this.list = new List({ defs });
 
     attr(this.title.obj.node)({
       'clip-path': 'url(#title-clip)'
@@ -51,6 +54,7 @@ export default class Card extends Component {
 
     group.add(this.frame.obj);
     group.add(this.title.obj);
+    group.add(this.list.obj);
 
     this._createClip();
 
@@ -76,14 +80,19 @@ export default class Card extends Component {
       areaName,
       fontSize,
       fontFamily,
-      content,
+      contents,
     } = props;
 
-    this.obj.position.set(-100, 150, 0);
+    this.obj.position.set(-50, 200, 0);
 
     // calculate pos & size
 
-    const areaNameSize = measureText(areaName, { fontSize, fontFamily });
+    const titleFontSize = fontSize * 1.5;
+
+    const areaNameSize = measureText(areaName, {
+        fontSize: titleFontSize,
+        fontFamily
+      });
 
     const titleSize = {
       height: areaNameSize.height * LINE_HEIGHT
@@ -91,15 +100,16 @@ export default class Card extends Component {
 
     const d = titleSize.height / tan(ANGLE);
 
-    // todo,
-    const contentTextSize = {
-      width: 400,
-      height: 300
-    };
+    const contentsTextSize = calcContentsSize({
+      contents,
+      lineHeight: LINE_HEIGHT,
+      fontSize,
+      fontFamily
+    });
 
-    const contentSize = {
-      width: Math.max(areaNameSize.width, contentTextSize.width),
-      height: contentTextSize.height
+    const contentsSize = {
+      ...contentsTextSize,
+      width: Math.max(areaNameSize.width, contentsTextSize.width),
     };
 
     const leftPadding = d + GAP;
@@ -112,11 +122,11 @@ export default class Card extends Component {
 
     const contentTop = GAP;
 
-    titleSize.width = d + contentSize.width + rightPadding + GAP;
+    titleSize.width = d + contentsSize.width + rightPadding + GAP;
 
     const frameSize = {
-      width: leftPadding + contentSize.width + rightPadding,
-      height: topPadding + titleSize.height + contentTop + contentSize.height + bottomPadding
+      width: leftPadding + contentsSize.width + rightPadding,
+      height: topPadding + titleSize.height + contentTop + contentsSize.height + bottomPadding
     };
 
     // corner
@@ -125,6 +135,7 @@ export default class Card extends Component {
 
     // update
 
+    // frame
     this.frame.update({
       a,
       b,
@@ -134,6 +145,7 @@ export default class Card extends Component {
       ...frameSize
     });
 
+    // title
     this.title.obj.position.set(GAP, -GAP, 0);
 
     attr(this._clips.title)({
@@ -150,7 +162,7 @@ export default class Card extends Component {
     this.title.update({
       indent: d,
       text: areaName,
-      fontSize,
+      fontSize: titleFontSize,
       fontFamily,
       backgroundColor1: Gradient[0],
       backgroundColor2: Gradient[1],
@@ -158,6 +170,16 @@ export default class Card extends Component {
       textColor2: '#000',
       bottomLineColor: Gradient[1],
       ...titleSize
+    });
+
+    // list
+    this.list.obj.position.set(a, -b - contentTop, 0);
+
+    this.list.update({
+      contents,
+      rowHeight: contentsSize.rowHeight,
+      fontSize,
+      fontFamily,
     });
   }
 }
