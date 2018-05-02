@@ -12,11 +12,13 @@ export default class Item extends Component {
   create ({ defs }) {
     this.defs = defs;
 
-    const group = svgObject('g')();
+    const group = svgObject('g')({
+      filter: 'url(#glow2)',
+    });
 
     const p = -10, h = 10;
     this.marker = svg('path')({
-      d: `M0 0 L ${h/2*1.73} ${h/2} L 0 ${h} Z`
+      d: `M0 0 L ${h/2*1.73} ${h/2} L 0 ${h} Z`,
     });
 
     this.text = svg('text')();

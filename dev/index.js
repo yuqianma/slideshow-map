@@ -66,6 +66,6 @@ window.run = () => slideshowMap.flyTo(testOptions);
 
 slideshowMap._test(testOptions);
 
-// window.setTimeout(() => {
-//   cancelAnimationFrame(window.threebox._updateid)
-// }, 100);
+window.setTimeout(() => {
+  cancelAnimationFrame(window.threebox._updateid)
+}, 100);

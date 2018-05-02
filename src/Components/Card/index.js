@@ -56,9 +56,34 @@ export default class Card extends Component {
     group.add(this.title.obj);
     group.add(this.list.obj);
 
+    this._createFilter();
     this._createClip();
 
     return group
+  }
+
+  _createFilter () {
+    const defs = this.defs;
+    const glowFilter1 = svg('filter')({ id: 'glow1' });
+    defs.appendChild(glowFilter1);
+
+    glowFilter1.innerHTML = `
+<feGaussianBlur result="blurOut" in="floodOut" stdDeviation="8" />
+<feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+`;
+
+    const glowFilter2 = svg('filter')({ id: 'glow2' });
+    defs.appendChild(glowFilter2);
+
+    glowFilter2.innerHTML = `
+<feGaussianBlur result="blurOut" in="floodOut" stdDeviation="2" />
+<feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+`;
+
+    this._filters = {
+      glowFilter1,
+      glowFilter2
+    };
   }
 
   _createClip () {

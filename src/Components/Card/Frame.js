@@ -17,7 +17,8 @@ export default class Frame extends Component {
     this.defs = defs;
 
     const group = svgObject('g')({
-      'class': 'dev-frame-g'
+      'class': 'dev-frame-g',
+      filter: 'url(#glow1)',
     });
 
     const path = svg('path');
@@ -26,6 +27,7 @@ export default class Frame extends Component {
       opacity: 0.2,
     });
     this.frame = path({
+      'class': 'slideshow-map-frame',
       fill: 'none',
       stroke: 'url(#frame-g)',
       'stroke-width': 2.5,
