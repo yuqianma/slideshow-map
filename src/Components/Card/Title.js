@@ -5,7 +5,7 @@
 import Component from '../Component';
 import { getColorStr } from '../../Utils/Utils';
 import { svg, svgObject, attr, linearGradient, createRectClip } from '../../Utils/Svg';
-import { timeline } from 'popmotion';
+import { timeline, easing } from 'popmotion';
 import { SPF } from '../../constants';
 
 export default class Title extends Component {
@@ -171,7 +171,8 @@ export default class Title extends Component {
         track: 'width',
         from: 0,
         to: width,
-        duration: 60 * SPF
+        duration: 60 * SPF,
+        ease: easing.circOut
       }
     ]).start((v) => {
       mainBackground(v);
@@ -181,7 +182,7 @@ export default class Title extends Component {
       [{
         track: 'width',
         from: 0,
-        to: width / 2,
+        to: width / 3,
         duration: 30 * SPF
       }, {
         track: 'x',
