@@ -59,16 +59,21 @@ export default class List extends Component {
     const lastItmes = this.items;
 
     this.items = contents.map((text, i) => {
-      const item = lastItmes.pop() || new Item({ defs });
+      let item = lastItmes.shift(); // pop will lead to seq bug
+
+      if (!item) {
+        item = new Item({ defs });
+        this.obj.add(item.obj);
+      }
+
+      item.obj.position.setY(-rowHeight * i);
+
       item.update({
         text,
         height: rowHeight,
         fontSize,
         fontFamily,
       });
-      this.obj.add(item.obj);
-
-      item.obj.position.setY(-rowHeight * i);
 
       return item
     });

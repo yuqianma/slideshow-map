@@ -11,6 +11,7 @@ import { svg, svgObject, attr, createRectClip, measureText } from '../../Utils/S
 import Frame from './Frame';
 import Title from './Title';
 import { default as List, calcContentsSize } from './List';
+import Circle from './Circle';
 
 const {
   Color,
@@ -48,6 +49,8 @@ export default class Card extends Component {
 
     this.list = new List({ defs });
 
+    this.circle = new Circle({ defs });
+
     attr(this.title.obj.node)({
       'clip-path': 'url(#title-clip)'
     });
@@ -55,6 +58,7 @@ export default class Card extends Component {
     group.add(this.frame.obj);
     group.add(this.title.obj);
     group.add(this.list.obj);
+    group.add(this.circle.obj);
 
     this._createFilter();
     this._createClip();
@@ -106,6 +110,7 @@ export default class Card extends Component {
       fontSize,
       fontFamily,
       contents,
+      description,
     } = props;
 
     this.obj.position.set(-50, 200, 0);
@@ -141,7 +146,7 @@ export default class Card extends Component {
 
     const topPadding = GAP;
 
-    const rightPadding = GAP;
+    const rightPadding = GAP * 2;
 
     const bottomPadding = GAP * 2;
 
@@ -205,6 +210,15 @@ export default class Card extends Component {
       rowHeight: contentsSize.rowHeight,
       fontSize,
       fontFamily,
+    });
+
+    this.circle.obj.position.set(10, -frameSize.height - 25, 0);
+
+    this.circle.update({
+      color: Color,
+      text: description,
+      fontSize,
+      fontFamily
     });
   }
 }
