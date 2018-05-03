@@ -207,6 +207,7 @@ export default class Card extends Component {
 
     this.list.update({
       contents,
+      width: frameSize.width, // for clip
       rowHeight: contentsSize.rowHeight,
       fontSize,
       fontFamily,

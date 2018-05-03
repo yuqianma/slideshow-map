@@ -44,17 +44,34 @@ export default class List extends Component {
 
     const group = new THREE.Group();
 
+    this._createClip();
+
     return group
+  }
+
+  _createClip () {
+    const defs = this.defs;
+
+    this._clips = {
+      text: createRectClip(defs)('list-text-clip')(),
+    };
+
   }
 
   update ({
     contents,
+    width,
     rowHeight,
     fontSize,
     fontFamily
   }) {
 
     const defs = this.defs;
+
+    attr(this._clips.text)({
+      width,
+      height: rowHeight
+    });
 
     const lastItmes = this.items;
 

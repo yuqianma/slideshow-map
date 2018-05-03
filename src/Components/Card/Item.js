@@ -3,10 +3,10 @@
  */
 
 import Component from '../Component';
-import { MainColor } from '../../constants';
+import { MainColor, SPF } from '../../constants';
 import { getColorStr, radify } from '../../Utils/Utils';
-import { svg, svgObject, attr, linearGradient, createRectClip } from '../../Utils/Svg';
-import { timeline } from 'popmotion';
+import { svg, svgObject, attr, linearGradient, createRectClip, measureText } from '../../Utils/Svg';
+import { timeline, easing } from 'popmotion';
 
 const TRI = {
   // centered path
@@ -15,9 +15,13 @@ const TRI = {
   height: 24,
 };
 
+const trans = (height, s, r) => `translate(${-TRI.width / 2}px, ${height / 2}px) scale(${s}) rotate(${r}deg)`;
+
 export default class Item extends Component {
   create ({ defs }) {
     this.defs = defs;
+
+    this.textWidth = 0;
 
     const group = svgObject('g')({
       filter: 'url(#glow2)',
@@ -27,7 +31,9 @@ export default class Item extends Component {
       d: TRI.d,
     });
 
-    this.text = svg('text')();
+    this.text = svg('text')({
+      'clip-path': 'url(#list-text-clip)'
+    });
 
     group.node.appendChild(this.marker);
     group.node.appendChild(this.text);
@@ -35,18 +41,17 @@ export default class Item extends Component {
     return group
   }
 
-  update ({
-    height,
-    markerColor = getColorStr(MainColor),
-    textColor = '#fff',
-    text,
-    fontSize,
-    fontFamily,
-  }) {
+  update (props) {
+    const {
+      height,
+      markerColor = getColorStr(MainColor),
+      textColor = '#fff',
+      text,
+      fontSize,
+      fontFamily,
+    } = props;
+
     attr(this.marker)({
-      style: `
-      transform: translate(${-TRI.width / 2}px, ${height / 2}px) scale(0.5) rotate(0deg);
-      `,
       fill: markerColor
     });
 
@@ -56,6 +61,39 @@ export default class Item extends Component {
       y: height / 2,
       style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: central`,
     });
+
+    this.textWidth = measureText(text, props).width;
+
+    this.enter(props);
+  }
+
+  enter ({
+    height
+  }) {
+
+    timeline([
+      {
+        track: 'v',
+        from: {
+          scale: 0,
+          rotate: -300,
+          x: -this.textWidth,
+        },
+        to: {
+          scale: 0.5,
+          rotate: 0,
+          x: 0
+        },
+        duration: 60 * SPF,
+        ease: easing.easeOut,
+      }
+    ]).start(({ v }) => {
+
+      this.marker.style.transform = trans(height, v.scale, v.rotate);
+
+      this.text.setAttribute('x', v.x);
+    });
+
   }
 
   dispose () {
