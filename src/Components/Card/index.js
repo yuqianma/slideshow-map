@@ -213,7 +213,7 @@ export default class Card extends Component {
       fontFamily,
     });
 
-    this.circle.obj.position.set(10, -frameSize.height - 25, 0);
+    this.circle.obj.position.set(0, -frameSize.height, 0);
 
     this.circle.update({
       color: Color,
