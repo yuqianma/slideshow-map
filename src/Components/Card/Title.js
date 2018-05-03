@@ -139,10 +139,9 @@ export default class Title extends Component {
       fill: getColorStr(backgroundColor2)
     });
 
-    // todo, animate
     attr(this.bottomLine)({
       y: height + 5,
-      width,
+      width: 0,
       height: 1.5
     });
 
@@ -158,6 +157,7 @@ export default class Title extends Component {
     const hollowBackground = attr(this.hollowBackground);
     const mainText = attr(this.mainText);
     const hollowText = attr(this.hollowText);
+    const bottomLine = attr(this.bottomLine);
 
     const mainTextClip = attr(this._clips.mainText);
     const hollowTextClip = attr(this._clips.hollow);
@@ -176,6 +176,23 @@ export default class Title extends Component {
       }
     ]).start((v) => {
       mainBackground(v);
+    });
+
+    timeline([
+      {
+        track: 'line',
+        from: {
+          x: width / 2,
+          width: 0,
+        },
+        to: {
+          x: 0,
+          width
+        },
+        duration: 60 * SPF,
+      }
+    ]).start(({line}) => {
+      bottomLine(line);
     });
 
     timeline([
