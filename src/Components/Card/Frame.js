@@ -3,8 +3,8 @@
  */
 
 import Component from '../Component';
-import { getColorStr, radify } from '../../Utils/Utils';
-import { svg, svgObject, attr, linearGradient, createRectClip } from '../../Utils/Svg';
+import { getColorStr } from '../../Utils/Utils';
+import { Svg } from '../../Utils/Svg';
 import { timeline } from 'popmotion';
 
 /**
@@ -16,55 +16,41 @@ export default class Frame extends Component {
 
     this.defs = defs;
 
-    const group = svgObject('g')({
-      'class': 'dev-frame-g',
+    const group = new Svg('g', {
       filter: 'url(#glow1)',
     });
 
-    const path = svg('path');
+    this.obj = group;
 
-    this.background = path({
+    group.append(this.background = new Svg('path', {
       opacity: 0.2,
-    });
-    this.frame = path({
+    }));
+    group.append(this.frame = new Svg('path', {
       'class': 'slideshow-map-frame',
       fill: 'none',
       stroke: 'url(#frame-g)',
       'stroke-width': 2.5,
-    });
+    }));
 
-    group.node.appendChild(this.background);
-    group.node.appendChild(this.frame);
-
-    this._createGradient();
-
-    return group
-  }
-
-  _createGradient () {
-    const defs = this.defs;
-    this._gradients = {
-      frame: linearGradient(defs)('frame-g')
-    };
+    console.log(group.node);
+    console.log(this.background.node);
   }
 
   _updateGradient ({
     color1,
     color2
   }) {
-    this._gradients.frame({
-      x1: 0,
-      x2: 1,
-      y1: 1,
-      y2: 0,
-      stops: [{
+    this.defs.linearGradient(
+      'frame-g',
+      { x1: 0, x2: 1, y1: 1, y2: 0 },
+      [{
         offset: '0',
         'stop-color': getColorStr(color1)
       }, {
         offset: '100%',
         'stop-color': getColorStr(color2)
       }]
-    });
+    );
   }
 
   update (props) {
@@ -80,7 +66,7 @@ export default class Frame extends Component {
 
     this._updateGradient(props);
 
-    attr(this.frame)({
+    this.frame.attr({
       d: [
         'M', a, 0,
         'L', width, 0,
@@ -92,7 +78,7 @@ export default class Frame extends Component {
       ].join(' ')
     });
 
-    attr(this.background)({
+    this.background.attr({
       fill: getColorStr(color1),
       d: [
         'M', a, -gap,

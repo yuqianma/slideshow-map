@@ -3,10 +3,10 @@
  */
 
 import Component from '../Component';
-import { MainColor, SPF } from '../../constants';
-import { getColorStr, radify } from '../../Utils/Utils';
-import { svg, svgObject, attr, linearGradient, createRectClip } from '../../Utils/Svg';
-import { timeline, tween, physics, delay, easing } from 'popmotion';
+import { SPF } from '../../constants';
+import { getColorStr } from '../../Utils/Utils';
+import { Svg } from '../../Utils/Svg';
+import { tween, physics, delay, easing } from 'popmotion';
 
 const Path = {
   Outer: 'M-2.631,9.96c-0.149,0.403-0.531,0.652-0.938,0.652c-0.116,0-0.233-0.02-0.348-0.062  C-8.303,8.92-11.25,4.681-11.25,0c0-0.776,0.079-1.549,0.234-2.299c0.113-0.541,0.641-0.891,1.183-0.775  c0.541,0.112,0.889,0.642,0.776,1.183C-9.186-1.276-9.25-0.64-9.25,0c0,3.849,2.423,7.335,6.029,8.674  C-2.702,8.867-2.438,9.442-2.631,9.96z M11.015-2.3c-0.113-0.541-0.644-0.89-1.183-0.775C9.291-2.963,8.943-2.434,9.056-1.892  C9.185-1.273,9.25-0.637,9.25,0c0,3.851-2.426,7.338-6.035,8.676c-0.518,0.191-0.782,0.768-0.59,1.285  c0.149,0.403,0.531,0.652,0.938,0.652c0.115,0,0.233-0.02,0.348-0.062C8.301,8.924,11.25,4.684,11.25,0  C11.25-0.773,11.171-1.547,11.015-2.3z M-8.012-5.396c0.294,0,0.585-0.128,0.782-0.375C-5.462-7.982-2.827-9.25,0-9.25  c2.824,0,5.458,1.266,7.226,3.474c0.344,0.43,0.973,0.501,1.405,0.156c0.431-0.345,0.501-0.975,0.155-1.406  C6.638-9.71,3.436-11.25,0-11.25c-3.438,0-6.643,1.542-8.792,4.229C-9.137-6.589-9.066-5.96-8.636-5.615  C-8.451-5.468-8.23-5.396-8.012-5.396z',
@@ -19,31 +19,26 @@ export default class Circle extends Component {
   create ({ defs }) {
     this.defs = defs;
 
-    const group = svgObject('g')();
+    const group = new Svg('g');
+    this.obj = group;
 
-    this.marker = svg('g')();
+    const marker = this.marker = new Svg('g');
 
-    this.outer = svg('path')({
+    marker.append(this.outer = new Svg('path', {
       d: Path.Outer,
-    });
+    }));
 
-    this.inner = svg('path')({
+    marker.append(this.inner = new Svg('path', {
       d: Path.Inner,
-    });
+    }));
 
-    this.core = svg('circle')({
+    marker.append(this.core = new Svg('circle', {
       r: 3,
       fill: '#fff',
-    });
+    }));
 
-    this.marker.appendChild(this.outer);
-    this.marker.appendChild(this.inner);
-    this.marker.appendChild(this.core);
-
-    this.text = svg('text')();
-
-    group.node.appendChild(this.marker);
-    group.node.appendChild(this.text);
+    group.append(marker);
+    group.append(this.text = new Svg('text'));
 
     return group
   }
@@ -59,14 +54,14 @@ export default class Circle extends Component {
 
     const height = fontSize * 2 + 10;
 
-    this.marker.style.transform = `translate(${fontSize / 2}px, ${height / 2}px) scale(${fontSize / 18})`;
+    this.marker.node.style.transform = `translate(${fontSize / 2}px, ${height / 2}px) scale(${fontSize / 18})`;
 
-    attr(this.marker)({
+    this.marker.attr({
       fill: getColorStr(color)
     });
 
     // this.text.textContent = text;
-    attr(this.text)({
+    this.text.attr({
       x: fontSize * 1.5,
       y: height / 2,
       fill: getColorStr(color),
@@ -85,14 +80,14 @@ export default class Circle extends Component {
     tween({
       from: 0, to: 360, duration: 500 * SPF, loop: Infinity, ease: easing.linear
     }).start((v) => {
-      this.outer.style.transform = `rotate(${v}deg)`;
+      this.outer.style('transform', `rotate(${v}deg)`);
     });
 
     // core
     tween({
       from: 0, to: 3, duration: 76 * SPF, ease: easing.backOut
     }).start(r => {
-      this.core.setAttribute('r', r);
+      this.core.attr('r', r);
     });
 
     // flash
@@ -102,10 +97,10 @@ export default class Circle extends Component {
       to: 1,
       springStrength: 2000
     }).start((v) => {
-      this.outer.setAttribute('opacity', v);
+      this.outer.attr('opacity', v);
     });
 
-    this.inner.setAttribute('opacity', 0);
+    this.inner.attr('opacity', 0);
     delay(500).start({
       complete: () => {
         physics({
@@ -114,7 +109,7 @@ export default class Circle extends Component {
           to: 1,
           springStrength: 2000
         }).start((v) => {
-          this.inner.setAttribute('opacity', v);
+          this.inner.attr('opacity', v);
         });
       }
     });
@@ -123,7 +118,7 @@ export default class Circle extends Component {
     tween({
       from: 0, to: text.length, duration: 60 * SPF, ease: easing.backIn
     }).start((i) => {
-      this.text.textContent = text.substr(0, i);
+      this.text.node.textContent = text.substr(0, i);
     });
 
   }

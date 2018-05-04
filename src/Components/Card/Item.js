@@ -4,8 +4,8 @@
 
 import Component from '../Component';
 import { MainColor, SPF } from '../../constants';
-import { getColorStr, radify } from '../../Utils/Utils';
-import { svg, svgObject, attr, linearGradient, createRectClip, measureText } from '../../Utils/Svg';
+import { getColorStr } from '../../Utils/Utils';
+import { Svg, measureText } from '../../Utils/Svg';
 import { timeline, easing } from 'popmotion';
 
 const TRI = {
@@ -23,22 +23,16 @@ export default class Item extends Component {
 
     this.textWidth = 0;
 
-    const group = svgObject('g')({
-      filter: 'url(#glow2)',
-    });
+    const group = new Svg('g', { filter: 'url(#glow2)' });
+    this.obj = group;
 
-    this.marker = svg('path')({
+    group.append(this.marker = new Svg('path', {
       d: TRI.d,
-    });
+    }));
 
-    this.text = svg('text')({
+    group.append(this.text = new Svg('text', {
       'clip-path': 'url(#list-text-clip)'
-    });
-
-    group.node.appendChild(this.marker);
-    group.node.appendChild(this.text);
-
-    return group
+    }));
   }
 
   update (props) {
@@ -51,12 +45,12 @@ export default class Item extends Component {
       fontFamily,
     } = props;
 
-    attr(this.marker)({
+    this.marker.attr({
       fill: markerColor
     });
 
-    this.text.textContent = text;
-    attr(this.text)({
+    this.text.node.textContent = text;
+    this.text.attr({
       fill: textColor,
       y: height / 2,
       style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: central`,
@@ -74,29 +68,15 @@ export default class Item extends Component {
     timeline([
       {
         track: 'v',
-        from: {
-          scale: 0,
-          rotate: -300,
-          x: -this.textWidth,
-        },
-        to: {
-          scale: 0.5,
-          rotate: 0,
-          x: 0
-        },
+        from: { scale: 0, rotate: -300, x: -this.textWidth },
+        to: { scale: 0.5, rotate: 0, x: 0 },
         duration: 60 * SPF,
         ease: easing.easeOut,
       }
     ]).start(({ v }) => {
-
-      this.marker.style.transform = trans(height, v.scale, v.rotate);
-
-      this.text.setAttribute('x', v.x);
+      this.marker.style('transform', trans(height, v.scale, v.rotate));
+      this.text.attr({ x: v.x });
     });
-
-  }
-
-  dispose () {
 
   }
 }

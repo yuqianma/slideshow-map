@@ -1,7 +1,7 @@
 // import * as THREE from './three';
 import * as ThreeboxConstants from './constants'
 import * as utils from './Utils/Utils';
-import { svg } from './Utils/Svg';
+import { Defs } from './Utils/Svg';
 import CameraSync from './Camera/CameraSync';
 import SymbolLayer3D from './Layers/SymbolLayer3D';
 import { EffectComposer, BloomPass, RenderPass, KernelSize } from 'postprocessing';
@@ -65,9 +65,8 @@ function Threebox(map) {
   this.plane = new THREE.Group();
   this.svgScene.add(this.plane);
 
-  const defs = new THREE.SVGObject(svg('defs')());
-  this.defs = defs.node;
-  this.svgScene.add(defs);
+  this.defs = new Defs();
+  this.svgScene.add(this.defs);
 
   this.cameraSynchronizer = new CameraSync(this.map, this.camera, this.world, this.plane);
 

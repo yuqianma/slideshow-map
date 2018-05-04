@@ -3,8 +3,7 @@
  */
 
 import Component from '../Component';
-import { getColorStr, radify } from '../../Utils/Utils';
-import { svg, svgObject, attr, linearGradient, createRectClip, measureText } from '../../Utils/Svg';
+import { measureText } from '../../Utils/Svg';
 import { timeline } from 'popmotion';
 import Item from './Item';
 
@@ -42,20 +41,9 @@ export default class List extends Component {
 
     this.items = [];
 
-    const group = new THREE.Group();
+    this.clip = defs.clipPath('list-text-clip', null, 'rect');
 
-    this._createClip();
-
-    return group
-  }
-
-  _createClip () {
-    const defs = this.defs;
-
-    this._clips = {
-      text: createRectClip(defs)('list-text-clip')(),
-    };
-
+    return new THREE.Group();
   }
 
   update ({
@@ -68,7 +56,7 @@ export default class List extends Component {
 
     const defs = this.defs;
 
-    attr(this._clips.text)({
+    this.clip.attr({
       width,
       height: rowHeight
     });
@@ -83,8 +71,7 @@ export default class List extends Component {
         this.obj.add(item.obj);
       }
 
-      item.obj.position.setY(-rowHeight * i);
-
+      item.position(0, -rowHeight * i, 0);
       item.update({
         text,
         height: rowHeight,
@@ -97,7 +84,7 @@ export default class List extends Component {
 
     if (lastItmes.length) {
       lastItmes.forEach(item => {
-        this.obj.remove(item.obj);
+        this.remove(item);
       });
     }
   }

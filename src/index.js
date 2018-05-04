@@ -55,9 +55,13 @@ export default class SlideshowMap extends Threebox {
     return vector;
   }
 
-  addToMap (name, component, lntLat = [ 0, 0 ]) {
+  moveToCoordinate (object, lnglat, options) {
+    super.moveToCoordinate(object.obj || object, lnglat, options);
+  }
+
+  addToMap (name, component, lnglat = [ 0, 0 ]) {
     this.components[name] = component;
-    this.addAtCoordinate(component.obj, lntLat);
+    this.addAtCoordinate(component.obj, lnglat);
   }
 
   addToPlane (name, component, coords = [ 0, 0 ]) {
@@ -139,6 +143,7 @@ export default class SlideshowMap extends Threebox {
   }
 
   _test (options) {
+    this.components.card.position(-50, 200, 0);
     this.components.card.update(options);
   }
 

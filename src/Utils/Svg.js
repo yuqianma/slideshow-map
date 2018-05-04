@@ -2,69 +2,148 @@
  * Created by Jeffrey on 2018/4/29.
  */
 
-export const svg = tag => props => {
-  const node = document.createElementNS( 'http://www.w3.org/2000/svg', tag );
-  if (props) {
-    return attr(node)(props)
+const svg = tag => document.createElementNS( 'http://www.w3.org/2000/svg', tag );
+
+export class Svg extends THREE.SVGObject {
+  constructor (tag, props) {
+    const node = svg(tag);
+    super(node);
+
+    this.type = tag;
+    if (props) {
+      this.attr(props);
+    }
   }
-  return node
-};
 
-export const svgObject = tag => props => new THREE.SVGObject(svg(tag)(props));
-
-export const attr = node => props => {
-  for (let k in props) {
-    node.setAttribute(k, props[k]);
+  attr (props, _) {
+    if (arguments.length === 2) {
+      this.node.setAttribute(props, _);
+      return this
+    }
+    for (let k in props) {
+      this.node.setAttribute(k, props[k]);
+    }
+    return this
   }
-  return node
-};
 
-export const linearGradient = defs => id => props => {
+  style (props, _) {
+    if (arguments.length === 2) {
+      this.node.style[props] = _;
+      return this
+    }
+    for (let k in props) {
+      this.node.style[k] = props[k];
+    }
+    return this
+  }
 
-  const {
-    x1 = 0,
-    x2 = 1,
-    y1 = 0,
-    y2 = 0,
-    stops = []
-  } = props;
+  append(el) {
+    this.node.appendChild(el.node);
+  }
 
-  const linearGradient = attr(defs.querySelector('#' + id) || svg( 'linearGradient' )())({
-    id,
-    x1,
-    x2,
-    y1,
-    y2
-  });
+  dispose () {
+    this.node.parentNode.removeChild(this.node);
+  }
 
-  const stopDoms = [...linearGradient.querySelectorAll('stop')];
+}
 
-  stops.forEach((stop, i) => {
-    linearGradient.appendChild(attr(stopDoms[i] || svg('stop')())(stop));
-  });
+export class Defs extends Svg {
+  constructor () {
+    super('defs');
 
-  defs.appendChild(linearGradient);
+    this.defs = {};
+  }
 
-  return linearGradient
-};
+  linearGradient (id, attrs, stops) {
+    let g = this.defs[id];
 
-export const createRectClip = defs => id => props => {
+    if (!g) {
+      g = this.defs[id] = new LinearGradient({id});
+      this.append(g);
+    }
 
-  const _clip = svg('clipPath')({id});
-  defs.appendChild(_clip);
+    if (!(g instanceof LinearGradient)) {
+      throw `id:${id} collided!`
+    }
 
-  const clip = svg('rect')(props);
-  _clip.appendChild(clip);
+    if (attrs) {
+      g.attr(attrs);
+    }
 
-  return clip
-};
+    if (stops) {
+      g.stops(stops);
+    }
 
-const _hiddenSvgNode = svg('svg')({
-  style: 'visibility: hidden; position: absolute; top: -1000px'
-});
-const _textNode = svg('text')();
+    return g
+  }
+
+  clipPath (id, attrs, type) {
+    let c = this.defs[id];
+
+    if (!c) {
+      if (!type) {
+        throw `id:${id} 'type' must be set at first time`;
+      }
+      c = this.defs[id] = new Svg('clipPath', {id});
+      const path = new Svg(type);
+      c.path = path;
+      c.append(path);
+      this.append(c);
+    }
+
+    if (type && type !== c.path.type) {
+      throw `id:${id} cannot change clip type`;
+    }
+
+    if (attrs) {
+      c.path.attr(attrs);
+    }
+
+    return c.path
+  }
+
+  filter (id) {
+    let f = this.defs[id];
+
+    if (!f) {
+      f = this.defs[id] = new Svg('filter', {id});
+      this.append(f);
+    }
+
+    // set the innerHTML directly;
+
+    return f
+  }
+}
+
+export class LinearGradient extends Svg {
+  constructor (props) {
+    super('linearGradient', props);
+
+    this._stopNodes = [];
+  }
+
+  stops (v) {
+    const nextStops = [];
+    v.forEach((s) => {
+      let stop = this._stopNodes.shift();
+      if (!stop) {
+        stop = new Svg('stop');
+        this.append(stop);
+      }
+      nextStops.push(stop.attr(s));
+    });
+
+    this._stopNodes.forEach(node => node.remove());
+
+    return v
+  }
+}
+
+const _hiddenSvgNode = svg('svg');
+_hiddenSvgNode.style.cssText = 'visibility: hidden; position: absolute; top: -1000px';
+const _textNode = svg('text');
 _hiddenSvgNode.appendChild(_textNode);
-document.body.appendChild(_hiddenSvgNode);
 
 export const measureText = (text, style) => {
 
@@ -86,3 +165,11 @@ export const measureText = (text, style) => {
     height: bbox.height
   }
 };
+
+const bodyReady = () => document.body.appendChild(_hiddenSvgNode);
+
+if (document.body) {
+  bodyReady();
+} else {
+  document.addEventListener('DOMContentLoaded', bodyReady);
+}
