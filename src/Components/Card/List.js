@@ -4,7 +4,7 @@
 
 import Component from '../Component';
 import { measureText } from '../../Utils/Svg';
-import { timeline } from 'popmotion';
+import { delay } from 'popmotion';
 import Item from './Item';
 
 export function calcContentsSize ({
@@ -72,11 +72,16 @@ export default class List extends Component {
       }
 
       item.position(0, -rowHeight * i, 0);
-      item.update({
-        text,
-        height: rowHeight,
-        fontSize,
-        fontFamily,
+
+      delay(1000 * i / contents.length).start({
+        complete: () => {
+          item.update({
+            text,
+            height: rowHeight,
+            fontSize,
+            fontFamily,
+          });
+        }
       });
 
       return item

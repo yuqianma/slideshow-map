@@ -32,8 +32,6 @@ export default class Frame extends Component {
       'stroke-width': 2.5,
     }));
 
-    console.log(group.node);
-    console.log(this.background.node);
   }
 
   _updateGradient ({

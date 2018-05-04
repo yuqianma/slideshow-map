@@ -33,6 +33,8 @@ export default class Item extends Component {
     group.append(this.text = new Svg('text', {
       'clip-path': 'url(#list-text-clip)'
     }));
+
+    group.hide();
   }
 
   update (props) {
@@ -44,6 +46,8 @@ export default class Item extends Component {
       fontSize,
       fontFamily,
     } = props;
+
+    this.obj.show();
 
     this.marker.attr({
       fill: markerColor

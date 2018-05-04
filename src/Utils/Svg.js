@@ -37,6 +37,14 @@ export class Svg extends THREE.SVGObject {
     return this
   }
 
+  hide () {
+    this.node.style.visibility = 'hidden';
+  }
+
+  show () {
+    this.node.style.visibility = '';
+  }
+
   append(el) {
     this.node.appendChild(el.node);
   }
