@@ -11,7 +11,7 @@ import { Svg, measureText } from '../../Utils/Svg';
 import Frame from './Frame';
 import Title from './Title';
 import { default as List, calcContentsSize } from './List';
-import Circle from './Circle';
+import Description from './Description';
 
 const {
   Color,
@@ -53,7 +53,7 @@ export default class Card extends Component {
 
     this.add(this.list = new List({ defs }));
 
-    this.add(this.circle = new Circle({ defs }));
+    this.add(this.description = new Description({ defs }));
 
     defs.clipPath('title-clip', null, 'path');
 
@@ -120,8 +120,8 @@ export default class Card extends Component {
       fontFamily,
     });
 
-    this.circle.position(0, -frameSize.height, 0);
-    this.circle.update({
+    this.description.position(0, -frameSize.height, 0);
+    this.description.update({
       color: Color,
       text: description,
       fontSize,

@@ -15,7 +15,7 @@ const Path = {
   height: 22,
 };
 
-export default class Circle extends Component {
+export default class Description extends Component {
   create ({ defs }) {
     this.defs = defs;
 
