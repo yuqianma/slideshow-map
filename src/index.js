@@ -20,7 +20,7 @@ export default class SlideshowMap extends Threebox {
 
     this.__installed = false;
 
-    this.components = {};
+    this.c = {};
 
     this._installHelperObjects();
 
@@ -60,17 +60,13 @@ export default class SlideshowMap extends Threebox {
   }
 
   addToMap (name, component, lnglat = [ 0, 0 ]) {
-    this.components[name] = component;
+    this.c[name] = component;
     this.addAtCoordinate(component.obj, lnglat);
   }
 
   addToPlane (name, component, coords = [ 0, 0 ]) {
-    this.components[name] = component;
+    this.c[name] = component;
     this.plane.add(component.obj);
-  }
-
-  getComponent (name) {
-    return this.components[name];
   }
 
   installComponents () {
@@ -143,8 +139,8 @@ export default class SlideshowMap extends Threebox {
   }
 
   _test (options) {
-    this.components.card.position(-50, 200, 0);
-    this.components.card.update(options);
+    this.c.card.position(-50, 200, 0);
+    this.c.card.update(options);
   }
 
   flyTo (options) {
@@ -181,22 +177,22 @@ export default class SlideshowMap extends Threebox {
       return
     }
 
-    const coords = options.lngLat.slice();
+    const lngLat = options.lngLat;
+
+    const coords = lngLat.slice();
     coords[2] = 400;
     const vector = this.projectToPlane(coords);
 
-    const box = this.getComponent('box');
-    this.moveToCoordinate(box.obj, options.lngLat);
+    this.moveToCoordinate(this.c.box, lngLat);
+    this.c.box.update(options);
 
-    box.update(options);
-    this.getComponent('link').update(vector);
+    this.c.link.update(vector);
 
-    const radioWave = this.getComponent('radioWave');
-    this.moveToCoordinate(radioWave.obj, options.lngLat);
-    radioWave.update();
+    this.moveToCoordinate(this.c.radioWave, lngLat);
+    this.c.radioWave.update();
 
-    box.visible = !!options.pillar;
-    radioWave.visible = !options.pillar;
+    this.c.box.visible = !!options.pillar;
+    this.c.radioWave.visible = !options.pillar;
 
     this.visible = true;
   }
