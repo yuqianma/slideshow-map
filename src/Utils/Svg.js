@@ -132,6 +132,10 @@ export class LinearGradient extends Svg {
   }
 
   stops (v) {
+    if (!v) {
+      return this._stopNodes;
+    }
+
     const nextStops = [];
     v.forEach((s) => {
       let stop = this._stopNodes.shift();
@@ -144,7 +148,9 @@ export class LinearGradient extends Svg {
 
     this._stopNodes.forEach(node => node.remove());
 
-    return v
+    this._stopNodes = nextStops;
+
+    return this._stopNodes;
   }
 }
 
