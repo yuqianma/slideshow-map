@@ -22,7 +22,9 @@ export default class Description extends Component {
     const group = new Svg('g');
     this.obj = group;
 
-    const marker = this.marker = new Svg('g');
+    const marker = this.marker = new Svg('g', {
+      opacity: 0
+    });
 
     marker.append(this.outer = new Svg('path', {
       d: Path.Outer,
@@ -76,6 +78,8 @@ export default class Description extends Component {
     text
   }) {
 
+    this.marker.attr({ opacity: 1 });
+
     // infinity loop
     tween({
       from: 0, to: 360, duration: 500 * SPF, loop: Infinity, ease: easing.linear
@@ -115,11 +119,19 @@ export default class Description extends Component {
     });
 
     // text
-    tween({
+    this._textAnimate = tween({
       from: 0, to: text.length, duration: 60 * SPF, ease: easing.backIn
     }).start((i) => {
       this.text.node.textContent = text.substr(0, i);
     });
 
+  }
+
+  leave () {
+    this._textAnimate.reverse();
+    this._textAnimate.resume();
+    tween({ from: 1, to: 0, duration: 60 * SPF }).start( opacity => {
+      this.marker.attr({ opacity });
+    });
   }
 }

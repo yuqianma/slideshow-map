@@ -8,7 +8,7 @@ const slideshowMap = new SlideshowMap({
   center: [118.78, 32.04],
   zoom: 15.95,
   pitch: 60,
-  bearing: -60,
+  // bearing: -60,
   // heading: 41,
   hash: true
 });
@@ -59,15 +59,14 @@ const testOptions = {
   fontSize: 16,
   lngLat: [118.77680629491806, 32.0620757594658],
   zoom: 14,
-  // pitch: 60,
+  pitch: 60,
 };
 
 window.run = () => slideshowMap.flyTo(testOptions);
 
 window.runCard = () => slideshowMap._test(testOptions);
 
-runCard();
-
-window.setTimeout(() => {
-  cancelAnimationFrame(window.threebox._updateid)
-}, 100);
+// runCard();
+// window.setTimeout(() => {
+//   cancelAnimationFrame(window.threebox._updateid)
+// }, 100);

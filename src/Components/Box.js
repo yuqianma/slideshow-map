@@ -78,4 +78,8 @@ export default class Box extends Component {
       this.obj.scale.setZ(z);
     });
   }
+
+  leave () {
+
+  }
 }

@@ -132,13 +132,16 @@ export default class Title extends Component {
     this.hollowTextClip.attr({ height });
     this.mainTextClip.attr({ x: indent, height });
 
-    timeline([
+    this._animates = [];
+    let i = -1;
+
+    this._animates[++i] = timeline([
       { track: 'width', from: 0, to: width, duration: 60 * SPF, ease: easing.circOut }
     ]).start((v) => {
       this.mainBackground.attr(v);
     });
 
-    timeline([
+    this._animates[++i] = timeline([
       {
         track: 'line',
         from: { x: width / 2, width: 0 },
@@ -149,7 +152,7 @@ export default class Title extends Component {
       this.bottomLine.attr(line);
     });
 
-    timeline([
+    this._animates[++i] = timeline([
       [
         { track: 'width', from: 0, to: width / 3, duration: 30 * SPF },
         { track: 'x', from: 0, to: width, duration: 60 * SPF }
@@ -163,7 +166,7 @@ export default class Title extends Component {
       this.hollowTextClip.attr(v);
     });
 
-    timeline([
+    this._animates[++i] = timeline([
       { track: 'x', from: width, to: indent, duration: 60 * SPF }
     ]).start((v) => {
       this.mainText.attr(v);
@@ -173,6 +176,9 @@ export default class Title extends Component {
   }
 
   leave () {
-
+    this._animates.forEach(a => {
+      a.reverse();
+      a.resume();
+    });
   }
 }

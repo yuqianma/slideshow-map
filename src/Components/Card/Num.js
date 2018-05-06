@@ -33,7 +33,7 @@ export default class Num extends Component {
 
     this.obj.node.textContent = num;
 
-    tween({ duration: 60 * SPF }).start( v => {
+    this._animate = tween({ duration: 60 * SPF }).start( v => {
       this.stops[1].attr({
         offset: `${Math.min(v * 200, 100)}%`,
         'stop-color': `rgba(255, 255, 255, ${v < 0.5 ? 0 : (v - 0.5) * 2})`
@@ -42,12 +42,6 @@ export default class Num extends Component {
   }
 
   leave () {
-    tween({ duration: 60 * SPF }).start( v => {
-      v = 1 - v;
-      this.stops[1].attr({
-        offset: `${Math.min(v * 200, 100)}%`,
-        'stop-color': `rgba(255, 255, 255, ${v < 0.5 ? 0 : (v - 0.5) * 2})`
-      });
-    });
+    this._animate.reverse();
   }
 }

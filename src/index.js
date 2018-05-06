@@ -8,7 +8,7 @@ import {
   RadioWave,
   Card
 } from './Components';
-import { timeline } from 'popmotion';
+import { delay } from 'popmotion';
 
 mapboxgl.accessToken = config.accessToken;
 
@@ -29,6 +29,8 @@ export default class SlideshowMap extends Threebox {
     this.map.on('moveend', (ev) => {
       this.animateComponents(ev);
     });
+
+    this.visible = false;
   }
 
   // Add these helpers to use their inner methods.
@@ -150,14 +152,19 @@ export default class SlideshowMap extends Threebox {
       content,
       description,
       lngLat,
-      zoom
+      zoom,
+      pitch
     } = options;
 
     this.visible = false;
 
+    const [lng, lat] = lngLat;
+
     this.map.flyTo({
-      center: lngLat,
+      // [0.005713705081944909, 0.010004240534200903]
+      center: [lng + 0.005713705081944909, lat + 0.010004240534200903],
       zoom,
+      pitch,
     }, {
       options
     })
@@ -172,6 +179,13 @@ export default class SlideshowMap extends Threebox {
     return this.world.visible
   }
 
+  _leave () {
+      this.c.box.leave();
+      this.c.radioWave.leave();
+      this.c.link.leave();
+      this.c.card.leave();
+  }
+
   animateComponents ({ options }) {
     if (!options) {
       return
@@ -180,19 +194,30 @@ export default class SlideshowMap extends Threebox {
     const lngLat = options.lngLat;
 
     const coords = lngLat.slice();
-    coords[2] = 400;
+
+    if (options.pillar) {
+      this.c.box.visible = true;
+      this.c.radioWave.visible = false;
+
+      coords[2] = 400;
+      this.moveToCoordinate(this.c.box, lngLat);
+      this.c.box.update(options);
+
+    } else {
+      this.c.box.visible = false;
+      this.c.radioWave.visible = true;
+      const coords = lngLat.slice();
+
+      coords[2] = 0;
+      this.moveToCoordinate(this.c.radioWave, lngLat);
+      this.c.radioWave.update();
+    }
+
     const vector = this.projectToPlane(coords);
-
-    this.moveToCoordinate(this.c.box, lngLat);
-    this.c.box.update(options);
-
     this.c.link.update(vector);
 
-    this.moveToCoordinate(this.c.radioWave, lngLat);
-    this.c.radioWave.update();
-
-    this.c.box.visible = !!options.pillar;
-    this.c.radioWave.visible = !options.pillar;
+    this.c.card.position(-40, 260, 0);
+    this.c.card.update(options);
 
     this.visible = true;
   }

@@ -20,6 +20,8 @@ export default class RadioWave extends Component {
     const group = new THREE.Object3D();
 
     const material = new THREE.MeshBasicMaterial( {
+      transparent: true,
+      opacity: 1,
       color,
       morphTargets: true,
     } );
@@ -61,6 +63,11 @@ export default class RadioWave extends Component {
 
   update () {
     this._startAnimate();
+  }
+
+  leave () {
+    this._running.stop();
+
   }
 
 }

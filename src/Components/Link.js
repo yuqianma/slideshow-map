@@ -39,7 +39,7 @@ export default class Link extends Component {
     geometry.vertices[1].copy(vector);
     geometry.verticesNeedUpdate = true;
 
-    timeline([
+    this._animate = timeline([
       Durations[0],
       {
         track: 'v',
@@ -59,6 +59,11 @@ export default class Link extends Component {
       geometry.vertices[1].setY(v.y);
       geometry.verticesNeedUpdate = true;
     });
+  }
+
+  leave () {
+    this._animate.reverse();
+    this._animate.resume();
   }
 }
 

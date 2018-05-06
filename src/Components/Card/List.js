@@ -93,4 +93,14 @@ export default class List extends Component {
       });
     }
   }
+
+  leave () {
+    this.items.forEach((item, i) => {
+      delay(1000 * i / this.items.length).start({
+        complete: () => {
+          item.leave();
+        }
+      });
+    })
+  }
 }

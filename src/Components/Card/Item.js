@@ -69,7 +69,7 @@ export default class Item extends Component {
     height
   }) {
 
-    timeline([
+    this._animate = timeline([
       {
         track: 'v',
         from: { scale: 0, rotate: -300, x: -this.textWidth },
@@ -82,5 +82,10 @@ export default class Item extends Component {
       this.text.attr({ x: v.x });
     });
 
+  }
+
+  leave () {
+    this._animate.reverse();
+    this._animate.resume();
   }
 }

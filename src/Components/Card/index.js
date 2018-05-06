@@ -3,8 +3,8 @@
  */
 
 import Component from '../Component';
-import { Card as Default } from '../../constants';
-import { tween, stagger, easing } from 'popmotion';
+import { Card as Default, SPF } from '../../constants';
+import { delay } from 'popmotion';
 import { getColorStr } from '../../Utils/Utils';
 import { Svg, measureText } from '../../Utils/Svg';
 
@@ -78,15 +78,7 @@ export default class Card extends Component {
       d
     } = calcSize(props);
 
-    this.frame.update({
-      a,
-      b,
-      gap: GAP,
-      color1: Gradient[0],
-      color2: Gradient[1],
-      ...frameSize
-    });
-
+    this.description.position(0, -frameSize.height, 0);
     this.defs.clipPath('title-clip', {
       d: [
         'M', d, 0,
@@ -98,35 +90,59 @@ export default class Card extends Component {
       ].join(' ')
     });
     this.title.position(GAP, -GAP, 0);
-    this.title.update({
-      indent: d,
-      text: areaName,
-      fontSize: fontSize * TITLE_LINE_HEIGHT,
-      fontFamily,
-      backgroundColor1: Gradient[0],
-      backgroundColor2: Gradient[1],
-      textColor1: Gradient[1],
-      textColor2: '#000',
-      bottomLineColor: Gradient[1],
-      ...titleSize
-    });
-
     this.list.position(contentsSize.x, contentsSize.y, 0);
-    this.list.update({
-      contents,
-      width: contentsSize.width, // for clip
-      rowHeight: contentsSize.rowHeight,
-      fontSize,
-      fontFamily,
+
+    delay(30 * SPF).start({
+      complete: () => {
+        this.description.update({
+          color: Color,
+          text: description,
+          fontSize,
+          fontFamily
+        });
+      }
     });
 
-    this.description.position(0, -frameSize.height, 0);
-    this.description.update({
-      color: Color,
-      text: description,
-      fontSize,
-      fontFamily
+    delay(45 * SPF).start({
+      complete: () => {
+        this.frame.update({
+          a,
+          b,
+          gap: GAP,
+          color1: Gradient[0],
+          color2: Gradient[1],
+          ...frameSize
+        });
+
+        this.title.update({
+          indent: d,
+          text: areaName,
+          fontSize: fontSize * TITLE_LINE_HEIGHT,
+          fontFamily,
+          backgroundColor1: Gradient[0],
+          backgroundColor2: Gradient[1],
+          textColor1: Gradient[1],
+          textColor2: '#000',
+          bottomLineColor: Gradient[1],
+          ...titleSize
+        });
+
+        this.list.update({
+          contents,
+          width: contentsSize.width, // for clip
+          rowHeight: contentsSize.rowHeight,
+          fontSize,
+          fontFamily,
+        });
+      }
     });
+  }
+
+  leave () {
+    this.frame.leave();
+    this.title.leave();
+    this.list.leave();
+    this.description.leave();
   }
 }
 

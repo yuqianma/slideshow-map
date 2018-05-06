@@ -4,8 +4,9 @@
 
 import Component from '../Component';
 import { getColorStr } from '../../Utils/Utils';
+import { SPF } from '../../constants';
 import { Svg } from '../../Utils/Svg';
-import { timeline } from 'popmotion';
+import { tween } from 'popmotion';
 
 /**
  * Frame & background
@@ -18,6 +19,7 @@ export default class Frame extends Component {
 
     const group = new Svg('g', {
       filter: 'url(#glow1)',
+      opacity: 0
     });
 
     this.obj = group;
@@ -88,5 +90,17 @@ export default class Frame extends Component {
         'Z'
       ].join(' ')
     });
+
+    this._animate = tween({ duration: 10 * SPF }).start(opacity => {
+      this.obj.attr({
+        opacity
+      });
+    });
+
+  }
+
+  leave () {
+    this._animate.reverse();
+    this._animate.resume();
   }
 }
