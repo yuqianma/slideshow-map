@@ -5,12 +5,12 @@ import mapboxgl from 'mapbox-gl';
 const slideshowMap = new SlideshowMap({
   container: 'map',
   style: 'mapbox://styles/mapbox/dark-v9',
-  center: [118.78, 32.04],
+  center: [118.78 - 1, 32.04],
   zoom: 15.95,
   pitch: 60,
   // bearing: -60,
   // heading: 41,
-  hash: true
+  // hash: true
 });
 
 slideshowMap.installComponents();
@@ -41,7 +41,7 @@ window.flyTo = {
 
 const testOptions = {
   index: 1,
-  areaName: '紫峰大厦',
+  areaName: '江苏省南京市紫峰大厦',
   contents: [
     '外文名称: Greenland Square Zifeng Tower',
     '建筑高度: 450m',
@@ -57,6 +57,7 @@ const testOptions = {
     // '总工程师: 张宁'
   ],
   description: '江苏省南京市',
+  // pillar: true,
   fontSize: 16,
   lngLat: [118.77680629491806, 32.0620757594658],
   zoom: 14,
@@ -67,7 +68,7 @@ window.run = () => slideshowMap.flyTo(testOptions);
 
 window.runCard = () => slideshowMap._test(testOptions);
 
-run();
+// run();
 
 // runCard();
 // window.setTimeout(() => {

@@ -6,7 +6,7 @@ import Component from '../Component';
 import { getColorStr } from '../../Utils/Utils';
 import { SPF } from '../../constants';
 import { Svg } from '../../Utils/Svg';
-import { tween } from 'popmotion';
+import { timeline } from 'popmotion';
 
 /**
  * Frame & background
@@ -25,7 +25,7 @@ export default class Frame extends Component {
     this.obj = group;
 
     group.append(this.background = new Svg('path', {
-      opacity: 0.2,
+      opacity: 0.1,
     }));
     group.append(this.frame = new Svg('path', {
       'class': 'slideshow-map-frame',
@@ -92,7 +92,10 @@ export default class Frame extends Component {
       ].join(' ')
     });
 
-    this._animate = tween({ duration: 10 * SPF }).start(opacity => {
+    this._animate = timeline([
+      30 * SPF,
+      { track: 'opacity', from: 0, to: 1, duration: 60 * SPF }
+    ]).start(({opacity}) => {
       this.obj.attr({
         opacity
       });

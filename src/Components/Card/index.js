@@ -97,57 +97,48 @@ export default class Card extends Component {
     this.title.position(X_GAP, -Y_GAP, 0);
     this.list.position(contentsSize.x, contentsSize.y, 0);
 
-    delay(30 * SPF).start({
-      complete: () => {
-        this.description.update({
-          color: Color,
-          text: description,
-          fontSize,
-          fontFamily
-        });
-      }
+    this.description.update({
+      color: Color,
+      text: description,
+      fontSize,
+      fontFamily
     });
 
-    delay(45 * SPF).start({
-      complete: () => {
+    this.num.update({
+      num: index,
+      fontSize,
+      fontFamily
+    });
 
-        this.num.update({
-          num: index,
-          fontSize,
-          fontFamily
-        });
+    this.frame.update({
+      a,
+      b,
+      xgap: X_GAP,
+      ygap: Y_GAP,
+      color1: Gradient[0],
+      color2: Gradient[1],
+      ...frameSize
+    });
 
-        this.frame.update({
-          a,
-          b,
-          xgap: X_GAP,
-          ygap: Y_GAP,
-          color1: Gradient[0],
-          color2: Gradient[1],
-          ...frameSize
-        });
+    this.title.update({
+      indent: d,
+      text: areaName,
+      fontSize: fontSize * TITLE_LINE_HEIGHT,
+      fontFamily,
+      backgroundColor1: Gradient[0],
+      backgroundColor2: Gradient[1],
+      textColor1: Gradient[1],
+      textColor2: '#000',
+      bottomLineColor: Gradient[1],
+      ...titleSize
+    });
 
-        this.title.update({
-          indent: d,
-          text: areaName,
-          fontSize: fontSize * TITLE_LINE_HEIGHT,
-          fontFamily,
-          backgroundColor1: Gradient[0],
-          backgroundColor2: Gradient[1],
-          textColor1: Gradient[1],
-          textColor2: '#000',
-          bottomLineColor: Gradient[1],
-          ...titleSize
-        });
-
-        this.list.update({
-          contents,
-          width: contentsSize.width, // for clip
-          rowHeight: contentsSize.rowHeight,
-          fontSize,
-          fontFamily,
-        });
-      }
+    this.list.update({
+      contents,
+      width: contentsSize.width, // for clip
+      rowHeight: contentsSize.rowHeight,
+      fontSize,
+      fontFamily,
     });
   }
 

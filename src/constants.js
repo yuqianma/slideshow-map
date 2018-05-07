@@ -19,7 +19,7 @@ export const Box = {
 
 export const Link = {
   Color: MainColor,
-  Durations: [ 30 * SPF, 16 * SPF, 206 * SPF, 16 * SPF ]
+  Durations: [ 0, 16 * SPF]
 };
 
 export const RadioWave = {

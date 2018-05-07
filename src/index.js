@@ -31,7 +31,9 @@ export default class SlideshowMap extends Threebox {
     this.setupDefaultLights();
 
     this.map.on('moveend', (ev) => {
-      this.animateComponents(ev);
+      window.setTimeout(() => {
+        this.animateComponents(ev);
+      }, 500);
     });
 
     this.visible = false;
@@ -200,7 +202,6 @@ export default class SlideshowMap extends Threebox {
       pillar,
       fontSize
     } = options;
-
 
     const coords = lngLat.slice();
 

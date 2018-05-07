@@ -142,35 +142,29 @@ export default class Title extends Component {
     });
 
     this._animates[++i] = timeline([
-      {
-        track: 'line',
-        from: { x: width / 2, width: 0 },
-        to:   { x: 0,         width },
-        duration: 60 * SPF,
-      }
+      24 * SPF,
+      { track: 'line', from: { x: width / 2, width: 0 }, to:   { x: 0, width }, duration: 60 * SPF,}
     ]).start(({line}) => {
       this.bottomLine.attr(line);
     });
 
     this._animates[++i] = timeline([
-      [
-        { track: 'width', from: 0, to: width / 3, duration: 30 * SPF },
-        { track: 'x', from: 0, to: width, duration: 60 * SPF }
-      ],
-      [
-        { track: 'width', to: 0, duration: 30 * SPF }
-      ]
+      // 34 * SPF,
+      { track: 'x', from: width / 2, to: indent, duration: 60 * SPF, ease: easing.easeIn }
+    ]).start((v) => {
+      this.mainText.attr(v);
+      this.hollowText.attr(v);
+    });
+
+    this._animates[++i] = timeline([
+      { track: 'width', from: 0, to: width / 2, duration: 30 * SPF, ease: easing.easeOut },
+      { track: 'width', to: 0, duration: 30 * SPF, ease: easing.easeIn },
+      '' + - 60 * SPF,
+      { track: 'x', from: 0, to: width, duration: 60 * SPF }
     ]).start((v) => {
       this.mainTextClip.attr({ width: v.x });
       this.hollowBackground.attr(v);
       this.hollowTextClip.attr(v);
-    });
-
-    this._animates[++i] = timeline([
-      { track: 'x', from: width, to: indent, duration: 60 * SPF }
-    ]).start((v) => {
-      this.mainText.attr(v);
-      this.hollowText.attr(v);
     });
 
   }
