@@ -6,7 +6,8 @@ import {
   Box,
   Link,
   RadioWave,
-  Card
+  Card,
+  EffectCircle,
 } from './Components';
 import { delay } from 'popmotion';
 
@@ -36,7 +37,7 @@ export default class SlideshowMap extends Threebox {
       }, 500);
     });
 
-    this.visible = false;
+    // this.visible = false;
   }
 
   // Add these helpers to use their inner methods.
@@ -97,6 +98,10 @@ export default class SlideshowMap extends Threebox {
     this.addToMap('radioWave', new RadioWave(), DEV_NANJING);
 
     this.addToPlane('card', new Card({ defs: this.defs }));
+
+    this.addToMap('effectCircle', new EffectCircle({
+      src: 'dev/circle.webm'
+    }), DEV_NANJING)
 
     // const video = document.getElementById( 'video' );
     //
@@ -207,14 +212,17 @@ export default class SlideshowMap extends Threebox {
 
     if (pillar) {
       this.c.box.visible = true;
+      this.c.effectCircle.visible = true;
       this.c.radioWave.visible = false;
 
       coords[2] = 400;
       this.moveToCoordinate(this.c.box, lngLat);
+      this.moveToCoordinate(this.c.effectCircle, lngLat);
       this.c.box.update(options);
 
     } else {
       this.c.box.visible = false;
+      this.c.effectCircle.visible = false;
       this.c.radioWave.visible = true;
       const coords = lngLat.slice();
 

@@ -3,13 +3,14 @@
  */
 
 const svg = tag => document.createElementNS( 'http://www.w3.org/2000/svg', tag );
+const dom = tag => document.createElement(tag);
 
 export class Svg extends THREE.SVGObject {
   constructor (tag, props) {
-    const node = svg(tag);
+    const node = tag instanceof Element ? tag : svg(tag);
     super(node);
 
-    this.type = tag;
+    this.type = node.tagName.toLowerCase();
     if (props) {
       this.attr(props);
     }
@@ -53,6 +54,13 @@ export class Svg extends THREE.SVGObject {
     this.node.parentNode.removeChild(this.node);
   }
 
+}
+
+export class Dom extends Svg {
+  constructor (tag, props) {
+    const node = tag instanceof Element ? tag : dom(tag);
+    super(node, props);
+  }
 }
 
 export class Defs extends Svg {

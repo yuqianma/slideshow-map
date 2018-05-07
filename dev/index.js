@@ -10,7 +10,7 @@ const slideshowMap = new SlideshowMap({
   pitch: 60,
   // bearing: -60,
   // heading: 41,
-  // hash: true
+  hash: true
 });
 
 slideshowMap.installComponents();
@@ -57,11 +57,11 @@ const testOptions = {
     // '总工程师: 张宁'
   ],
   description: '江苏省南京市',
-  // pillar: true,
+  pillar: true,
   fontSize: 16,
   lngLat: [118.77680629491806, 32.0620757594658],
   zoom: 14,
-  pitch: 60,
+  pitch: 45,
 };
 
 window.run = () => slideshowMap.flyTo(testOptions);
