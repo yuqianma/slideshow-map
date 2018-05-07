@@ -40,6 +40,7 @@ window.flyTo = {
 // }));
 
 const testOptions = {
+  index: 1,
   areaName: '紫峰大厦',
   contents: [
     '外文名称: Greenland Square Zifeng Tower',

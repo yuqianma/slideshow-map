@@ -12,6 +12,7 @@ import Frame from './Frame';
 import Title from './Title';
 import { default as List, calcContentsSize } from './List';
 import Description from './Description';
+import Num from './Num';
 
 const {
   Color,
@@ -50,6 +51,8 @@ export default class Card extends Component {
 
     this.add(this.frame = new Frame({ defs }));
 
+    this.add(this.num = new Num({ defs }));
+
     this.add(this.title = new Title({ defs }));
 
     this.add(this.list = new List({ defs }));
@@ -63,6 +66,7 @@ export default class Card extends Component {
 
   update (props) {
     const {
+      index,
       areaName,
       fontSize,
       fontFamily,
@@ -106,6 +110,13 @@ export default class Card extends Component {
 
     delay(45 * SPF).start({
       complete: () => {
+
+        this.num.update({
+          num: index,
+          fontSize,
+          fontFamily
+        });
+
         this.frame.update({
           a,
           b,

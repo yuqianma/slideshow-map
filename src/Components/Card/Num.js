@@ -5,7 +5,7 @@
 import Component from '../Component';
 import { getColorStr } from '../../Utils/Utils';
 import { SPF } from '../../constants';
-import { Svg } from '../../Utils/Svg';
+import { Svg, measureText } from '../../Utils/Svg';
 import { tween } from 'popmotion';
 
 export default class Num extends Component {
@@ -29,9 +29,21 @@ export default class Num extends Component {
   }
 
   update (props) {
-    const { num } = props;
+    let {
+      num,
+      fontSize,
+      fontFamily,
+    } = props;
 
-    this.obj.node.textContent = num;
+    fontSize *= 2.5;
+
+    this.obj.node.textContent = (num + '').padStart(2, '0');
+    this.obj.attr({
+      x: - fontSize / 2,
+      y: fontSize / 2,
+      'text-anchor': 'right',
+      style: `font-weight: bold; font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: alphabetic`,
+    });
 
     this._animate = tween({ duration: 60 * SPF }).start( v => {
       this.stops[1].attr({
