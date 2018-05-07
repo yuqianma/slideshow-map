@@ -57,7 +57,8 @@ export default class Frame extends Component {
     const {
       a, // corner triangle horizontal line
       b, // corner triangle vertical line,
-      gap,
+      xgap,
+      ygap,
       width, // width & height are frame's
       height,
       color1,
@@ -81,12 +82,12 @@ export default class Frame extends Component {
     this.background.attr({
       fill: getColorStr(color1),
       d: [
-        'M', a, -gap,
-        'L', width + gap, -gap,
-        'L', width + gap, height - b,
-        'L', width - a + gap * 2, height - gap,
-        'L', gap, height - gap,
-        'L', gap, b - gap * 2,
+        'M', a, -ygap,
+        'L', width + xgap, -ygap,
+        'L', width + xgap, height - b,
+        'L', width - a + xgap * 2, height - ygap,
+        'L', xgap, height - ygap,
+        'L', xgap, b - ygap * 2,
         'Z'
       ].join(' ')
     });

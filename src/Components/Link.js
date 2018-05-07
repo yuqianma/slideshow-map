@@ -31,12 +31,16 @@ export default class Link extends Component {
     return link;
   }
 
-  update (vector) {
-    const { x, y } = vector;
+  update (options) {
+    const {
+      x, y,
+      dx, dy
+    } = options;
+
     const geometry = this.obj.geometry;
 
-    geometry.vertices[0].copy(vector);
-    geometry.vertices[1].copy(vector);
+    geometry.vertices[0].set(x, y, 0);
+    geometry.vertices[1].set(x, y, 0);
     geometry.verticesNeedUpdate = true;
 
     this._animate = timeline([
@@ -48,8 +52,8 @@ export default class Link extends Component {
           y,
         },
         to: {
-          x: x + 100,
-          y: y + 200,
+          x: x + dx,
+          y: y + dy,
         },
         duration: Durations[1]
       }

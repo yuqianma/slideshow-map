@@ -14,6 +14,10 @@ mapboxgl.accessToken = config.accessToken;
 
 const DEV_NANJING = [118.78, 32.04, 0];
 
+const ANGLE = 50 / 180 * Math.PI;
+const getLinkY = fontSize => fontSize * Math.sin(ANGLE) * 10;
+const getLinkX = fontSize => fontSize * Math.cos(ANGLE) * 10;
+
 export default class SlideshowMap extends Threebox {
   constructor (options) {
     super(new mapboxgl.Map(options));
@@ -191,11 +195,16 @@ export default class SlideshowMap extends Threebox {
       return
     }
 
-    const lngLat = options.lngLat;
+    const {
+      lngLat,
+      pillar,
+      fontSize
+    } = options;
+
 
     const coords = lngLat.slice();
 
-    if (options.pillar) {
+    if (pillar) {
       this.c.box.visible = true;
       this.c.radioWave.visible = false;
 
@@ -214,9 +223,13 @@ export default class SlideshowMap extends Threebox {
     }
 
     const vector = this.projectToPlane(coords);
-    this.c.link.update(vector);
+    this.c.link.update({
+      ...vector,
+      dx: getLinkX(fontSize),
+      dy: getLinkY(fontSize)
+    });
 
-    this.c.card.position(-40, 260, 0);
+    this.c.card.position(-40, 200, 0);
     this.c.card.update(options);
 
     this.visible = true;

@@ -23,9 +23,10 @@ const tan = Math.tan;
 const LINE_HEIGHT = 1.2;
 const TITLE_LINE_HEIGHT = 1.5;
 
-const ANGLE = 45 / 180 * Math.PI;
+const ANGLE = 50 / 180 * Math.PI;
 
-const GAP = 14;
+const Y_GAP = 14;
+const X_GAP = Y_GAP / tan(ANGLE);
 
 function createFilter (defs) {
   defs.filter('glow1').node.innerHTML = `
@@ -83,13 +84,13 @@ export default class Card extends Component {
       d: [
         'M', d, 0,
         'L', titleSize.width, 0,
-        'L', titleSize.width, titleSize.height + GAP,
-        'L', 0, titleSize.height + GAP,
+        'L', titleSize.width, titleSize.height + Y_GAP,
+        'L', 0, titleSize.height + X_GAP,
         'L', 0, titleSize.height,
         'Z'
       ].join(' ')
     });
-    this.title.position(GAP, -GAP, 0);
+    this.title.position(X_GAP, -Y_GAP, 0);
     this.list.position(contentsSize.x, contentsSize.y, 0);
 
     delay(30 * SPF).start({
@@ -108,7 +109,8 @@ export default class Card extends Component {
         this.frame.update({
           a,
           b,
-          gap: GAP,
+          xgap: X_GAP,
+          ygap: Y_GAP,
           color1: Gradient[0],
           color2: Gradient[1],
           ...frameSize
@@ -182,21 +184,21 @@ d |
     fontFamily
   });
 
-  const leftPadding = d + GAP;
+  const leftPadding = d + X_GAP;
 
-  const topPadding = GAP;
+  const topPadding = Y_GAP;
 
-  const rightPadding = GAP * 2;
+  const rightPadding = X_GAP * 2;
 
-  const bottomPadding = GAP * 2;
+  const bottomPadding = Y_GAP * 2;
 
-  const contentsTop = GAP;
+  const contentsTop = Y_GAP;
 
   const contentsWidth = Math.max(areaNameSize.width, contentsTextSize.width);
 
   // corner
-  const a = d + GAP; // h
-  const b = titleSize.height + GAP; // v
+  const a = d + X_GAP; // h
+  const b = titleSize.height + Y_GAP; // v
 
   const contentsSize = {
     ...contentsTextSize,
@@ -205,7 +207,7 @@ d |
     width: contentsWidth,
   };
 
-  titleSize.width = d + contentsSize.width + rightPadding + GAP;
+  titleSize.width = d + contentsSize.width + rightPadding + X_GAP;
 
   const frameSize = {
     width: leftPadding + contentsSize.width + rightPadding,
