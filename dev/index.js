@@ -5,8 +5,8 @@ import mapboxgl from 'mapbox-gl';
 const slideshowMap = new SlideshowMap({
   container: 'map',
   style: 'mapbox://styles/mapbox/dark-v9',
-  center: [118.78 - 1, 32.04],
-  zoom: 15.95,
+  center: [118.78 - 0.1, 32.04 - 0.1],
+  zoom: 14,
   pitch: 60,
   // bearing: -60,
   // heading: 41,
