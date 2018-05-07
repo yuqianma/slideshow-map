@@ -101,9 +101,9 @@ export default class Description extends Component {
         // flash
         physics({
           velocity: 1000,
-          friction: 0.6,
+          friction: 0.8,
           to: 1,
-          springStrength: 2000
+          springStrength: 1500
         }).start((v) => {
           this.outer.attr('opacity', v);
         });
@@ -117,7 +117,7 @@ export default class Description extends Component {
           velocity: 1000,
           friction: 0.8,
           to: 1,
-          springStrength: 2000
+          springStrength: 1500
         }).start((v) => {
           this.inner.attr('opacity', v);
         });
