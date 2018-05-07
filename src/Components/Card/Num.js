@@ -6,7 +6,7 @@ import Component from '../Component';
 import { getColorStr } from '../../Utils/Utils';
 import { SPF } from '../../constants';
 import { Svg, measureText } from '../../Utils/Svg';
-import { tween } from 'popmotion';
+import { timeline } from 'popmotion';
 
 export default class Num extends Component {
   create ({ defs }) {
@@ -24,6 +24,7 @@ export default class Num extends Component {
     this.stops = g.stops();
 
     return new Svg('text', {
+      opacity: 0.5,
       fill: 'url(#num-g)',
     });
   }
@@ -45,12 +46,16 @@ export default class Num extends Component {
       style: `font-weight: bold; font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: alphabetic`,
     });
 
-    this._animate = tween({ duration: 60 * SPF }).start( v => {
+    this._animate = timeline([
+      45 * SPF,
+      { track: 'v', from: 0, to: 1, duration: 60 * SPF}
+    ]).start( ({v}) => {
       this.stops[1].attr({
         offset: `${Math.min(v * 200, 100)}%`,
         'stop-color': `rgba(255, 255, 255, ${v < 0.5 ? 0 : (v - 0.5) * 2})`
       });
     });
+
   }
 
   leave () {

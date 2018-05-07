@@ -131,25 +131,27 @@ export default class Title extends Component {
 
     this.hollowTextClip.attr({ height });
     this.mainTextClip.attr({ x: indent, height });
+    this.hollowBackground.attr({ width: 0 });
 
     this._animates = [];
     let i = -1;
 
     this._animates[++i] = timeline([
+      30 * SPF,
       { track: 'width', from: 0, to: width, duration: 60 * SPF, ease: easing.circOut }
     ]).start((v) => {
       this.mainBackground.attr(v);
     });
 
     this._animates[++i] = timeline([
-      24 * SPF,
+      (30 + 24) * SPF,
       { track: 'line', from: { x: width / 2, width: 0 }, to:   { x: 0, width }, duration: 60 * SPF,}
     ]).start(({line}) => {
       this.bottomLine.attr(line);
     });
 
     this._animates[++i] = timeline([
-      // 34 * SPF,
+      30 * SPF,
       { track: 'x', from: width / 2, to: indent, duration: 60 * SPF, ease: easing.easeIn }
     ]).start((v) => {
       this.mainText.attr(v);
@@ -157,7 +159,9 @@ export default class Title extends Component {
     });
 
     this._animates[++i] = timeline([
-      { track: 'width', from: 0, to: width / 2, duration: 30 * SPF, ease: easing.easeOut },
+      { track: 'width', from: 0, to: 0, duration: 0},
+      30 * SPF,
+      { track: 'width', from: width / 4, to: width / 3, duration: 30 * SPF, ease: easing.easeOut },
       { track: 'width', to: 0, duration: 30 * SPF, ease: easing.easeIn },
       '' + - 60 * SPF,
       { track: 'x', from: 0, to: width, duration: 60 * SPF }

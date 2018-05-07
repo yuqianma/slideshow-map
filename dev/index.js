@@ -10,7 +10,7 @@ const slideshowMap = new SlideshowMap({
   pitch: 60,
   // bearing: -60,
   // heading: 41,
-  // hash: true
+  hash: true
 });
 
 slideshowMap.installComponents();
@@ -68,7 +68,7 @@ window.run = () => slideshowMap.flyTo(testOptions);
 
 window.runCard = () => slideshowMap._test(testOptions);
 
-// run();
+run();
 
 // runCard();
 // window.setTimeout(() => {

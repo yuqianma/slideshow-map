@@ -78,6 +78,7 @@ export default class Description extends Component {
     text
   }) {
 
+    this.outer.attr('opacity', 0);
     this.marker.attr({ opacity: 1 });
 
     // infinity loop
@@ -88,20 +89,25 @@ export default class Description extends Component {
     });
 
     // core
-    tween({
-      from: 0, to: 3, duration: 76 * SPF, ease: easing.backOut
-    }).start(r => {
-      this.core.attr('r', r);
+    timeline([
+      16 * SPF,
+      { track: 'r', from: 0, to: 3, duration: 76 * SPF, ease: easing.backOut }
+    ]).start(v => {
+      this.core.attr(v);
     });
 
-    // flash
-    physics({
-      velocity: 1000,
-      friction: 0.6,
-      to: 1,
-      springStrength: 2000
-    }).start((v) => {
-      this.outer.attr('opacity', v);
+    delay(17 * SPF).start({
+      complete: () => {
+        // flash
+        physics({
+          velocity: 1000,
+          friction: 0.6,
+          to: 1,
+          springStrength: 2000
+        }).start((v) => {
+          this.outer.attr('opacity', v);
+        });
+      }
     });
 
     this.inner.attr('opacity', 0);
@@ -120,7 +126,7 @@ export default class Description extends Component {
 
     // text
     this._textAnimate = timeline([
-      20 * SPF,
+      36 * SPF,
       { track: 'i', from: 0, to: text.length, duration: 60 * SPF, ease: easing.backIn }
     ]).start(({i}) => {
       this.text.node.textContent = text.substr(0, i);

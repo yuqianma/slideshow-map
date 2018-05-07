@@ -3,6 +3,7 @@
  */
 
 import Component from '../Component';
+import { SPF } from '../../constants';
 import { measureText } from '../../Utils/Svg';
 import { delay } from 'popmotion';
 import Item from './Item';
@@ -64,7 +65,7 @@ export default class List extends Component {
     const lastItmes = this.items;
 
     this.items = contents.map((text, i) => {
-      let item = lastItmes.shift(); // pop will lead to seq bug
+      let item = null;// lastItmes.shift(); // pop will lead to seq bug
 
       if (!item) {
         item = new Item({ defs });
@@ -73,7 +74,7 @@ export default class List extends Component {
 
       item.position(0, -rowHeight * i, 0);
 
-      delay(1000 * i / contents.length).start({
+      delay(45 * SPF + 1000 * i / contents.length).start({
         complete: () => {
           item.update({
             text,
