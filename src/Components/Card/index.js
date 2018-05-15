@@ -13,6 +13,7 @@ import Title from './Title';
 import { default as List, calcContentsSize } from './List';
 import Description from './Description';
 import Num from './Num';
+import Global from './Global';
 
 const {
   Color,
@@ -43,6 +44,7 @@ function createFilter (defs) {
 export default class Card extends Component {
   create ({
     defs,
+    svg,
   }) {
 
     this.defs = defs;
@@ -50,6 +52,8 @@ export default class Card extends Component {
     this.obj = new Svg('g');
 
     this.add(this.frame = new Frame({ defs }));
+
+    this.add(this.global = new Global({ svg }));
 
     this.add(this.num = new Num({ defs }));
 
@@ -109,6 +113,9 @@ export default class Card extends Component {
       fontSize,
       fontFamily
     });
+
+    // this.global.position(0, 0, 0);
+    this.global.update();
 
     this.frame.update({
       a,

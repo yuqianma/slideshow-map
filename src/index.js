@@ -37,7 +37,7 @@ export default class SlideshowMap extends Threebox {
       }, 500);
     });
 
-    // this.visible = false;
+    this.visible = false;
   }
 
   // Add these helpers to use their inner methods.
@@ -97,7 +97,7 @@ export default class SlideshowMap extends Threebox {
 
     this.addToMap('radioWave', new RadioWave(), DEV_NANJING);
 
-    this.addToPlane('card', new Card({ defs: this.defs }));
+    this.addToPlane('card', new Card({ defs: this.defs, svg: this.svgRenderer.domElement }));
 
     this.addToMap('effectCircle', new EffectCircle({
       src: 'dev/circle.webm'
@@ -173,7 +173,8 @@ export default class SlideshowMap extends Threebox {
 
     this.map.flyTo({
       // [0.005713705081944909, 0.010004240534200903]
-      center: [lng + 0.005713705081944909, lat + 0.010004240534200903],
+      // center: [lng + 0.005713705081944909, lat + 0.010004240534200903],
+      center: [lng, lat],
       zoom,
       pitch,
     }, {
@@ -238,7 +239,7 @@ export default class SlideshowMap extends Threebox {
       dy: getLinkY(fontSize)
     });
 
-    this.c.card.position(-40, 200, 0);
+    this.c.card.position(0, 400, 0);
     this.c.card.update(options);
 
     this.visible = true;
