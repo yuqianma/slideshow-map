@@ -8,34 +8,6 @@ import { measureText } from '../../Utils/Svg';
 import { delay } from 'popmotion';
 import Item from './Item';
 
-export function calcContentsSize ({
-  contents,
-  lineHeight,
-  fontSize,
-  fontFamily
-}) {
-  if (!contents || contents.length === 0) {
-    return {
-      width: 0,
-      height: 0,
-      rowHeight: 0
-    }
-  }
-
-  const sizes = contents.map(text => measureText(text, { fontSize, fontFamily }));
-
-  const maxWidth = Math.max(...sizes.map(s => s.width));
-  const maxHeight = Math.max(...sizes.map(s => s.height));
-
-  const rowHeight = maxHeight * lineHeight;
-
-  return {
-    width: maxWidth,
-    height: rowHeight * sizes.length,
-    rowHeight
-  }
-}
-
 export default class List extends Component {
   create ({ defs }) {
     this.defs = defs;

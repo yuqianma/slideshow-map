@@ -15,9 +15,9 @@ const SEGMENTS = 1;
 
 export default class Box extends Component {
   create ({
-    width = 20,
-    height = 20,
-    depth = 20,
+    width = 1,
+    height = 1,
+    depth = 1,
     color = Color
   }) {
 
@@ -56,24 +56,17 @@ export default class Box extends Component {
   }
 
   update (options) {
-    const { lngLat } = options;
+    const { x, y, z } = options;
 
-    this.obj.scale.setZ(1e-6);
+    this.obj.scale.set(x, y, 1e-6);
 
     timeline([
       {
         track: 'z',
         from: 1e-6,
-        to: 1,
+        to: z,
         duration: Durations[0]
-      },
-      // Durations[1],
-      // {
-      //   track: 'z',
-      //   from: 1,
-      //   to: 1e-6,
-      //   duration: Durations[2]
-      // }
+      }
     ]).start(({ z }) => {
       this.obj.scale.setZ(z);
     });

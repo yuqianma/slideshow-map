@@ -54,7 +54,7 @@ export default class Description extends Component {
       fontFamily,
     } = props;
 
-    const height = fontSize * 2 + 10;
+    const height = fontSize * 2.6;
 
     this.marker.node.style.transform = `translate(${fontSize / 2}px, ${height / 2}px) scale(${fontSize / 18})`;
 

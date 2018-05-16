@@ -4,19 +4,20 @@ import Threebox from './Threebox';
 import mapboxgl from 'mapbox-gl';
 import {
   Box,
-  Link,
   RadioWave,
   Card,
   EffectCircle,
 } from './Components';
+import {
+  calcFittedSize,
+  getBoxSize, getLinkSize,
+  getValidSize,
+} from './helper';
 import { delay } from 'popmotion';
 
 mapboxgl.accessToken = config.accessToken;
 
 const DEV_NANJING = [118.78, 32.04, 0];
-
-const ANGLE = 50 / 180 * Math.PI;
-
 
 export default class SlideshowMap extends Threebox {
   constructor (options) {
@@ -46,6 +47,10 @@ export default class SlideshowMap extends Threebox {
     this._mapObj = this.addAtCoordinate(mapObj, [0, 0]);
   }
 
+  getSize () {
+    return this.map.transform
+  }
+
   projectToPlane (coords) {
     const width = this.map.transform.width, height = this.map.transform.height;
     const widthHalf = width / 2, heightHalf = height / 2;
@@ -67,13 +72,11 @@ export default class SlideshowMap extends Threebox {
     super.moveToCoordinate(object.obj || object, lnglat, options);
   }
 
-  addToMap (name, component, lnglat = [ 0, 0 ]) {
-    this.c[name] = component;
+  addToMap (component, lnglat = [ 0, 0 ]) {
     this.addAtCoordinate(component.obj, lnglat);
   }
 
-  addToPlane (name, component, coords = [ 0, 0 ]) {
-    this.c[name] = component;
+  addToPlane (component, coords = [ 0, 0 ]) {
     this.plane.add(component.obj);
   }
 
@@ -84,70 +87,15 @@ export default class SlideshowMap extends Threebox {
     }
     this.__installed = true;
 
-    const box = new Box({
-      width: 200,
-      height: 200,
-      depth: 400,
-    });
+    this.addToMap(this.c.box = new Box({}), DEV_NANJING);
 
-    this.addToMap('box', box, DEV_NANJING);
+    this.addToMap(this.c.radioWave = new RadioWave(), DEV_NANJING);
 
-    this.addToPlane('link', new Link());
+    this.addToPlane(this.c.card = new Card({ defs: this.defs, svg: this.svgRenderer.domElement }));
 
-    this.addToMap('radioWave', new RadioWave(), DEV_NANJING);
-
-    this.addToPlane('card', new Card({ defs: this.defs, svg: this.svgRenderer.domElement }));
-
-    this.addToMap('effectCircle', new EffectCircle({
+    this.addToMap(this.c.effectCircle = new EffectCircle({
       src: 'dev/circle.webm'
-    }), DEV_NANJING)
-
-    // const video = document.getElementById( 'video' );
-    //
-    // const texture = new THREE.VideoTexture( video );
-    // texture.minFilter = THREE.LinearFilter;
-    // texture.magFilter = THREE.LinearFilter;
-    // // texture.format = THREE.RGBFormat;
-    //
-    // var mat = new THREE.MeshBasicMaterial({
-    //   transparent: true,
-    //   map: texture
-    // });
-    //
-    // var geometry = new THREE.PlaneGeometry( 2000, 2000, 1 );
-    // var circle = new THREE.Mesh( geometry, mat );
-    //
-    // this.addAtCoordinate(circle, DEV_NANJING);
-
-    // const width = 200, height = 100;
-    //
-    // const background = new THREE.Shape();
-    //
-    // background.moveTo(0, 0);
-    // background.lineTo(width, 0);
-    // background.lineTo(width, height);
-    // background.lineTo(0, height);
-    // background.lineTo(0, 0);
-    //
-    // var geometry = new THREE.ShapeGeometry( background);
-    // var material = new THREE.MeshPhongMaterial( {
-    //   transparent: true,
-    //   opacity: 0.5,
-    //   color: 0x00eeee,
-    //   // depthTest: false,
-    //   // side: THREE.DoubleSide
-    // } );
-    // var mesh = new THREE.Mesh( geometry, material ) ;
-    //
-    // // geometry.rotateX(- Math.PI / 2);
-    // // geometry.translate(-1000, 0, 1000);
-    //
-    // this.plane.add(mesh);
-    //
-    //
-    //
-    // this.plane.add( link );
-    // this.components.link = link;
+    }), DEV_NANJING);
   }
 
   _test (options) {
@@ -203,9 +151,14 @@ export default class SlideshowMap extends Threebox {
     }
 
     const {
-      lngLat,
+      areaName,
+      contents,
+      description,
       pillar,
-      fontSize
+      fixed,
+      size,
+      lngLat,
+      fontFamily
     } = options;
 
     const coords = lngLat.slice();
@@ -215,10 +168,12 @@ export default class SlideshowMap extends Threebox {
       this.c.effectCircle.visible = true;
       this.c.radioWave.visible = false;
 
-      coords[2] = 400;
+      const boxSize = getBoxSize(size);
+
+      coords[2] = boxSize.z;
       this.moveToCoordinate(this.c.box, lngLat);
       this.moveToCoordinate(this.c.effectCircle, lngLat);
-      this.c.box.update(options);
+      this.c.box.update(boxSize);
 
     } else {
       this.c.box.visible = false;
@@ -232,14 +187,20 @@ export default class SlideshowMap extends Threebox {
     }
 
     const vector = this.projectToPlane(coords);
-    this.c.link.update({
-      ...vector,
-      dx: getLinkX(fontSize),
-      dy: getLinkY(fontSize)
+    const viewSize = this.getSize();
+    const validSize = getValidSize({
+      x: vector.x,
+      y: vector.y,
+      ...viewSize
     });
 
-    this.c.card.position(0, 400, 0);
-    this.c.card.update(options);
+    this.c.card.position(vector.x, vector.y, 0);
+    this.c.card.update({
+      ...options,
+      viewportWidth: viewSize.width,
+      width: validSize.width,
+      height: validSize.height
+    });
 
     this.visible = true;
   }

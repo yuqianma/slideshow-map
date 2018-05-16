@@ -3,32 +3,30 @@
  */
 
 import Component from '../Component';
-import { Card as Default, SPF } from '../../constants';
 import { delay } from 'popmotion';
-import { getColorStr } from '../../Utils/Utils';
-import { Svg, measureText } from '../../Utils/Svg';
+import { Svg } from '../../Utils/Svg';
+
+import {
+  Card as Default,
+  TITLE_FONT_SIZE_SCALE
+} from '../../constants';
+import {
+  getGaps,
+  calcFittedSize
+} from '../../helper';
 
 import Frame from './Frame';
 import Title from './Title';
-import { default as List, calcContentsSize } from './List';
+import List from './List';
 import Description from './Description';
 import Num from './Num';
 import Global from './Global';
+import Link from './Link';
 
 const {
   Color,
   Gradient
 } = Default;
-
-const tan = Math.tan;
-
-const LINE_HEIGHT = 1.2;
-const TITLE_LINE_HEIGHT = 1.5;
-
-const ANGLE = 50 / 180 * Math.PI;
-
-const Y_GAP = 14;
-const X_GAP = Y_GAP / tan(ANGLE);
 
 function createFilter (defs) {
   defs.filter('glow1').node.innerHTML = `
@@ -63,74 +61,54 @@ export default class Card extends Component {
 
     this.add(this.description = new Description({ defs }));
 
+    this.add(this.link = new Link());
+
     defs.clipPath('title-clip', null, 'path');
 
     createFilter(defs);
   }
 
   update (props) {
+
     const {
       index,
       areaName,
-      fontSize,
-      fontFamily,
       contents,
       description,
+      fontFamily,
     } = props;
 
     const {
-      frameSize,
+      fontSize,
       titleSize,
       contentsSize,
-      a,
-      b,
-      d
-    } = calcSize(props);
+      frameSize,
+      descriptionSize,
+      linkSize,
+    } = calcFittedSize(props);
 
-    this.description.position(0, -frameSize.height, 0);
+    const gaps = getGaps(fontSize);
+
+    if (linkSize) {
+      this.link.position(linkSize.x, linkSize.y, 0);
+      this.link.update(linkSize);
+    }
+
     this.defs.clipPath('title-clip', {
       d: [
-        'M', d, 0,
+        'M', titleSize.d, 0,
         'L', titleSize.width, 0,
-        'L', titleSize.width, titleSize.height + Y_GAP,
-        'L', 0, titleSize.height + X_GAP,
+        'L', titleSize.width, titleSize.height + gaps.y,
+        'L', 0, titleSize.height + gaps.x,
         'L', 0, titleSize.height,
         'Z'
       ].join(' ')
     });
-    this.title.position(X_GAP, -Y_GAP, 0);
-    this.list.position(contentsSize.x, contentsSize.y, 0);
-
-    this.description.update({
-      color: Color,
-      text: description,
-      fontSize,
-      fontFamily
-    });
-
-    this.num.update({
-      num: index,
-      fontSize,
-      fontFamily
-    });
-
-    // this.global.position(0, 0, 0);
-    this.global.update();
-
-    this.frame.update({
-      a,
-      b,
-      xgap: X_GAP,
-      ygap: Y_GAP,
-      color1: Gradient[0],
-      color2: Gradient[1],
-      ...frameSize
-    });
-
+    this.title.position(titleSize.x, titleSize.y, 0);
     this.title.update({
-      indent: d,
+      indent: titleSize.d,
       text: areaName,
-      fontSize: fontSize * TITLE_LINE_HEIGHT,
+      fontSize: fontSize * TITLE_FONT_SIZE_SCALE,
       fontFamily,
       backgroundColor1: Gradient[0],
       backgroundColor2: Gradient[1],
@@ -140,12 +118,40 @@ export default class Card extends Component {
       ...titleSize
     });
 
+    this.num.position(frameSize.x, frameSize.y, 0);
+    this.num.update({
+      num: index,
+      fontSize,
+      fontFamily
+    });
+
+    this.global.position(frameSize.x, frameSize.y, 0);
+    this.global.update();
+
+    this.frame.position(frameSize.x, frameSize.y, 0);
+    this.frame.update({
+      xgap: gaps.x,
+      ygap: gaps.y,
+      color1: Gradient[0],
+      color2: Gradient[1],
+      ...frameSize
+    });
+
+    this.list.position(contentsSize.x, contentsSize.y, 0);
     this.list.update({
       contents,
       width: contentsSize.width, // for clip
       rowHeight: contentsSize.rowHeight,
       fontSize,
       fontFamily,
+    });
+
+    this.description.position(descriptionSize.x, descriptionSize.y, 0);
+    this.description.update({
+      color: Color,
+      text: description,
+      fontSize,
+      fontFamily
     });
   }
 
@@ -157,78 +163,4 @@ export default class Card extends Component {
   }
 }
 
-export const calcSize = ({
-  areaName,
-  contents,
-  fontSize,
-  fontFamily
-}) => {
 
-  // calculate pos & size
-
-  const titleFontSize = fontSize * TITLE_LINE_HEIGHT;
-
-  const areaNameSize = measureText(areaName, {
-    fontSize: titleFontSize,
-    fontFamily
-  });
-
-  const titleSize = {
-    height: areaNameSize.height * LINE_HEIGHT
-  };
-
-/*
-  ____________________
- /|                   | | height
-/_|___________________| |
-d |
-------- width --------
-*/
-  const d = titleSize.height / tan(ANGLE);
-
-  const contentsTextSize = calcContentsSize({
-    contents,
-    lineHeight: LINE_HEIGHT,
-    fontSize,
-    fontFamily
-  });
-
-  const leftPadding = d + X_GAP;
-
-  const topPadding = Y_GAP;
-
-  const rightPadding = X_GAP * 2;
-
-  const bottomPadding = Y_GAP * 2;
-
-  const contentsTop = Y_GAP;
-
-  const contentsWidth = Math.max(areaNameSize.width, contentsTextSize.width);
-
-  // corner
-  const a = d + X_GAP; // h
-  const b = titleSize.height + Y_GAP; // v
-
-  const contentsSize = {
-    ...contentsTextSize,
-    x: a,
-    y: - b - contentsTop,
-    width: contentsWidth,
-  };
-
-  titleSize.width = d + contentsSize.width + rightPadding + X_GAP;
-
-  const frameSize = {
-    width: leftPadding + contentsSize.width + rightPadding,
-    height: topPadding + titleSize.height + contentsTop + contentsSize.height + bottomPadding
-  };
-
-  return {
-    frameSize,
-    titleSize,
-    contentsSize,
-    a,
-    b,
-    d
-  }
-};

@@ -4,25 +4,48 @@ import {
   TITLE_FONT_SIZE_SCALE,
   ANGLE,
   FONT_SIZE_RATIO,
-  LINK_SCALE
+  LINK_SCALE,
+  BOUND_PADDING
 } from './constants';
 
-const getGaps = fontSize => ({
+// we have to know box size to calculate the link & card pos
+export const getBoxSize = (size) => {
+  return {
+    x: 100 * size,
+    y: 100 * size,
+    z: 200 * size,
+  }
+};
+
+// x,y is left-bottom
+export const getValidSize = ({ x, y, width, height }) => {
+  const p = BOUND_PADDING * width;
+  const _width = width / 2 - x - p;
+  const _height = height / 2 - y - p;
+  return {
+    x,
+    y,
+    width: _width,
+    height: _height
+  }
+};
+
+export const getGaps = fontSize => ({
   x: fontSize / Math.tan(ANGLE),
   y: fontSize
 });
 
-const getGlobalSize = fontSize => ({
+export const getGlobalSize = fontSize => ({
   width: fontSize * 100 / 15, // approximately
   height: fontSize * 100 / 15
 });
 
-const getLinkSize = fontSize => ({
+export const getLinkSize = fontSize => ({
   width: fontSize * Math.cos(ANGLE) * LINK_SCALE,
   height: fontSize * Math.sin(ANGLE) * LINK_SCALE
 });
 
-const getDescriptionHeight = fontSize => fontSize * 1.3;// approximately
+export const getDescriptionHeight = fontSize => fontSize * 2.6;// approximately
 
 export function calcContentsSize ({
   contents,
@@ -52,16 +75,16 @@ export function calcContentsSize ({
   }
 }
 
-// assume no text there
-export const getEmptyFrameSize = ({
-  fontSize,
-}) => {
+// component height
+const getTitleHeight = (fontSize) => fontSize * TITLE_FONT_SIZE_SCALE * LINE_HEIGHT * 1.2;
+
+export const getEmptyFrameSize = (fontSize) => {
   const {
     x: xgap,
     y: ygap,
   } = getGaps(fontSize);
 
-  const titleHeight = fontSize * TITLE_FONT_SIZE_SCALE * 1.2; // bbox height 1.2
+  const titleHeight = getTitleHeight(fontSize);
 
   /*
     ____________________
@@ -70,7 +93,7 @@ export const getEmptyFrameSize = ({
   d |
   ------- width --------
   */
-  const d = titleHeight / Math.tan(ANGLE);
+  const d = getGaps(titleHeight).x;
 
   // the gap between main frame (line) & title & contents outline
 
@@ -104,45 +127,21 @@ export const getEmptyFrameSize = ({
     rightPadding,
     bottomPadding,
     contentsTop,
-    titleHeight,
   }
 };
 
-export const calcCardSize = ({
+export const _fitContentsSize = ({
   areaName,
   contents,
   description,
   fontSize,
   fontFamily,
 }) => {
-  const {
-    x: xgap,
-    y: ygap,
-  } = getGaps(fontSize);
-
-  const {
-    a, b, d,
-    leftPadding,
-    topPadding,
-    rightPadding,
-    bottomPadding,
-    contentsTop,
-  } = getEmptyFrameSize({ fontSize });
-
-  // calculate pos & size
-
-  const titleFontSize = fontSize * TITLE_FONT_SIZE_SCALE;
-
   // text size
   const areaNameSize = measureText(areaName, {
-    fontSize: titleFontSize,
+    fontSize: fontSize * TITLE_FONT_SIZE_SCALE,
     fontFamily
   });
-
-  // component size
-  const titleSize = {
-    height: areaNameSize.height * LINE_HEIGHT
-  };
 
   const contentsTextSize = calcContentsSize({
     contents,
@@ -155,11 +154,66 @@ export const calcCardSize = ({
     fontSize, fontFamily
   });
 
+  // get max text length as result width
   const contentsWidth = Math.max(
     areaNameSize.width,
     contentsTextSize.width,
     descriptionTextSize.width - fontSize // approximately
   );
+
+  return {
+    width: contentsWidth,
+    height: contentsTextSize.height,
+    rowHeight: contentsTextSize.rowHeight
+  }
+};
+
+export const calcCardSize = ({
+  areaName,
+  contents,
+  description,
+  fontSize,
+  fontFamily,
+  fitContentsSize
+}) => {
+
+  if (!fitContentsSize) {
+    fitContentsSize = _fitContentsSize
+  }
+
+  const {
+    x: xgap,
+    y: ygap,
+  } = getGaps(fontSize);
+
+  const {
+    a, b, d,
+    leftPadding,
+    topPadding,
+    rightPadding,
+    bottomPadding,
+    contentsTop,
+  } = getEmptyFrameSize(fontSize);
+
+  // text size
+  const contentsTextSize = fitContentsSize({
+    areaName,
+    contents,
+    description,
+    fontSize,
+    fontFamily,
+  });
+
+  const contentsWidth = contentsTextSize.width;
+
+  // xy 坐标原点是frame线 内轮廓线 包围矩形 左上角，就是大约序号数字那里
+  const titleSize = {
+    x: xgap,
+    y: -ygap,
+    d,
+    width: d + contentsWidth + rightPadding + xgap,
+    height: getTitleHeight(fontSize)
+  };
 
   const contentsSize = {
     ...contentsTextSize,
@@ -168,22 +222,86 @@ export const calcCardSize = ({
     width: contentsWidth,
   };
 
-  titleSize.width = d + contentsSize.width + rightPadding + xgap;
-
   const frameSize = {
+    x: 0,
+    y: 0,
     a,
     b,
-    width: leftPadding + contentsSize.width + rightPadding,
+    width: leftPadding + contentsWidth + rightPadding,
     height: topPadding + titleSize.height + contentsTop + contentsSize.height + bottomPadding
   };
 
+  const descriptionSize = {
+    x: 0,
+    y: -frameSize.height,
+    width: frameSize.width,
+    height: getDescriptionHeight(fontSize),
+  };
+
   return {
-    d,
     titleSize,
     contentsSize,
-    frameSize
+    frameSize,
+    descriptionSize
   }
 
+};
+
+const moveBounds = (sizes, { x, y }) => {
+  const nextSizes = {};
+  Object.keys(sizes).forEach(k => {
+    const c = {...sizes[k]};
+    c.x += x;
+    c.y += y;
+    nextSizes[k] = c;
+  });
+  return nextSizes
+};
+
+const getPlacedSizesWithLink = ({
+  fontSize,
+  sizes
+}) => {
+  const linkSize = getLinkSize(fontSize);
+  const offsetX = linkSize.width;
+  const offsetY = linkSize.height
+    + sizes.descriptionSize.height
+    + sizes.frameSize.height;
+
+  const nextSizes = moveBounds(sizes, { x: offsetX, y: offsetY });
+
+  return {
+    ...nextSizes,
+    linkSize: {
+      x: 0,
+      y: 0,
+      ...linkSize
+    }
+  }
+};
+
+const getPlacedSizesNoLink = ({
+  fontSize,
+  width,
+  height,
+  sizes
+}) => {
+  const { frameSize } = sizes;
+  const gaps = getGaps(fontSize);
+
+  const globalSize = getGlobalSize(fontSize);
+  const offsetX = width - frameSize.width - gaps.x;
+  const offsetY = height - globalSize.height / 2;
+
+  return moveBounds(sizes, { x: offsetX, y: offsetY });
+};
+
+const getPlacedSizes = (opt) => {
+  const { fontSize } = opt;
+  if ( !fontSize ) {
+    throw 'fontSize error'
+  }
+  return opt.withLink ? getPlacedSizesWithLink(opt) : getPlacedSizesNoLink(opt);
 };
 
 // the area to adjust
@@ -192,19 +310,36 @@ const getAreaSize = ({
   frameSize,
   withLink
 }) => {
-  const gap = getGaps(fontSize);
+  const gaps = getGaps(fontSize);
   const globalSize = getGlobalSize(fontSize);
   const linkSize = withLink ? getLinkSize(fontSize) : { width: 0, height: 0};
   const descriptionHeight = getDescriptionHeight(fontSize);
 
   return {
-    width: linkSize.width + frameSize.width + gap.x, // add frame background
+    width: linkSize.width
+    + frameSize.width
+    + gaps.x, // add right margin
 
-    height: globalSize.height / 2
+    height: globalSize.height / 2 // top margin
     + frameSize.height
     + descriptionHeight
     + linkSize.height,
   };
+};
+
+const cutCardHorizontalSizes = (sizes, dx) => {
+  sizes.titleSize.width -= dx;
+  sizes.contentsSize.width -= dx;
+  sizes.frameSize.width -= dx;
+  sizes.descriptionSize.width -= dx;
+};
+
+const cutCardVerticalSizes = (sizes, dy) => {
+  const rowHeight = sizes.contentsSize.rowHeight;
+  const cutHeight = Math.ceil(dy / rowHeight) * rowHeight;
+  sizes.contentsSize.height -= cutHeight;
+  sizes.frameSize.height -= cutHeight;
+  sizes.descriptionSize.y += cutHeight;
 };
 
 /**
@@ -220,9 +355,9 @@ const getAreaSize = ({
  * @returns {{
  *    fontSize: number,
  *    frameSize: {a: number, b: number, width: number, height: number},
- *    titleSize: {height: number},
+ *    titleSize: {},
  *    contentsSize: {width, height, rowHeight, x: number, y: number},
- *    d: number
+ *    descriptionSize: {}
  * }}
  */
 export const calcFittedSize = ({
@@ -236,14 +371,11 @@ export const calcFittedSize = ({
   fixed,
 }) => {
 
+  const withLink = !fixed;
+
   let fontSize = viewportWidth * FONT_SIZE_RATIO.MAX;
 
-  let {
-    d,
-    titleSize,
-    contentsSize,
-    frameSize,
-  } = calcCardSize({
+  let sizes = calcCardSize({
     areaName,
     contents,
     description,
@@ -251,7 +383,11 @@ export const calcFittedSize = ({
     fontFamily
   });
 
-  let areaSize = getAreaSize({ fontSize, frameSize, withLink: !fixed });
+  let areaSize = getAreaSize({
+    fontSize,
+    frameSize: sizes.frameSize,
+    withLink
+  });
 
   const wRatio = areaSize.width / width;
   const hRatio = areaSize.height / height;
@@ -260,30 +396,19 @@ export const calcFittedSize = ({
 
   // normal
   if (wRatio <= 1 && hRatio <= 1) {
-    return {
-      fontSize,
-      d,
-      titleSize,
-      contentsSize,
-      frameSize,
-    }
+
   }
   // a bit exceeded the boundary but don't need to ellipsis
   else if (wRatio <= r && hRatio <= r) {
     const minR = Math.min(wRatio, hRatio);
     fontSize = viewportWidth * FONT_SIZE_RATIO.MAX * minR;
-    const size = calcCardSize({
+    sizes = calcCardSize({
       areaName,
       contents,
       description,
       fontSize,
       fontFamily
     });
-
-    return {
-      ...size,
-      fontSize
-    }
   }
   else {
     fontSize = viewportWidth * FONT_SIZE_RATIO.MIN;
@@ -291,12 +416,7 @@ export const calcFittedSize = ({
     // It's too troublesome to get accurate ellipsis.
     // Simply cut the exceeded width; omit lines;
 
-    let {
-      d,
-      titleSize,
-      contentsSize,
-      frameSize,
-    } = calcCardSize({
+    sizes = calcCardSize({
       areaName,
       contents,
       description,
@@ -304,35 +424,36 @@ export const calcFittedSize = ({
       fontFamily
     });
 
-    let areaSize = getAreaSize({ fontSize, frameSize, withLink: !fixed });
+    let areaSize = getAreaSize({
+      fontSize,
+      frameSize: sizes.frameSize,
+      withLink
+    });
 
     // the length to cut
     const dx = areaSize.width - width;
     const dy = areaSize.height - height;
 
-    if (dx) {
-      // these widths have been aligned, so it's safe to cut
-      titleSize.width -= dx;
-      contentsSize.width -= dx;
-      frameSize.width -= dx;
+    if (dx > 0) {
+      cutCardHorizontalSizes(sizes, dx);
     }
 
-    if (dy) {
-      const rowHeight = contentsSize.rowHeight;
-      const cutHeight = Math.ceil(dy / rowHeight) * rowHeight;
-      contentsSize.height -= cutHeight;
-      frameSize.height -= cutHeight;
+    if (dy > 0) {
+      cutCardVerticalSizes(sizes, dy);
     }
+  }
 
-    return {
-      fontSize,
-      d,
-      titleSize,
-      contentsSize,
-      frameSize,
-    }
+  const placedSizes = getPlacedSizes({
+    fontSize,
+    sizes,
+    width,
+    height,
+    withLink
+  });
 
+  return {
+    ...placedSizes,
+    fontSize
   }
 
 };
-

@@ -2,8 +2,8 @@
  * Created by Jeffrey on 2018/4/26.
  */
 
-import Component from './Component';
-import { Link as Default } from '../constants';
+import Component from '../Component';
+import { Link as Default } from '../../constants';
 import { timeline } from 'popmotion';
 
 const {
@@ -33,14 +33,13 @@ export default class Link extends Component {
 
   update (options) {
     const {
-      x, y,
-      dx, dy
+      width, height
     } = options;
 
     const geometry = this.obj.geometry;
 
-    geometry.vertices[0].set(x, y, 0);
-    geometry.vertices[1].set(x, y, 0);
+    geometry.vertices[0].set(0, 0, 0);
+    geometry.vertices[1].set(0, 0, 0);
     geometry.verticesNeedUpdate = true;
 
     this._animate = timeline([
@@ -48,12 +47,12 @@ export default class Link extends Component {
       {
         track: 'v',
         from: {
-          x,
-          y,
+          x: 0,
+          y: 0,
         },
         to: {
-          x: x + dx,
-          y: y + dy,
+          x: width,
+          y: height,
         },
         duration: Durations[1]
       }

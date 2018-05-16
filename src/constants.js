@@ -15,6 +15,8 @@ export const LINE_HEIGHT = 1.2;
 
 export const ANGLE = 50 / 180 * Math.PI;
 
+export const BOUND_PADDING = 0.03;
+
 // a ratio to viewport width
 export const FONT_SIZE_RATIO = {
   MIN: 0.012,
