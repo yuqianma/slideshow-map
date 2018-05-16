@@ -1,7 +1,10 @@
 import {
   getGaps,
+  getLinkSize,
+  getGlobalSize,
   getEmptyFrameSize,
   calcCardSize,
+  getPlacedSizes,
   calcFittedSize
 } from '../src/helper';
 
@@ -90,6 +93,62 @@ describe('Layout', function () {
       });
 
     });
+  });
+
+  describe('getPlacedSizes', function () {
+    const fontSize = 10;
+    const gaps = getGaps(fontSize);
+    const globalSize = getGlobalSize(fontSize);
+
+    const sizes = calcCardSize({
+      // omit other parameters as we have stub
+      fontSize,
+      fitContentsSize: () => ({
+        width: 300,
+        height: 120,
+        rowHeight: 12
+      })
+    });
+
+    describe('fixed', function () {
+      const result = getPlacedSizes({
+        fontSize,
+        width: 1000,
+        height: 900,
+        sizes,
+        withLink: false
+      });
+      it('should place card at top-right', function () {
+        const { frameSize } = result;
+        expect(frameSize.x + frameSize.width + gaps.x).to.be.equal(1000);
+        expect(frameSize.y + globalSize.height / 2).to.be.equal(900);
+      });
+    });
+
+    describe('non-fixed', function () {
+      const result = getPlacedSizes({
+        fontSize,
+        width: 1000,
+        height: 900,
+        sizes,
+        withLink: true
+      });
+      const linkSize = getLinkSize(fontSize);
+
+      it('should place link at 0,0', function () {
+        expect(result.linkSize).to.be.eql({
+          x: 0,
+          y: 0,
+          ...linkSize
+        });
+      });
+      it('should place description at the end of link', function () {
+        const { descriptionSize } = result;
+        expect(descriptionSize.x).to.be.equal(linkSize.width);
+        expect(descriptionSize.y).to.be.equal(linkSize.height + descriptionSize.height);
+      });
+    });
+
   });
 
   describe('calcContentsSize', function () {

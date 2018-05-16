@@ -296,7 +296,7 @@ const getPlacedSizesNoLink = ({
   return moveBounds(sizes, { x: offsetX, y: offsetY });
 };
 
-const getPlacedSizes = (opt) => {
+export const getPlacedSizes = (opt) => {
   const { fontSize } = opt;
   if ( !fontSize ) {
     throw 'fontSize error'
