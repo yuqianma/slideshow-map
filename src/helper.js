@@ -457,3 +457,21 @@ export const calcFittedSize = ({
   }
 
 };
+
+export const getTruncated = (text, width, style) => {
+  let truncated = text;
+  let tCount = 0;
+  while (measureText(truncated, style).width > width) {
+    truncated = truncated.substr(0, truncated.length - 1);
+    ++tCount;
+  }
+
+  if (tCount === 1) {
+    // prevent ABCD -> ABC…
+    truncated = text;
+  }
+  else if (tCount > 1) {
+    truncated += '…';
+  }
+  return truncated
+};

@@ -140,10 +140,9 @@ export default class Card extends Component {
     this.list.position(contentsSize.x, contentsSize.y, 0);
     this.list.update({
       contents,
-      width: contentsSize.width, // for clip
-      rowHeight: contentsSize.rowHeight,
       fontSize,
       fontFamily,
+      ...contentsSize
     });
 
     this.description.position(descriptionSize.x, descriptionSize.y, 0);

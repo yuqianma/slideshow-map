@@ -7,6 +7,7 @@ import { SPF } from '../../constants';
 import { measureText } from '../../Utils/Svg';
 import { delay } from 'popmotion';
 import Item from './Item';
+import { getTruncated } from '../../helper';
 
 export default class List extends Component {
   create ({ defs }) {
@@ -22,6 +23,7 @@ export default class List extends Component {
   update ({
     contents,
     width,
+    height,
     rowHeight,
     fontSize,
     fontFamily
@@ -29,14 +31,20 @@ export default class List extends Component {
 
     const defs = this.defs;
 
+    const itemCount = Math.floor(height / rowHeight);
+
     this.clip.attr({
-      width,
+      width: width + fontSize,
       height: rowHeight
     });
 
-    const lastItmes = this.items;
+    this.items.forEach(item => {
+      this.remove(item);
+    });
 
-    this.items = contents.map((text, i) => {
+    const showContents = contents.slice(0, itemCount);
+
+    this.items = showContents.map((text, i) => {
       let item = null;// lastItmes.shift(); // pop will lead to seq bug
 
       if (!item) {
@@ -46,10 +54,10 @@ export default class List extends Component {
 
       item.position(0, -rowHeight * i, 0);
 
-      delay(45 * SPF + 1000 * i / contents.length).start({
+      delay(45 * SPF + 1000 * i / showContents.length).start({
         complete: () => {
           item.update({
-            text,
+            text: getTruncated(text, width, { fontSize, fontFamily }),
             height: rowHeight,
             fontSize,
             fontFamily,
@@ -60,10 +68,23 @@ export default class List extends Component {
       return item
     });
 
-    if (lastItmes.length) {
-      lastItmes.forEach(item => {
-        this.remove(item);
+    if (itemCount < contents.length) {
+      const item = new Item({ defs });
+      this.obj.add(item.obj);
+      item.position(0, -rowHeight * itemCount + fontSize / 2, 0);
+      delay(45 * SPF + 1000 * itemCount / showContents.length).start({
+        complete: () => {
+          item.update({
+            text: '…',
+            height: rowHeight,
+            fontSize,
+            fontFamily,
+            hideMarker: true
+          });
+        }
       });
+
+      this.items.push(item);
     }
   }
 

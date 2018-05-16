@@ -45,9 +45,14 @@ export default class Item extends Component {
       text,
       fontSize,
       fontFamily,
+      hideMarker = false
     } = props;
 
     this.obj.show();
+
+    if (hideMarker) {
+      this.marker.hide();
+    }
 
     this.marker.attr({
       fill: markerColor
