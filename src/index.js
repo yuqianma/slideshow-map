@@ -16,8 +16,7 @@ mapboxgl.accessToken = config.accessToken;
 const DEV_NANJING = [118.78, 32.04, 0];
 
 const ANGLE = 50 / 180 * Math.PI;
-const getLinkY = fontSize => fontSize * Math.sin(ANGLE) * 10;
-const getLinkX = fontSize => fontSize * Math.cos(ANGLE) * 10;
+
 
 export default class SlideshowMap extends Threebox {
   constructor (options) {

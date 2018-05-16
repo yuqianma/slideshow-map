@@ -8,11 +8,19 @@ const config = {
   entry: {
     main: './dev/index.js',
     'dev-three': './dev/three.js',
-    'dev-mapbox': './dev/mapbox.js'
+    'dev-mapbox': './dev/mapbox.js',
+    'test': './test/index.js',
   },
   output: {
     filename: '[name].js',
     path: path.join(__dirname, 'dist')
+  },
+  module: {
+    rules: [{
+      test: /test\.js$/,
+      use: 'mocha-loader',
+      exclude: /node_modules/,
+    }]
   },
   serve: {
     host: internalIp.v4.sync(),
@@ -29,7 +37,7 @@ const config = {
     }),
     new webpack.ProvidePlugin({
       THREE: [path.join(__dirname, 'src/LibThree.js'), 'THREE'],
-      // THREE: 'three'
+      expect: ['chai', 'expect']
     }),
   ]
 };
