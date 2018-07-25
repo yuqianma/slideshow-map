@@ -9,20 +9,25 @@ class SlideshowMap {
 
     this.slideshow.installComponents();
 
-    this.slideshow.map.flyTo({
-      center: options.center,
-      zoom: options.zoom,
-      pitch: options.pitch
-    });
+    var map = this.slideshow.map;
 
-    window.setTimeout(() => {
+    // map.flyTo({
+    //   center: options.center,
+    //   zoom: options.zoom,
+    //   pitch: options.pitch
+    // });
+
+    if (map.loaded()) {
       this.startShow();
-    }, 6000);
-
+    } else {
+      map.on('load', (e) => {
+        this.startShow();
+      });
+    }
   }
 
   startShow () {
-    console.log('start');
+    // console.log('start');
     const locations = this.options.locations;
     if (locations && locations.length) {
       let i = 0;

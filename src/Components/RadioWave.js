@@ -66,7 +66,7 @@ export default class RadioWave extends Component {
   }
 
   leave () {
-    this._running && this._running.stop();
+    // this._running && this._running.stop();
 
   }
 
