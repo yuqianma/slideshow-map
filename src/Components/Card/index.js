@@ -125,8 +125,8 @@ export default class Card extends Component {
       fontFamily
     });
 
-    this.global.position(frameSize.x, frameSize.y, 0);
-    this.global.update();
+    // this.global.position(frameSize.x, frameSize.y, 0);
+    // this.global.update();
 
     this.frame.position(frameSize.x, frameSize.y, 0);
     this.frame.update({

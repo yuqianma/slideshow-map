@@ -60,7 +60,7 @@ export default class Box extends Component {
 
     this.obj.scale.set(x, y, 1e-6);
 
-    timeline([
+    this._animation = timeline([
       {
         track: 'z',
         from: 1e-6,
@@ -73,6 +73,9 @@ export default class Box extends Component {
   }
 
   leave () {
-
+    if (this._animation) {
+      this._animation.reverse();
+      this._animation.resume();
+    }
   }
 }
