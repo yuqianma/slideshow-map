@@ -4,7 +4,7 @@ const config = require('./webpack.config');
 module.exports = {
   mode: 'production',
   entry: {
-    main: './dev/index.js'
+    main: './src/index.js'
   },
   output: {
     filename: 'VanSlideshowMap.js',
