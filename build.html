@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>slideshow Map</title>
+    <link href="node_modules/mapbox-gl/dist/mapbox-gl.css" rel='stylesheet'/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #ccc;
+
+        }
+
+        .map {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            bottom: 10px;
+            right: 20px;
+            overflow: hidden;
+        }
+
+        .tip {
+            position: fixed;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div id="map" class="map"></div>
+
+
+</body>
+<script src="./dist/VanSlideshowMap.js"></script>
+<script>
+    var SlideshowMap = VanBigScreen.SlideshowMap;
+  SlideshowMap.setAccessToken('pk.eyJ1IjoibWF5cTA0MjIiLCJhIjoiY2phamMwOHV4MjllajMzbnFyeTMwcmZvYiJ9.aFMw4Aws5zY9Y4NwYqFMlQ');
+
+  var slideshowMap = new SlideshowMap({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/dark-v9',
+    center: [118.78 - 0.1, 32.04 - 0.1],
+    zoom: 13,
+    pitch: 60,
+    interval: 3000,
+    locations: [{
+      index: 1,
+      type: 'pillar', // point
+      size: 2,
+
+      // color: '#0bd',
+
+      // it's not center
+      lngLat: [118.77680629491806, 32.0620757594658],
+
+      zoom: 14,
+      pitch: 45,
+
+      fontFamily: 'sans-serif',
+
+      areaName: '江苏省南京市紫峰大厦',
+      contents: [
+        '外文名称: Greenland Square Zifeng Tower',
+        '建筑高度: 450m',
+        '建筑面积: 137529.00㎡',
+        '楼层信息: 地上89层，地下3层',
+        '开工日期: 2005年5月底',
+        '竣工日期: 2010年9月28日'
+      ],
+      description: '江苏省南京市',
+      // fixed: true,
+    }, {
+      index: 2,
+      type: 'point',
+      size: 2,
+      color: '#0b9',
+      lngLat: [120.299, 31.568],
+      zoom: 14.21,
+      pitch: 50,
+      areaName: '江苏省无锡市',
+      contents: [
+        'AAAAAAAAAAAAAAAAAAAAA',
+        'BBBBBBBBBBB',
+        'CCCCCCCCCCCCCCCC'
+      ],
+      description: '江苏省无锡市',
+    }]
+  });
+</script>
+</html>
