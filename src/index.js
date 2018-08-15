@@ -53,8 +53,8 @@ class SlideshowMap {
   }
 }
 
-const VanBigScreen = window.VanBigScreen || {};
+window.VanBigScreen = window.VanBigScreen || {};
 
-VanBigScreen.SlideshowMap = SlideshowMap;
+window.VanBigScreen.SlideshowMap = SlideshowMap;
 
 export default SlideshowMap
