@@ -26,6 +26,8 @@ export default class RadioWave extends Component {
       morphTargets: true,
     } );
 
+    this.material = material;
+
     for (let i = 0; i < RING_NUM; i++) {
       const geometry = new THREE.RingGeometry(-16, 0, 32);
 
@@ -61,8 +63,9 @@ export default class RadioWave extends Component {
     this._running = this.animation.start();
   }
 
-  update (size) {
-    size = size / 10;
+  update ({ size, opacity }) {
+    size = size / 2;
+    this.material.opacity = opacity;
     this.obj.scale.set(size, size, size);
     this._startAnimate();
   }

@@ -5,6 +5,7 @@
 import Component from './Component';
 import { Box as Default, Frame as FrameDefault } from '../constants';
 import { delay, timeline } from 'popmotion';
+import { getBoxSize } from '../helper';
 
 const {
   Color,
@@ -39,24 +40,28 @@ export default class Box extends Component {
       })
     ));
 
+    this.material = new THREE.MeshPhongMaterial({
+      color,
+      transparent: true,
+      opacity: 0.8,
+      // shininess: 0,
+      // emissive: 0xffffff,
+      // side: THREE.DoubleSide,
+      flatShading: true
+    });
+
     mesh.add(new THREE.Mesh(
       box,
-      new THREE.MeshPhongMaterial({
-        color,
-        transparent: true,
-        opacity: 0.8,
-        // shininess: 0,
-        // emissive: 0xffffff,
-        // side: THREE.DoubleSide,
-        flatShading: true
-      })
+      this.material
     ));
 
     return mesh;
   }
 
-  update (options) {
-    const { x, y, z } = options;
+  update ({ size, opacity }) {
+    const { x, y, z } = getBoxSize(size);
+
+    this.material.opacity = opacity;
 
     this.obj.scale.set(x, y, 1e-6);
 

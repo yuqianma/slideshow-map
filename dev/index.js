@@ -19,6 +19,7 @@ function main () {
       index: 1,
       type: 'pillar', // point
       size: 2,
+      opacity: 0.8,
 
       // color: '#0bd',
 
@@ -44,8 +45,8 @@ function main () {
     }, {
       index: 2,
       type: 'point',
-      size: 10,
-      color: '#0b9',
+      size: 2,
+      opacity: 0.8,
       lngLat: [120.299, 31.568],
       zoom: 14.21,
       pitch: 50,

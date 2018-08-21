@@ -181,7 +181,8 @@ export default class Slideshow extends Threebox {
       description,
       type,
       fixed,
-      size,
+      size = 2,
+      opacity = 1,
       lngLat,
       fontFamily
     } = options;
@@ -198,7 +199,10 @@ export default class Slideshow extends Threebox {
       coords[2] = boxSize.z;
       this.moveToCoordinate(this.c.box, lngLat);
       this.moveToCoordinate(this.c.effectCircle, lngLat);
-      this.c.box.update(boxSize);
+      this.c.box.update({
+        size,
+        opacity
+      });
 
       setTimeout(cb, 4000);
 
@@ -210,7 +214,10 @@ export default class Slideshow extends Threebox {
 
       coords[2] = 0;
       this.moveToCoordinate(this.c.radioWave, lngLat);
-      this.c.radioWave.update(size);
+      this.c.radioWave.update({
+        size,
+        opacity
+      });
 
       setTimeout(cb, 3000);
     }
