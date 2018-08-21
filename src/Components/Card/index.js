@@ -156,9 +156,11 @@ export default class Card extends Component {
 
   leave () {
     this.frame.leave();
+    this.num.leave();
     this.title.leave();
     this.list.leave();
     this.description.leave();
+    this.link.leave();
   }
 }
 

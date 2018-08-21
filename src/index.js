@@ -9,6 +9,8 @@ class SlideshowMap {
 
     this.slideshow.installComponents();
 
+    this.index = 0;
+
     var map = this.slideshow.map;
 
     // map.flyTo({
@@ -17,36 +19,43 @@ class SlideshowMap {
     //   pitch: options.pitch
     // });
 
-    this.slideshow.flyTo(options.locations[0]);
 
-    // if (map.loaded()) {
-    //   this.startShow();
-    // } else {
-    //   map.on('load', (e) => {
-    //     this.startShow();
-    //   });
-    // }
+    if (__DEV__) {
+      // this.slideshow.flyTo(options.locations[0]);
+      this.startShow();
+      window._slideshowMap = this;
+    } else {
+
+      if (map.loaded()) {
+        this.startShow();
+      } else {
+        map.on('load', (e) => {
+          this.startShow();
+        });
+      }
+
+    }
   }
 
   startShow () {
     // console.log('start');
     const locations = this.options.locations;
+    const interval = this.options.interval;
     if (locations && locations.length) {
-      let i = 0;
+      let i = -1;
 
       const turn = () => {
 
-        this.slideshow.flyTo(locations[i]);
-        i = ++i % locations.length;
-
-        window.setTimeout(() => {
-          this.slideshow._leave();
-        }, 9000);
+        new Promise(resolve => {
+          i = ++i % locations.length;
+          this.slideshow.flyTo(locations[i], resolve);
+        })
+          .then(() => new Promise(resolve => setTimeout(resolve, interval)))
+          .then(() => new Promise(resolve => this.slideshow.leave(resolve)))
+          .then(turn);
       };
 
       turn();
-
-      this._id = window.setInterval(turn, this.options.interval + 9000); // todo
     }
   }
 

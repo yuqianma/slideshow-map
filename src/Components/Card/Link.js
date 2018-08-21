@@ -3,8 +3,8 @@
  */
 
 import Component from '../Component';
-import { Link as Default } from '../../constants';
-import { timeline } from 'popmotion';
+import { Link as Default, Frame as FrameDefault } from '../../constants';
+import { timeline, delay } from 'popmotion';
 
 const {
   Color,
@@ -65,8 +65,12 @@ export default class Link extends Component {
   }
 
   leave () {
-    this._animate.reverse();
-    this._animate.resume();
+    delay(FrameDefault.Durations[1] / 3).start({
+      complete: () => {
+        this._animate.reverse();
+        this._animate.resume();
+      }
+    });
   }
 }
 

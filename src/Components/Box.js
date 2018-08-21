@@ -3,8 +3,8 @@
  */
 
 import Component from './Component';
-import { Box as Default } from '../constants';
-import { timeline } from 'popmotion';
+import { Box as Default, Frame as FrameDefault } from '../constants';
+import { delay, timeline } from 'popmotion';
 
 const {
   Color,
@@ -74,8 +74,12 @@ export default class Box extends Component {
 
   leave () {
     if (this._animation) {
-      this._animation.reverse();
-      this._animation.resume();
+      delay(FrameDefault.Durations[1]).start({
+        complete: () => {
+          this._animation.reverse();
+          this._animation.resume();
+        }
+      });
     }
   }
 }

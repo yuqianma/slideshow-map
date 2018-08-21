@@ -60,5 +60,6 @@ export default class Num extends Component {
 
   leave () {
     this._animate.reverse();
+    this._animate.resume();
   }
 }

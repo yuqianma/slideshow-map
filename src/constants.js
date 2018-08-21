@@ -29,6 +29,10 @@ export const LINK_SCALE = 6;
 
 // components
 
+export const Frame = {
+  Durations: [ 30 * SPF, 60 * SPF ]
+};
+
 export const Box = {
   Color: MainColor,
   Durations: [ 30 * SPF, 232 * SPF, 30 * SPF ]

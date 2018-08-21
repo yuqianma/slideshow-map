@@ -12,7 +12,7 @@ import {
   getBoxSize, getLinkSize,
   getValidSize,
 } from './helper';
-import { delay } from 'popmotion';
+import { timeline, easing } from 'popmotion';
 
 const DEV_NANJING = [118.78, 32.04, 0];
 
@@ -100,7 +100,7 @@ export default class Slideshow extends Threebox {
     this.c.card.update(options);
   }
 
-  flyTo (options) {
+  flyTo (options, cb) {
 
     const {
       areaName,
@@ -122,8 +122,11 @@ export default class Slideshow extends Threebox {
       zoom,
       pitch,
     }, {
-      options
-    })
+      options,
+      cb
+    });
+
+
   }
 
   set visible (v) {
@@ -135,14 +138,34 @@ export default class Slideshow extends Threebox {
     return this.world.visible
   }
 
-  _leave () {
-      this.c.box.leave();
-      this.c.radioWave.leave();
-      // this.c.link.leave();
-      this.c.card.leave();
+  setDomOpacity (v) {
+    this.renderer.domElement.style.opacity = v;
+    this.svgRenderer.domElement.style.opacity = v;
   }
 
-  animateComponents ({ options }) {
+  leave (cb) {
+      this.c.box.leave();
+      this.c.radioWave.leave();
+      this.c.card.leave();
+
+      timeline([
+        {
+          duration: 2000,
+          track: 'opacity',
+          ease: easing.easeOut,
+          from : 1,
+          to   : 0
+        },
+        1000
+      ]).start({
+        update: ({opacity}) => {
+          this.setDomOpacity(opacity);
+        },
+        complete: cb
+      });
+  }
+
+  animateComponents ({ options, cb }) {
     if (!options) {
       return
     }
@@ -172,6 +195,8 @@ export default class Slideshow extends Threebox {
       this.moveToCoordinate(this.c.effectCircle, lngLat);
       this.c.box.update(boxSize);
 
+      setTimeout(cb, 4000);
+
     } else {
       this.c.box.visible = false;
       this.c.effectCircle.visible = false;
@@ -181,6 +206,8 @@ export default class Slideshow extends Threebox {
       coords[2] = 0;
       this.moveToCoordinate(this.c.radioWave, lngLat);
       this.c.radioWave.update();
+
+      setTimeout(cb, 3000);
     }
 
     const vector = this.projectToPlane(coords);
@@ -200,5 +227,6 @@ export default class Slideshow extends Threebox {
     });
 
     this.visible = true;
+    this.setDomOpacity(1);
   }
 }
