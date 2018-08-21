@@ -10,6 +10,7 @@ function main () {
     style: 'mapbox://styles/mapbox/dark-v9',
     effectCircleUrl: '',
     globalUrl: '',
+    hash: true,
     center: [118.78 - 0.1, 32.04 - 0.1],
     zoom: 13,
     pitch: 60,
@@ -43,7 +44,7 @@ function main () {
     }, {
       index: 2,
       type: 'point',
-      size: 2,
+      size: 10,
       color: '#0b9',
       lngLat: [120.299, 31.568],
       zoom: 14.21,

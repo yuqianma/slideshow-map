@@ -61,7 +61,9 @@ export default class RadioWave extends Component {
     this._running = this.animation.start();
   }
 
-  update () {
+  update (size) {
+    size = size / 10;
+    this.obj.scale.set(size, size, size);
     this._startAnimate();
   }
 

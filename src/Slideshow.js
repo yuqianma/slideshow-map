@@ -18,6 +18,10 @@ const DEV_NANJING = [118.78, 32.04, 0];
 
 export default class Slideshow extends Threebox {
   constructor (options) {
+    if (!__DEV__) {
+      options.interactive = false;
+    }
+
     super(new mapboxgl.Map(options));
 
     this.__installed = false;
@@ -121,6 +125,7 @@ export default class Slideshow extends Threebox {
       center: [lng, lat],
       zoom,
       pitch,
+      bearing: Math.random() * 180 | 0 - 90,
     }, {
       options,
       cb
@@ -205,7 +210,7 @@ export default class Slideshow extends Threebox {
 
       coords[2] = 0;
       this.moveToCoordinate(this.c.radioWave, lngLat);
-      this.c.radioWave.update();
+      this.c.radioWave.update(size);
 
       setTimeout(cb, 3000);
     }

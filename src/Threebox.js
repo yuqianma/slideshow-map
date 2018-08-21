@@ -71,7 +71,7 @@ function Threebox(map) {
   this.cameraSynchronizer = new CameraSync(this.map, this.camera, this.world, this.plane);
 
   this.clock = new THREE.Clock();
-  // this.installPass();
+  this.installPass();
   //this.animationManager = new AnimationManager();
   this.update();
 }
@@ -92,7 +92,7 @@ Threebox.prototype = {
       this.update(timestamp);
     });
 
-    // this.composer.render(this.clock.getDelta());
+    this.composer.render(this.clock.getDelta());
   },
 
   installPass () {
@@ -105,8 +105,8 @@ Threebox.prototype = {
 
     const pass = new BloomPass({
       resolutionScale: 0.37,
-      intensity: 0.64,
-      distinction: 1.3,
+      intensity: 0.77,
+      distinction: 1.9,
       kernelSize: 5,
     });
     pass.combineMaterial.setScreenModeEnabled(false);
@@ -115,7 +115,9 @@ Threebox.prototype = {
 
     this.bloomPass = pass;
 
-    this.registerOptions();
+    if (__DEV__) {
+      this.registerOptions();
+    }
   },
 
   registerOptions () {
@@ -131,7 +133,7 @@ Threebox.prototype = {
       "intensity": pass.intensity,
       "distinction": pass.distinction,
       "blend": true,
-      "blend mode": "screen"
+      "blend mode": "add"
     };
 
     menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
@@ -176,6 +178,8 @@ Threebox.prototype = {
       pass.combineMaterial.setScreenModeEnabled((params["blend mode"] !== "add"));
 
     });
+
+    menu.closed = true;
 
   },
 

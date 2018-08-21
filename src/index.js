@@ -9,7 +9,7 @@ class SlideshowMap {
 
     this.slideshow.installComponents();
 
-    this.index = 0;
+    this._started = false;
 
     var map = this.slideshow.map;
 
@@ -21,7 +21,7 @@ class SlideshowMap {
 
 
     if (__DEV__) {
-      // this.slideshow.flyTo(options.locations[0]);
+      // this.slideshow.flyTo(options.locations[1]);
       this.startShow();
       window._slideshowMap = this;
     } else {
@@ -29,8 +29,13 @@ class SlideshowMap {
       if (map.loaded()) {
         this.startShow();
       } else {
+
+        setTimeout(() => {
+          !this._started && this.startShow();
+        }, 4000);
+
         map.on('load', (e) => {
-          this.startShow();
+          !this._started && this.startShow();
         });
       }
 
@@ -38,6 +43,9 @@ class SlideshowMap {
   }
 
   startShow () {
+
+    this._started = true;
+
     // console.log('start');
     const locations = this.options.locations;
     const interval = this.options.interval;
