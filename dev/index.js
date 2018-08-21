@@ -8,6 +8,8 @@ function main () {
   const slideshowMap = new SlideshowMap({
     container: 'map',
     style: 'mapbox://styles/mapbox/dark-v9',
+    effectCircleUrl: '',
+    globalUrl: '',
     center: [118.78 - 0.1, 32.04 - 0.1],
     zoom: 13,
     pitch: 60,
