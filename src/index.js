@@ -17,13 +17,15 @@ class SlideshowMap {
     //   pitch: options.pitch
     // });
 
-    if (map.loaded()) {
-      this.startShow();
-    } else {
-      map.on('load', (e) => {
-        this.startShow();
-      });
-    }
+    this.slideshow.flyTo(options.locations[0]);
+
+    // if (map.loaded()) {
+    //   this.startShow();
+    // } else {
+    //   map.on('load', (e) => {
+    //     this.startShow();
+    //   });
+    // }
   }
 
   startShow () {

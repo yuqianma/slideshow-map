@@ -328,18 +328,29 @@ const getAreaSize = ({
 };
 
 const cutCardHorizontalSizes = (sizes, dx) => {
-  sizes.titleSize.width -= dx;
-  sizes.contentsSize.width -= dx;
-  sizes.frameSize.width -= dx;
-  sizes.descriptionSize.width -= dx;
+  if (sizes.titleSize.width > dx
+    && sizes.contentsSize.width > dx
+    && sizes.frameSize.width > dx
+    && sizes.descriptionSize.width > dx
+  ) {
+    sizes.titleSize.width -= dx;
+    sizes.contentsSize.width -= dx;
+    sizes.frameSize.width -= dx;
+    sizes.descriptionSize.width -= dx;
+  }
 };
 
 const cutCardVerticalSizes = (sizes, dy) => {
   const rowHeight = sizes.contentsSize.rowHeight;
   const cutHeight = Math.ceil(dy / rowHeight) * rowHeight;
-  sizes.contentsSize.height -= cutHeight;
-  sizes.frameSize.height -= cutHeight;
-  sizes.descriptionSize.y += cutHeight;
+
+  const contentsSizeHeight = sizes.contentsSize.height - cutHeight;
+
+  if (contentsSizeHeight > rowHeight && sizes.frameSize.height > cutHeight) {
+    sizes.contentsSize.height -= cutHeight;
+    sizes.frameSize.height -= cutHeight;
+    sizes.descriptionSize.y += cutHeight;
+  }
 };
 
 /**
