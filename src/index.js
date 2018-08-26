@@ -1,9 +1,28 @@
 import Slideshow from './Slideshow';
 import mapboxgl from 'mapbox-gl';
 
+function attachTitleAndBorder (options) {
+  const container = options.container;
+  const vanCharts = VanCharts.init(document.getElementById(container) || container);
+  vanCharts.setOptions(Object.assign({
+    "plotOptions": {
+      "animation": false
+    },
+    "geo": {},
+    "series": [],
+    "chartType": "pointMap",
+    title: options.title,
+  }, options.border));
+}
+
 class SlideshowMap {
   constructor (options) {
     this.options = options; // todo, merge default
+
+    // 添加vancharts的标题和边框
+    // 这样会导致在同一个container被vancharts和mapbox init了2遍
+    // 看上去效果对就不管了……
+    attachTitleAndBorder(options);
 
     this.slideshow = new Slideshow(options);
 

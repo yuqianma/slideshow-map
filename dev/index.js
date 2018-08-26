@@ -15,6 +15,27 @@ function main () {
     zoom: 13,
     pitch: 60,
     interval: 3000,
+
+    "title": {
+      // "backgroundColor": "rgba(255,255,255,0.7490196078431373)",
+      "borderRadius": 0,
+      "style": {
+        "fontFamily": "Microsoft YaHei UI",
+        "color": "#fff",
+        "fontSize": "20pt",
+        "fontWeight": ""
+      },
+      "useHtml": false,
+      "text": "演示地图",
+      "align": "left"
+    },
+    border: {
+      "shadow": true,
+      "borderRadius": 10,
+      "borderWidth": 5,
+      "borderColor": "#0b9",
+    },
+
     locations: [{
       index: 1,
       type: 'pillar', // point
