@@ -62,7 +62,7 @@ function main () {
         '竣工日期: 2010年9月28日'
       ],
       description: '江苏省南京市',
-      // fixed: true,
+      fixed: true,
     }, {
       index: 2,
       type: 'point',
@@ -84,4 +84,8 @@ function main () {
 
 main();
 
-
+window._next = function () {
+  if (window._nextTurn) {
+    window._nextTurn();
+  }
+};
