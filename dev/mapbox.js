@@ -14,7 +14,8 @@ var map = new mapboxgl.Map({
           // "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
           // 'http://tile.thunderforest.com/transport-dark/{z}/{x}/{y}@2x.png',
           // 'http://wprd03.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
-          'http://wprd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=2&style=7'
+          // 'http://wprd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=2&style=7'
+          'http://api0.map.bdimg.com/customimage/tile?&x={x}&y={y}&z={z}&udt=20180911&scale=2&ak=8d6c8b8f3749aed6b1aff3aad6f40e37&styles=t%3Abackground%7Ce%3Aall%7Cc%3A%23000000ff'
         ],
         'tileSize': 256
       }
