@@ -26,7 +26,7 @@ class SlideshowMap {
 
     this.slideshow = new Slideshow(options);
 
-    this.slideshow.installComponents();
+    this.slideshow.installComponents(options);
 
     this._started = false;
 
@@ -71,13 +71,28 @@ class SlideshowMap {
     if (locations && locations.length) {
       let i = -1;
 
+      // const turn = () => {
+      //
+      //   new Promise(resolve => {
+      //     i = ++i % locations.length;
+      //     this.slideshow.flyTo(locations[i], resolve);
+      //   })
+      //     .then(() => new Promise(resolve => setTimeout(resolve, interval)))
+      //     .then(() => new Promise(resolve => this.slideshow.leave(resolve)))
+      //     .then(turn);
+      // };
+      //
+      // turn();
+
       const turn = () => {
 
         new Promise(resolve => {
           i = ++i % locations.length;
           this.slideshow.flyTo(locations[i], resolve);
         })
-          .then(() => new Promise(resolve => setTimeout(resolve, interval)))
+          .then(() => new Promise(resolve => {
+            window._nextTurn = resolve;
+          }))
           .then(() => new Promise(resolve => this.slideshow.leave(resolve)))
           .then(turn);
       };

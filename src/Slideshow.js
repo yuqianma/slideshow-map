@@ -81,7 +81,7 @@ export default class Slideshow extends Threebox {
     this.plane.add(component.obj);
   }
 
-  installComponents () {
+  installComponents ({ globalUrl, effectCircleUrl }) {
     if (this.__installed) {
       console.error('Cannot install Objects twice!');
       return
@@ -92,10 +92,14 @@ export default class Slideshow extends Threebox {
 
     this.addToMap(this.c.radioWave = new RadioWave(), DEV_NANJING);
 
-    this.addToPlane(this.c.card = new Card({ defs: this.defs, svg: this.svgRenderer.domElement }));
+    this.addToPlane(this.c.card = new Card({
+      defs: this.defs,
+      svg: this.svgRenderer.domElement,
+      globalUrl
+    }));
 
     this.addToMap(this.c.effectCircle = new EffectCircle({
-      src: 'dev/circle.webm'
+      src: effectCircleUrl || 'dev/circle.webm'
     }), DEV_NANJING);
   }
 

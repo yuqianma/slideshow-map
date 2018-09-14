@@ -121,6 +121,7 @@ Threebox.prototype = {
   },
 
   registerOptions () {
+    console.log('gui');
 
     const menu = new dat.GUI();
 

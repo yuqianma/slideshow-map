@@ -106,7 +106,7 @@ export default class Title extends Component {
         x: indent,
         y: height / 2,
         // 'text-anchor': 'middle',
-        style: `font-weight: bold; font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: central`,
+        style: `font-weight: bold; font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: middle`,
       });
     });
 

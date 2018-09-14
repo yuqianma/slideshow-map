@@ -67,8 +67,10 @@ export default class Link extends Component {
   leave () {
     delay(FrameDefault.Durations[1] / 3).start({
       complete: () => {
-        this._animate.reverse();
-        this._animate.resume();
+        if (this._animate) {
+          this._animate.reverse();
+          this._animate.resume();
+        }
       }
     });
   }

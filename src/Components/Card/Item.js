@@ -15,7 +15,7 @@ const TRI = {
   height: 24,
 };
 
-const trans = (height, s, r) => `translate(${-TRI.width / 2}px, ${height / 2}px) scale(${s}) rotate(${r}deg)`;
+const trans = (height, s, r) => `translate(${-height / 2}px, ${height / 2}px) scale(${s}) rotate(${r}deg)`;
 
 export default class Item extends Component {
   create ({ defs }) {
@@ -62,7 +62,7 @@ export default class Item extends Component {
     this.text.attr({
       fill: textColor,
       y: height / 2,
-      style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: central`,
+      style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: middle`,
     });
 
     this.textWidth = measureText(text, props).width;
@@ -74,11 +74,13 @@ export default class Item extends Component {
     height
   }) {
 
+    const tScale = height / TRI.height * 0.8;
+
     this._animate = timeline([
       {
         track: 'v',
         from: { scale: 0, rotate: -300, x: -this.textWidth },
-        to: { scale: 0.5, rotate: 0, x: 0 },
+        to: { scale: tScale, rotate: 0, x: 0 },
         duration: 60 * SPF,
         ease: easing.easeOut,
       }

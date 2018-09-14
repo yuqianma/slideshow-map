@@ -43,6 +43,7 @@ export default class Card extends Component {
   create ({
     defs,
     svg,
+    globalUrl
   }) {
 
     this.defs = defs;
@@ -51,7 +52,7 @@ export default class Card extends Component {
 
     this.add(this.frame = new Frame({ defs }));
 
-    this.add(this.global = new Global({ svg }));
+    this.add(this.global = new Global({ svg, globalUrl }));
 
     this.add(this.num = new Num({ defs }));
 

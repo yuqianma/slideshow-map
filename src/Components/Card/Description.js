@@ -67,7 +67,7 @@ export default class Description extends Component {
       x: fontSize * 1.5,
       y: height / 2,
       fill: getColorStr(color),
-      style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: central`,
+      style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: middle`,
     });
 
     this.enter(props);

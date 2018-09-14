@@ -5,7 +5,7 @@ import Component from '../Component';
 import { Svg, Dom } from '../../Utils/Svg';
 
 export default class Global extends Component {
-  create ({ svg }) {
+  create ({ svg, globalUrl }) {
 
     this.svg = svg;
 
@@ -13,7 +13,7 @@ export default class Global extends Component {
 
     this.video = new Dom('video', {
       id: 'global',
-      src: 'dev/global.webm',
+      src: globalUrl || 'dev/global.webm',
       autoplay: true,
       loop: true,
       muted: true,
