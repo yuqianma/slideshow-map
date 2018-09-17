@@ -27,19 +27,19 @@ export default class Global extends Component {
     this.obj.append(this.video);
   }
 
-  update () {
+  update (frameSize) {
     const { x, y } = this.svg.viewBox.baseVal;
 
     this.video.style({
-      transform: `translate(${- x - 80}px, ${- y - 50}px)`,
+      transform: `translate(${- x - frameSize.x}px, ${- y - frameSize.y}px)`,
       width: `100px`,
       height: `100px`
     });
 
     this.video.show();
 
-    // this.video.node.currentTime = 0;
-    // this.video.node.play();
+    this.video.node.currentTime = 0;
+    this.video.node.play();
   }
 
   leave () {

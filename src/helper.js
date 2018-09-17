@@ -103,7 +103,7 @@ export const getEmptyFrameSize = (fontSize) => {
 
   const rightPadding = xgap * 2;
 
-  const bottomPadding = ygap * 2; // contents bottom
+  const bottomPadding = ygap * 1.5; // contents bottom
 
   const contentsTop = ygap; // gap between title & contents
 

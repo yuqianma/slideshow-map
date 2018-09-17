@@ -127,7 +127,7 @@ export default class Card extends Component {
     });
 
     // this.global.position(frameSize.x, frameSize.y, 0);
-    // this.global.update();
+    // this.global.update(frameSize);
 
     this.frame.position(frameSize.x, frameSize.y, 0);
     this.frame.update({

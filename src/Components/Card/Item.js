@@ -62,7 +62,7 @@ export default class Item extends Component {
     this.text.attr({
       fill: textColor,
       y: height / 2,
-      style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: middle`,
+      style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: central`,
     });
 
     this.textWidth = measureText(text, props).width;
@@ -74,7 +74,7 @@ export default class Item extends Component {
     height
   }) {
 
-    const tScale = height / TRI.height * 0.8;
+    const tScale = height / TRI.height * 0.5;
 
     this._animate = timeline([
       {

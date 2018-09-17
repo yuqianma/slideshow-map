@@ -31,7 +31,11 @@ export default class List extends Component {
 
     const defs = this.defs;
 
-    const itemCount = Math.floor(height / rowHeight);
+    let itemCount = Math.floor(height / rowHeight);
+
+    if (itemCount < contents.length) {
+      itemCount = Math.max(0, itemCount - 1);
+    }
 
     this.clip.attr({
       width: width + fontSize,
@@ -71,7 +75,7 @@ export default class List extends Component {
     if (itemCount < contents.length) {
       const item = new Item({ defs });
       this.obj.add(item.obj);
-      item.position(0, -rowHeight * itemCount + fontSize / 2, 0);
+      item.position(0, -rowHeight * itemCount, 0);
       delay(45 * SPF + 1000 * itemCount / showContents.length).start({
         complete: () => {
           item.update({
