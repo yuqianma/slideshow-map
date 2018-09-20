@@ -200,27 +200,45 @@ export default class Slideshow extends Threebox {
       description,
       type,
       fixed,
-      size = 2,
       opacity = 1,
       lngLat,
       fontFamily
     } = options;
 
+    let size = options.size || 10;
+
     const coords = lngLat.slice();
 
+    const vector = this.projectToPlane(coords);
+    const viewSize = this.getSize();
+    const validSize = getValidSize({
+      x: vector.x,
+      y: vector.y,
+      ...viewSize
+    });
+
     if (type === 'pillar') {
+
+      if (!fixed) {
+        size /= 2;
+      }
+
       this.c.box.visible = true;
       this.c.effectCircle.visible = true;
       this.c.radioWave.visible = false;
 
-      const boxSize = getBoxSize(size);
+      const boxSize = getBoxSize(size, viewSize.scale, viewSize.height);
 
       coords[2] = boxSize.z;
       this.moveToCoordinate(this.c.box, lngLat);
       this.moveToCoordinate(this.c.effectCircle, lngLat);
       this.c.box.update({
-        size,
-        opacity
+        boxSize,
+        opacity,
+      });
+
+      this.c.effectCircle.update({
+        boxSize
       });
 
       setTimeout(cb, 4000);
@@ -240,14 +258,6 @@ export default class Slideshow extends Threebox {
 
       setTimeout(cb, 3000);
     }
-
-    const vector = this.projectToPlane(coords);
-    const viewSize = this.getSize();
-    const validSize = getValidSize({
-      x: vector.x,
-      y: vector.y,
-      ...viewSize
-    });
 
     this.c.card.position(vector.x, vector.y, 0);
     this.c.card.update({

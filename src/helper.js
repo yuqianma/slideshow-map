@@ -8,12 +8,15 @@ import {
   BOUND_PADDING
 } from './constants';
 
+const S = 1.6e2;
+
 // we have to know box size to calculate the link & card pos
-export const getBoxSize = (size) => {
+export const getBoxSize = (size, scale, height) => {
+  const s = S * height / scale;
   return {
-    x: 100 * size,
-    y: 100 * size,
-    z: 200 * size,
+    x: 0.618 * size * s,
+    y: 0.618 * size * s,
+    z: 2 * size * s,
   }
 };
 

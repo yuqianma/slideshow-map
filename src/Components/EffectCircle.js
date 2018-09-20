@@ -36,14 +36,18 @@ export default class EffectCircle extends Component {
       map: texture
     });
 
-    const geometry = new THREE.PlaneGeometry( 800, 800, 1 );
+    const geometry = new THREE.PlaneGeometry( 8, 8, 1 );
 
     return new THREE.Mesh( geometry, mat );
   }
 
-  update () {
+  update ({ boxSize }) {
     this.video.node.currentTime = 0;
     // this.video.node.play();
+
+    const s = boxSize.x;
+
+    this.obj.scale.set(s, s, 1);
   }
 
   leave () {

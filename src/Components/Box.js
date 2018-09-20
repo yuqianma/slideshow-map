@@ -16,8 +16,8 @@ const SEGMENTS = 1;
 
 export default class Box extends Component {
   create ({
-    width = 0.618,
-    height = 0.618,
+    width = 1,
+    height = 1,
     depth = 1,
     color = Color
   }) {
@@ -78,8 +78,9 @@ export default class Box extends Component {
     return mesh;
   }
 
-  update ({ size, opacity }) {
-    const { x, y, z } = getBoxSize(size);
+  update ({ boxSize, opacity }) {
+
+    const { x, y, z } = boxSize;
 
     this.material.opacity = opacity;
 
