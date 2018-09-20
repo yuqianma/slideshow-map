@@ -32,17 +32,16 @@ export default class EffectGlobal extends Component {
 
     const mat = new THREE.MeshBasicMaterial({
       // color: 0xffffff,
-      // opacity: 0.5,
+      opacity: 0.5,
       transparent: true,
       map: texture
     });
 
     const geometry = new THREE.PlaneGeometry( 200, 220, 1 );
-    // geometry.translate(0, 220 / 2, 0);
+    // geometry.translate(200 / 2, 220 / 2, 0);
+    geometry.scale(0.3, 0.3, 1);
 
     const mesh = new THREE.Mesh( geometry, mat );
-
-    mesh.scale.set(0.5, 0.5, 1);
 
     mesh.visible = false;
 
@@ -51,8 +50,11 @@ export default class EffectGlobal extends Component {
 
   update (frameSize) {
     // console.log(frameSize);
-    // this.video.node.currentTime = 0;
-    // this.obj.visible = true;
+    // mesh has been translated in `animateComponents`
+    this.obj.geometry.translate(frameSize.x, frameSize.y, 0);
+
+    this.video.node.currentTime = 0;
+    this.obj.visible = true;
     // this.video.node.play();
   }
 

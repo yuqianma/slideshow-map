@@ -355,10 +355,10 @@ Threebox.prototype = {
     // this.scene.add( lights[ 1 ] );
     // this.scene.add( lights[ 2 ] );
 
-    const genLight = (num) => {
+    const genLight = (num, [x, y, z]) => {
       const light = new THREE.PointLight( 0xffffff, 1.4, 0 );
 
-      light.position.set( 36, 0, 117 );
+      light.position.set( x, y, z );
       light.matrixWorldNeedsUpdate = true;
 
       this.scene.add( light );
@@ -391,8 +391,8 @@ Threebox.prototype = {
     };
 
 
-    genLight(1);
-    genLight(2);
+    genLight('1', [36, 0, 117]);
+    genLight('2', [36, 0, 117]);
 
   }
 };

@@ -24,7 +24,7 @@ export default class Num extends Component {
     this.stops = g.stops();
 
     return new Svg('text', {
-      opacity: 0.5,
+      opacity: 0.8,
       fill: 'url(#num-g)',
     });
   }

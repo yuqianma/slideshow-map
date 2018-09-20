@@ -74,8 +74,8 @@ export default class Slideshow extends Threebox {
     super.moveToCoordinate(object.obj || object, lnglat, options);
   }
 
-  addToMap (component, lnglat = [ 0, 0 ]) {
-    this.addAtCoordinate(component.obj, lnglat);
+  addToMap (component, lnglat = [ 0, 0 ], options) {
+    this.addAtCoordinate(component.obj, lnglat, options);
   }
 
   addToPlane (component, coords = [ 0, 0 ]) {
@@ -111,8 +111,11 @@ export default class Slideshow extends Threebox {
       src: effectCircleUrl || 'dev/circle2.webm'
     }), DEV_NANJING);
 
+    // 好乱……
+    // 因为svg放视频被chrome限制了
+    // 就再搞个scene让three渲染吧
+    // 然后这个和card组件其实就脱离了
     this.addToPlane2(this.c.effectGlobal);
-    // this.c.effectGlobal.obj.lookAt(this.camera);
   }
 
   _test (options) {
@@ -253,6 +256,9 @@ export default class Slideshow extends Threebox {
       width: validSize.width,
       height: validSize.height
     });
+
+    // →_→越乱越坑
+    this.c.effectGlobal.position(vector.x, vector.y, 0);
 
     this.visible = true;
     this.setDomOpacity(1);

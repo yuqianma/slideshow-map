@@ -36,7 +36,7 @@ export default class EffectCircle extends Component {
       map: texture
     });
 
-    const geometry = new THREE.PlaneGeometry( 1000, 1000, 1 );
+    const geometry = new THREE.PlaneGeometry( 800, 800, 1 );
 
     return new THREE.Mesh( geometry, mat );
   }

@@ -16,8 +16,8 @@ const SEGMENTS = 1;
 
 export default class Box extends Component {
   create ({
-    width = 1,
-    height = 1,
+    width = 0.618,
+    height = 0.618,
     depth = 1,
     color = Color
   }) {
