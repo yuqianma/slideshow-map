@@ -58,6 +58,11 @@ lights.map(l => {
 var axesHelper = new THREE.AxesHelper(1000);
 scene.add(axesHelper);
 
+var geometry = new THREE.PlaneGeometry( 5, 10, 10 );
+var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+var plane = new THREE.Mesh( geometry, material );
+scene.add( plane );
+
 
 function segmentBox () {
   var mesh = new THREE.Object3D();
@@ -247,6 +252,9 @@ var render = function () {
     // mesh.rotation.z += 0.005;
   // }
   renderer.render(scene, camera);
+
+  // plane.lookAt( camera.position );
+  // plane.quaternion.copy(camera.quaternion)
 };
 
 render();
