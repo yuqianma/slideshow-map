@@ -6,10 +6,12 @@ import Box from './Box';
 import RadioWave from './RadioWave';
 import Card from './Card';
 import EffectCircle from './EffectCircle';
+import EffectGlobal from './EffectGlobal';
 
 export {
   Box,
   RadioWave,
   Card,
-  EffectCircle
+  EffectCircle,
+  EffectGlobal
 }

@@ -5,7 +5,7 @@
 import Component from './Component';
 import { Dom } from '../Utils/Svg';
 
-export default class EffectCircle extends Component {
+export default class EffectGlobal extends Component {
   create (props) {
     this.video = new Dom('video', {
       autoplay: true,
@@ -31,18 +31,28 @@ export default class EffectCircle extends Component {
     texture.format = THREE.RGBAFormat;
 
     const mat = new THREE.MeshBasicMaterial({
-      opacity: 0.8,
+      // color: 0xffffff,
+      // opacity: 0.5,
       transparent: true,
       map: texture
     });
 
-    const geometry = new THREE.PlaneGeometry( 1000, 1000, 1 );
+    const geometry = new THREE.PlaneGeometry( 200, 220, 1 );
+    // geometry.translate(0, 220 / 2, 0);
 
-    return new THREE.Mesh( geometry, mat );
+    const mesh = new THREE.Mesh( geometry, mat );
+
+    mesh.scale.set(0.5, 0.5, 1);
+
+    mesh.visible = false;
+
+    return mesh;
   }
 
-  update () {
-    this.video.node.currentTime = 0;
+  update (frameSize) {
+    // console.log(frameSize);
+    // this.video.node.currentTime = 0;
+    // this.obj.visible = true;
     // this.video.node.play();
   }
 

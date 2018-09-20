@@ -30,25 +30,45 @@ export default class Box extends Component {
     box.translate(0, 0, box.parameters.depth / 2);
 
     // todo, try three.meshline
-    mesh.add(new THREE.LineSegments2(
-      new THREE.WireframeGeometry2(box),
-      new THREE.LineMaterial({
-        color,
+    const wireFrame = new THREE.LineSegments(
+      new THREE.EdgesGeometry(box),
+      new THREE.LineBasicMaterial({
+        color: 0x00fffc,
         // transparent: true,
         // opacity: 0.1,
         linewidth: 0.0015,
       })
-    ));
+    );
+    // wireFrame.material.color = color;
+    // wireFrame.material.opacity = 1;
+    // wireFrame.material.transparent = true;
+
+    mesh.add(wireFrame);
 
     this.material = new THREE.MeshPhongMaterial({
-      color,
+      color: 0x2194ce,
       transparent: true,
       opacity: 0.8,
-      // shininess: 0,
+      // shininess: 40,
       // emissive: 0xffffff,
       // side: THREE.DoubleSide,
-      flatShading: true
+      // flatShading: true
     });
+
+    if (__DEV__) {
+      const params = {
+        opacity: this.material.opacity,
+        shininess: this.material.shininess
+      };
+
+      const folder = menu.addFolder('box');
+      folder.add(params, 'opacity').min(0).max(1).step(0.01).onChange(() => {
+        this.material.opacity = params.opacity;
+      });
+      folder.add(params, 'shininess').min(0).max(200).step(1).onChange(() => {
+        this.material.shininess = params.shininess;
+      });
+    }
 
     mesh.add(new THREE.Mesh(
       box,

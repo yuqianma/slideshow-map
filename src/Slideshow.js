@@ -6,6 +6,7 @@ import {
   RadioWave,
   Card,
   EffectCircle,
+  EffectGlobal
 } from './Components';
 import {
   calcFittedSize,
@@ -81,6 +82,10 @@ export default class Slideshow extends Threebox {
     this.plane.add(component.obj);
   }
 
+  addToPlane2 (component, coords = [ 0, 0 ]) {
+    this.plane2.add(component.obj);
+  }
+
   installComponents ({ globalUrl, effectCircleUrl }) {
     if (this.__installed) {
       console.error('Cannot install Objects twice!');
@@ -92,15 +97,22 @@ export default class Slideshow extends Threebox {
 
     this.addToMap(this.c.radioWave = new RadioWave(), DEV_NANJING);
 
+    this.c.effectGlobal = new EffectGlobal({
+      src: globalUrl || 'dev/global.webm'
+    });
+
     this.addToPlane(this.c.card = new Card({
       defs: this.defs,
       svg: this.svgRenderer.domElement,
-      globalUrl
+      effectGlobal: this.c.effectGlobal
     }));
 
     this.addToMap(this.c.effectCircle = new EffectCircle({
-      src: effectCircleUrl || 'dev/circle.webm'
+      src: effectCircleUrl || 'dev/circle2.webm'
     }), DEV_NANJING);
+
+    this.addToPlane2(this.c.effectGlobal);
+    // this.c.effectGlobal.obj.lookAt(this.camera);
   }
 
   _test (options) {

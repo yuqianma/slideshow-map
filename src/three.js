@@ -20,6 +20,8 @@ import 'three/examples/js/lines/LineMaterial';
 import 'three/examples/js/lines/LineSegments2';
 import 'three/examples/js/lines/Line2';
 import 'three/examples/js/lines/Wireframe';
+// import 'three/examples/js/geometries/ConvexGeometry.js';
+// import 'three/examples/js/QuickHull.js';
 
 __DEV__ && (window.THREE = three);
 

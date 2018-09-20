@@ -9,6 +9,10 @@ import { EffectComposer, BloomPass, RenderPass, KernelSize } from 'postprocessin
 
 //var AnimationManager = require("./Animation/AnimationManager.js");
 
+if (__DEV__) {
+  window.menu = new dat.GUI();
+}
+
 function Threebox(map) {
   this.map = map;
 
@@ -40,6 +44,7 @@ function Threebox(map) {
 
 
   this.scene = new THREE.Scene();
+  this.scene2 = new THREE.Scene();
   this.svgScene = new THREE.Scene();
   this.camera = new THREE.PerspectiveCamera(
     26,
@@ -62,16 +67,19 @@ function Threebox(map) {
   this.world = new THREE.Group();
   this.scene.add(this.world);
 
+  this.plane2 = new THREE.Group();
+  this.scene2.add(this.plane2);
+
   this.plane = new THREE.Group();
   this.svgScene.add(this.plane);
 
   this.defs = new Defs();
   this.svgScene.add(this.defs);
 
-  this.cameraSynchronizer = new CameraSync(this.map, this.camera, this.world, this.plane);
+  this.cameraSynchronizer = new CameraSync(this.map, this.camera, this.world, this.plane, this.plane2);
 
   this.clock = new THREE.Clock();
-  this.installPass();
+  // this.installPass();
   //this.animationManager = new AnimationManager();
   this.update();
 }
@@ -83,8 +91,13 @@ Threebox.prototype = {
     // Update any animations
     //this.animationManager.update(timestamp);
 
+    this.renderer.autoClear = false;
+
     // Render the scene
+    this.renderer.clear();
     this.renderer.render(this.scene, this.camera);
+    this.renderer.clearDepth();
+    this.renderer.render(this.scene2, this.camera);
     this.svgRenderer.render(this.svgScene, this.camera);
 
     // Run this again next frame
@@ -92,7 +105,9 @@ Threebox.prototype = {
       this.update(timestamp);
     });
 
-    this.composer.render(this.clock.getDelta());
+    if (this.composer) {
+      this.composer.render(this.clock.getDelta());
+    }
   },
 
   installPass () {
@@ -123,7 +138,7 @@ Threebox.prototype = {
   registerOptions () {
     console.log('gui');
 
-    const menu = new dat.GUI();
+    const menu = window.menu || new dat.GUI();
 
     const composer = this.composer;
     const pass = this.bloomPass;
@@ -324,23 +339,62 @@ Threebox.prototype = {
     var sunlight = new THREE.DirectionalLight(0xffffff, 0.5);
     sunlight.position.set(0, 800, 1000);
     sunlight.matrixWorldNeedsUpdate = true;
-    this.world.add(sunlight);
+    // this.world.add(sunlight);
     //this.world.add(sunlight.target);
 
     // var lights = [];
     // lights[ 0 ] = new THREE.PointLight( 0x999999, 1, 0 );
     // lights[ 1 ] = new THREE.PointLight( 0x999999, 1, 0 );
     // lights[ 2 ] = new THREE.PointLight( 0x999999, 0.2, 0 );
-
-    // lights[ 0 ].position.set( 0, 200, 1000 );
+    //
+    // lights[ 0 ].position.set( 30, 0, 150 );
     // lights[ 1 ].position.set( 100, 200, 1000 );
     // lights[ 2 ].position.set( -100, -200, 0 );
 
-    // //scene.add( lights[ 0 ] );
+    // this.scene.add( lights[ 0 ] );
     // this.scene.add( lights[ 1 ] );
     // this.scene.add( lights[ 2 ] );
 
+    const genLight = (num) => {
+      const light = new THREE.PointLight( 0xffffff, 1.4, 0 );
+
+      light.position.set( 36, 0, 117 );
+      light.matrixWorldNeedsUpdate = true;
+
+      this.scene.add( light );
+
+      var sphereSize = 10;
+      var pointLightHelper = new THREE.PointLightHelper( light, sphereSize );
+      this.scene.add( pointLightHelper );
+
+      if (__DEV__) {
+        const params = {
+          positionX: light.position.x,
+          positionY: light.position.y,
+          positionZ: light.position.z,
+          intensity: light.intensity
+        };
+        const folder = menu.addFolder('light' + num);
+        folder.add(params, 'positionX').min(-200).max(200).step(1).onChange(function () {
+          light.position.setX(params.positionX);
+        });
+        folder.add(params, 'positionY').min(-200).max(200).step(1).onChange(function () {
+          light.position.setY(params.positionY);
+        });
+        folder.add(params, 'positionZ').min(-200).max(200).step(1).onChange(function () {
+          light.position.setZ(params.positionZ);
+        });
+        folder.add(params, 'intensity').min(0).max(2).step(0.01).onChange(function () {
+          light.intensity = params.intensity;
+        });
+      }
+    };
+
+
+    genLight(1);
+    genLight(2);
+
   }
-}
+};
 
 export default Threebox

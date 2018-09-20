@@ -2,7 +2,7 @@
 import * as utils from '../Utils/Utils';
 import * as ThreeboxConstants from '../constants';
 
-function CameraSync(map, camera, world, plane) {
+function CameraSync(map, camera, world, plane, plane2) {
   this.map = map;
   this.camera = camera;
   this.active = true;
@@ -17,6 +17,10 @@ function CameraSync(map, camera, world, plane) {
   this.plane = plane || new THREE.Group();
   this.plane.position.x = this.plane.position.y = ThreeboxConstants.WORLD_SIZE / 2;
   this.plane.matrixAutoUpdate = false;
+
+  this.plane2 = plane2 || new THREE.Group();
+  this.plane2.position.x = this.plane2.position.y = ThreeboxConstants.WORLD_SIZE / 2;
+  this.plane2.matrixAutoUpdate = false;
 
   // Listen for move events from the map and update the Three.js camera
   const _this = this;
@@ -82,7 +86,7 @@ CameraSync.prototype = {
       .premultiply(translateCenter)
       .premultiply(scale)
       .premultiply(translateMap);
-    
+
     // ... I'm a bit confused by matrix & worldMatrix...
     const planeMatrix = new THREE.Matrix4;
     // const _cameraTranslateZ = new THREE.Matrix4().makeTranslation(0, 0, 0);
@@ -97,6 +101,7 @@ CameraSync.prototype = {
     // utils.prettyPrintMatrix(planeMatrix.elements);
 
     this.plane.matrix.copy(planeMatrix);
+    this.plane2.matrix.copy(planeMatrix);
 
 
     // utils.prettyPrintMatrix(cameraWorldMatrix.elements);

@@ -60,8 +60,8 @@ scene.add(axesHelper);
 
 var geometry = new THREE.PlaneGeometry( 5, 10, 10 );
 var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-var plane = new THREE.Mesh( geometry, material );
-scene.add( plane );
+// var plane = new THREE.Mesh( geometry, material );
+// scene.add( plane );
 
 
 function segmentBox () {
@@ -242,7 +242,33 @@ function glow () {
   scene.add(mesh);
 }
 
-glow();
+function extrude () {
+  var length = 10, width = 10;
+
+  var shape = new THREE.Shape();
+  shape.moveTo( 0,0 );
+  shape.lineTo( 0, width );
+  shape.lineTo( length, width );
+  shape.lineTo( length, 0 );
+  shape.lineTo( 0, 0 );
+
+  var extrudeSettings = {
+    steps: 2,
+    depth: 10,
+    bevelEnabled: true,
+    bevelThickness: 1,
+    bevelSize: 1,
+    bevelSegments: 1
+  };
+
+  var geometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+  var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  var mesh = new THREE.Mesh( geometry, material ) ;
+  scene.add( mesh );
+}
+
+extrude();
+
 
 var render = function () {
   requestAnimationFrame(render);
