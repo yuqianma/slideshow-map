@@ -10,12 +10,14 @@ import {
 } from './Components';
 import {
   calcFittedSize,
-  getBoxSize, getLinkSize,
+  getShapeSize, getLinkSize,
   getValidSize,
 } from './helper';
 import { timeline, easing } from 'popmotion';
 
 const DEV_NANJING = [118.78, 32.04, 0];
+
+const BEARING_RANGE = [-75, -15];
 
 export default class Slideshow extends Threebox {
   constructor (options) {
@@ -51,6 +53,17 @@ export default class Slideshow extends Threebox {
 
   getSize () {
     return this.map.transform
+  }
+
+  projectToScene (lngLat, coords) {
+
+    const vector = new THREE.Vector3(...coords);
+
+    this.moveToCoordinate(this._mapObj, lngLat);
+    this._mapObj.parent.updateMatrixWorld(); // update the matrixWorld immediately
+    this._mapObj.localToWorld(vector);
+
+    return vector;
   }
 
   projectToPlane (coords) {
@@ -144,7 +157,7 @@ export default class Slideshow extends Threebox {
       center: [lng, lat],
       zoom,
       pitch,
-      bearing: Math.random() * 180 | 0 - 90,
+      bearing: (Math.random() * (BEARING_RANGE[1] - BEARING_RANGE[0]) | 0) + BEARING_RANGE[0],
     }, {
       options,
       cb
@@ -219,6 +232,7 @@ export default class Slideshow extends Threebox {
 
     if (type === 'pillar') {
 
+      // 留出link空间
       if (!fixed) {
         size /= 2;
       }
@@ -227,7 +241,11 @@ export default class Slideshow extends Threebox {
       this.c.effectCircle.visible = true;
       this.c.radioWave.visible = false;
 
-      const boxSize = getBoxSize(size, viewSize.scale, viewSize.height);
+      const boxSize = getShapeSize(size, viewSize.scale, viewSize.height);
+
+      const lightSize = this.projectToScene(lngLat, [boxSize.x, boxSize.y, boxSize.z]);
+
+      this.updatePointLights(lightSize);
 
       coords[2] = boxSize.z;
       this.moveToCoordinate(this.c.box, lngLat);

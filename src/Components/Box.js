@@ -5,7 +5,7 @@
 import Component from './Component';
 import { Box as Default, Frame as FrameDefault } from '../constants';
 import { delay, timeline } from 'popmotion';
-import { getBoxSize } from '../helper';
+import { getShapeSize } from '../helper';
 
 const {
   Color,

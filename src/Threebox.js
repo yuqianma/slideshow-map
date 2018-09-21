@@ -355,6 +355,8 @@ Threebox.prototype = {
     // this.scene.add( lights[ 1 ] );
     // this.scene.add( lights[ 2 ] );
 
+    this.lights = [];
+
     const genLight = (num, [x, y, z]) => {
       const light = new THREE.PointLight( 0xffffff, 1.4, 0 );
 
@@ -363,37 +365,61 @@ Threebox.prototype = {
 
       this.scene.add( light );
 
-      var sphereSize = 10;
-      var pointLightHelper = new THREE.PointLightHelper( light, sphereSize );
-      this.scene.add( pointLightHelper );
-
       if (__DEV__) {
-        const params = {
-          positionX: light.position.x,
-          positionY: light.position.y,
-          positionZ: light.position.z,
-          intensity: light.intensity
+        var sphereSize = 1;
+        var pointLightHelper = new THREE.PointLightHelper( light, sphereSize );
+        this.scene.add( pointLightHelper );
+
+        const params = {};
+
+        light.syncParams = () => {
+          params.positionX = light.position.x;
+          params.positionY = light.position.y;
+          params.positionZ = light.position.z;
+          params.intensity = light.intensity;
+          return params;
         };
+
+        light.syncParams();
+
         const folder = menu.addFolder('light' + num);
+
+        light.folder = folder;
+
         folder.add(params, 'positionX').min(-200).max(200).step(1).onChange(function () {
           light.position.setX(params.positionX);
         });
         folder.add(params, 'positionY').min(-200).max(200).step(1).onChange(function () {
           light.position.setY(params.positionY);
         });
-        folder.add(params, 'positionZ').min(-200).max(200).step(1).onChange(function () {
+        folder.add(params, 'positionZ').min(-400).max(400).step(1).onChange(function () {
           light.position.setZ(params.positionZ);
         });
         folder.add(params, 'intensity').min(0).max(2).step(0.01).onChange(function () {
           light.intensity = params.intensity;
         });
       }
+
+      return light;
     };
 
 
-    genLight('1', [36, 0, 117]);
-    genLight('2', [36, 0, 117]);
+    this.lights.push(genLight('1', [0, -44, 150]));
+    this.lights.push(genLight('2', [31, 0, 133]));
 
+  },
+
+  updatePointLights ({ x, y, z }) {
+    this.lights[0].position.set(        0, y * 1.02, z * 1.12 );
+    this.lights[1].position.set( -x * 0.90,       0, z * 1.1 );
+
+    if (__DEV__) {
+      this.lights[0].syncParams();
+      this.lights[0].folder.__controllers.forEach(c => c.updateDisplay());
+
+      this.lights[1].syncParams();
+      this.lights[1].folder.__controllers.forEach(c => c.updateDisplay());
+    }
   }
 };
 

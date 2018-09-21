@@ -39,7 +39,7 @@ function main () {
     locations: [{
       index: 1,
       type: 'pillar', // point
-      size: 100,
+      size: 5,
       opacity: 0.8,
 
       // color: '#0bd',
@@ -47,7 +47,7 @@ function main () {
       // it's not center
       lngLat: [118.77680629491806, 32.0620757594658],
 
-      zoom: 20,
+      zoom: 14,
       pitch: 45,
 
       fontFamily: 'sans-serif',
