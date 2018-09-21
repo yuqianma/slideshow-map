@@ -263,7 +263,7 @@ export default class Slideshow extends Threebox {
       coords[2] = 0;
       this.moveToCoordinate(this.c.radioWave, lngLat);
       this.c.radioWave.update({
-        size,
+        shapeSize: getShapeSize(size, viewSize.scale, viewSize.height),
         opacity
       });
 

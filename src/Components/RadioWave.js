@@ -63,8 +63,8 @@ export default class RadioWave extends Component {
     this._running = this.animation.start();
   }
 
-  update ({ size, opacity }) {
-    size = size / 2;
+  update ({ shapeSize, opacity }) {
+    const size = shapeSize.x / 80;
     this.material.opacity = opacity;
     this.obj.scale.set(size, size, size);
     this._startAnimate();
