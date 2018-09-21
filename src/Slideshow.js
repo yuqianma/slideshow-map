@@ -222,13 +222,7 @@ export default class Slideshow extends Threebox {
 
     const coords = lngLat.slice();
 
-    const vector = this.projectToPlane(coords);
     const viewSize = this.getSize();
-    const validSize = getValidSize({
-      x: vector.x,
-      y: vector.y,
-      ...viewSize
-    });
 
     if (type === 'pillar') {
 
@@ -265,7 +259,6 @@ export default class Slideshow extends Threebox {
       this.c.box.visible = false;
       this.c.effectCircle.visible = false;
       this.c.radioWave.visible = true;
-      const coords = lngLat.slice();
 
       coords[2] = 0;
       this.moveToCoordinate(this.c.radioWave, lngLat);
@@ -276,6 +269,13 @@ export default class Slideshow extends Threebox {
 
       setTimeout(cb, 3000);
     }
+
+    const vector = this.projectToPlane(coords);
+    const validSize = getValidSize({
+      x: vector.x,
+      y: vector.y,
+      ...viewSize
+    });
 
     this.c.card.position(vector.x, vector.y, 0);
     this.c.card.update({
