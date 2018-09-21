@@ -4,6 +4,8 @@
 
 import Component from './Component';
 import { Dom } from '../Utils/Svg';
+import { timeline } from 'popmotion';
+import { SPF } from '../constants';
 
 export default class EffectGlobal extends Component {
   create (props) {
@@ -38,28 +40,43 @@ export default class EffectGlobal extends Component {
     });
 
     const geometry = new THREE.PlaneGeometry( 200, 220, 1 );
-    // geometry.translate(200 / 2, 220 / 2, 0);
-    geometry.scale(0.3, 0.3, 1);
 
-    const mesh = new THREE.Mesh( geometry, mat );
+    this.videoMesh = new THREE.Mesh( geometry, mat );
 
-    mesh.visible = false;
+    this.wrapper = new THREE.Group();
+    this.wrapper.add(this.videoMesh);
 
-    return mesh;
+    this.obj = new THREE.Group();
+    this.obj.add(this.wrapper);
+
+    this.obj.visible = false;
+
+    return this.obj;
   }
 
   update (frameSize) {
     // console.log(frameSize);
     // mesh has been translated in `animateComponents`
-    this.obj.geometry.translate(frameSize.x, frameSize.y, 0);
+    const s = frameSize.height / 200 / 1.5;
+    this.videoMesh.scale.set(s, s, 1);
+    this.wrapper.position.set(frameSize.x - frameSize.a * 0.7, frameSize.y + frameSize.b * 0.3, 0);
+
 
     this.video.node.currentTime = 0;
     this.obj.visible = true;
+    this.videoMesh.material.opacity = 0;
+
+    this._animate = timeline([
+      45 * SPF,
+      { track: 'v', from: 0, to: 1, duration: 60 * SPF}
+    ]).start( ({v}) => {
+      this.videoMesh.material.opacity = v;
+    });
     // this.video.node.play();
   }
 
   leave () {
-    // todo, fade
-    // this.video.node.pause();
+    this._animate.reverse();
+    this._animate.resume();
   }
 }

@@ -126,7 +126,8 @@ export default class Card extends Component {
     this.num.update({
       num: index,
       fontSize,
-      fontFamily
+      fontFamily,
+      ...frameSize
     });
 
     // this.global.position(frameSize.x, frameSize.y, 0);

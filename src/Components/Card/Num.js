@@ -30,18 +30,19 @@ export default class Num extends Component {
   }
 
   update (props) {
+    console.log(props);
     let {
       num,
       fontSize,
       fontFamily,
     } = props;
 
-    fontSize *= 2.5;
+    fontSize *= 3.5;
 
     this.obj.node.textContent = (num + '').padStart(2, '0');
     this.obj.attr({
-      x: - fontSize / 2,
-      y: fontSize / 2,
+      x: - fontSize / 2 - props.a,
+      y: fontSize / 2 + props.b / 4,
       'text-anchor': 'right',
       style: `font-weight: bold; font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: alphabetic`,
     });
