@@ -111,8 +111,8 @@ class SlideshowMap {
   }
 }
 
-window.VanBigScreen = window.VanBigScreen || {};
+window.Van = window.Van || {};
 
-window.VanBigScreen.SlideshowMap = SlideshowMap;
+window.Van.SlideshowMap = SlideshowMap;
 
 export default SlideshowMap

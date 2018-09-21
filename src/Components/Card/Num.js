@@ -30,7 +30,6 @@ export default class Num extends Component {
   }
 
   update (props) {
-    console.log(props);
     let {
       num,
       fontSize,
