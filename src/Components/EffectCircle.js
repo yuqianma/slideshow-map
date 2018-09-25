@@ -43,7 +43,7 @@ export default class EffectCircle extends Component {
 
   update ({ boxSize }) {
     this.video.node.currentTime = 0;
-    // this.video.node.play();
+    this.video.node.play();
 
     const s = boxSize.x;
 
@@ -52,6 +52,7 @@ export default class EffectCircle extends Component {
 
   leave () {
     // todo, fade
-    // this.video.node.pause();
+    this.video.node.pause();
+    this.video.node.currentTime = 0;
   }
 }

@@ -42,7 +42,7 @@ export default class Slideshow extends Threebox {
     this.map.on('moveend', (ev) => {
       window.setTimeout(() => {
         this.animateComponents(ev);
-      }, 100);
+      }, 0);
     });
 
     this.visible = false;
@@ -188,6 +188,7 @@ export default class Slideshow extends Threebox {
       this.c.box.leave();
       this.c.radioWave.leave();
       this.c.card.leave();
+      this.c.effectCircle.leave();
 
       timeline([
         {
