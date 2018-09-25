@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack-serve --open",
     "dev": "webpack-serve",
-    "build": "webpack --config webpack.build.config.js"
+    "build": "webpack --config webpack.build.config.js",
+    "build:dev": "webpack --config webpack.build.dev.config.js"
   },
   "repository": {
     "type": "git",

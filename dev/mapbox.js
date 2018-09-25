@@ -1,4 +1,4 @@
-import mapboxgl from './mapbox-gl-dev';
+import mapboxgl from 'mapbox-gl';
 
 window.mapboxgl = mapboxgl;
 
@@ -6,32 +6,33 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibWF5cTA0MjIiLCJhIjoiY2phamMwOHV4MjllajMzbnFye
 var map = new mapboxgl.Map({
   container: 'map',
   // tileCacheSize: 100,
-  style: 'mapbox://styles/mapbox/dark-v9',
-  // style: {
-  //   "version": 8,
-  //   "sources": {
-  //     "osm-tiles": {
-  //       "type": "raster",
-  //       'tiles': [
-  //         // "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-  //         // 'http://tile.thunderforest.com/transport-dark/{z}/{x}/{y}@2x.png',
-  //         'http://wprd03.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
-  //         // 'http://wprd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=2&style=7'
-  //         // 'http://api0.map.bdimg.com/customimage/tile?&x={x}&y={y}&z={z}&udt=20180911&scale=1&ak=8d6c8b8f3749aed6b1aff3aad6f40e37&styles=t%3Abackground%7Ce%3Aall%7Cc%3A%23000000ff'
-  //         // 'http://online1.map.bdimg.com/onlinelabel/qt=tile&x={x}&y={y}&z={z}',
-  //         // 'http://cmmre.ishowchina.com/tile?x={x}&y={y}&z={z}&mid=basemap_17703&f=png&scale={scale}'
-  //       ],
-  //       'tileSize': 256
-  //     }
-  //   },
-  //   "layers": [{
-  //     "id": "simple-tiles",
-  //     "type": "raster",
-  //     "source": "osm-tiles",
-  //     "minzoom": 0,
-  //     "maxzoom": 22
-  //   }]
-  // },
+  // style: 'mapbox://styles/mapbox/dark-v9',
+  style: {
+    "version": 8,
+    "sources": {
+      "osm-tiles": {
+        "type": "raster",
+        'tiles': [
+          // "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          // 'http://tile.thunderforest.com/transport-dark/{z}/{x}/{y}@2x.png',
+          // 'http://wprd03.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}'
+          // 'http://wprd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=2&style=7'
+          // 'http://api0.map.bdimg.com/customimage/tile?&x={x}&y={y}&z={z}&udt=20180911&scale=1&ak=8d6c8b8f3749aed6b1aff3aad6f40e37&styles=t%3Abackground%7Ce%3Aall%7Cc%3A%23000000ff'
+          // 'http://online1.map.bdimg.com/onlinelabel/qt=tile&x={x}&y={y}&z={z}',
+          // 'http://cmmre.ishowchina.com/tile?x={x}&y={y}&z={z}&mid=basemap_17703&f=png&scale={scale}',
+          'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}'
+        ],
+        'tileSize': 256
+      }
+    },
+    "layers": [{
+      "id": "simple-tiles",
+      "type": "raster",
+      "source": "osm-tiles",
+      "minzoom": 0,
+      "maxzoom": 22
+    }]
+  },
   center: [118.78406, 32.05873],
   maxZoom: 22,
   minZoom: 0,
