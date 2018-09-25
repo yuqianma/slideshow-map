@@ -57,9 +57,9 @@ export default class EffectGlobal extends Component {
   update (frameSize) {
     // console.log(frameSize);
     // mesh has been translated in `animateComponents`
-    const s = frameSize.a / 200 * 3;
+    const s = frameSize.a / 200 * 2.5;
     this.videoMesh.scale.set(s, s, 1);
-    this.wrapper.position.set(frameSize.x - frameSize.a * 0.7, frameSize.y + frameSize.b * 0.3, 0);
+    this.wrapper.position.set(frameSize.x - frameSize.a * 0.5, frameSize.y + frameSize.b * 0.3, 0);
 
 
     this.video.node.currentTime = 0;
