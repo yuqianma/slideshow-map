@@ -15,6 +15,10 @@ import {
 } from './helper';
 import { timeline, easing } from 'popmotion';
 
+if (__DEV__) {
+  window._easing = easing;
+}
+
 const DEV_NANJING = [118.78, 32.04, 0];
 
 const BEARING_RANGE = [-75, -15];
@@ -38,7 +42,7 @@ export default class Slideshow extends Threebox {
     this.map.on('moveend', (ev) => {
       window.setTimeout(() => {
         this.animateComponents(ev);
-      }, 500);
+      }, 100);
     });
 
     this.visible = false;
