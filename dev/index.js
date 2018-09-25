@@ -8,29 +8,30 @@ function main () {
   const slideshowMap = new SlideshowMap({
     container: 'map',
     // style: 'mapbox://styles/mapbox/dark-v9',
-    style: {
-      "version": 8,
-      "sources": {
-        "osm-tiles": {
-          "type": "raster",
-          'tiles': [
-            'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
-            // 'https://tilemap.geoq.cn/database/ytt_basemap/layergroup/a2b1bbaf4829217716e36b70c1d54b6f/0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50/{z}/{x}/{y}.png',
-            // 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-            // 'http://wprd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=2&style=6',
-            // 'http://t3.tianditu.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'
-          ],
-          'tileSize': 256
-        }
-      },
-      "layers": [{
-        "id": "simple-tiles",
-        "type": "raster",
-        "source": "osm-tiles",
-        "minzoom": 0,
-        "maxzoom": 22
-      }]
-    },
+    style: 'black',
+    // style: {
+    //   "version": 8,
+    //   "sources": {
+    //     "osm-tiles": {
+    //       "type": "raster",
+    //       'tiles': [
+    //         // 'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
+    //         'https://tilemap.geoq.cn/database/ytt_basemap/layergroup/a2b1bbaf4829217716e36b70c1d54b6f/0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50/{z}/{x}/{y}.png',
+    //         // 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    //         // 'http://wprd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=2&style=6',
+    //         // 'http://t3.tianditu.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'
+    //       ],
+    //       'tileSize': 256
+    //     }
+    //   },
+    //   "layers": [{
+    //     "id": "simple-tiles",
+    //     "type": "raster",
+    //     "source": "osm-tiles",
+    //     "minzoom": 0,
+    //     "maxzoom": 22
+    //   }]
+    // },
     effectCircleUrl: '',
     globalUrl: '',
     hash: true,

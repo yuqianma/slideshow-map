@@ -1,6 +1,29 @@
 import Slideshow from './Slideshow';
 import mapboxgl from 'mapbox-gl';
 
+const TILES = {
+  BLACK: 'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
+  SATELLITE: 'http://t3.tianditu.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'
+};
+
+const getTileStyle = (tileUrl) => ({
+  "version": 8,
+  "sources": {
+    "image-tiles": {
+      "type": "raster",
+      'tiles': [tileUrl],
+      'tileSize': 256
+    }
+  },
+  "layers": [{
+    "id": "simple-tiles",
+    "type": "raster",
+    "source": "image-tiles",
+    "minzoom": 0,
+    "maxzoom": 22
+  }]
+});
+
 function attachTitleAndBorder (options) {
   const container = options.container;
   const vanCharts = VanCharts.init(document.getElementById(container) || container);
@@ -15,9 +38,20 @@ function attachTitleAndBorder (options) {
   }, options.border));
 }
 
+function mergeDefaultOptions (options) {
+  options = {...options};
+  let style = '' + options.style || 'BLACK';
+  style = style.toUpperCase();
+  if (TILES[style]) {
+    options.style = getTileStyle(TILES[style]);
+  }
+  return options
+}
+
 class SlideshowMap {
   constructor (options) {
-    this.options = options; // todo, merge default
+    options = mergeDefaultOptions(options);
+    this.options = options;
 
     // 添加vancharts的标题和边框
     // 这样会导致在同一个container被vancharts和mapbox init了2遍
