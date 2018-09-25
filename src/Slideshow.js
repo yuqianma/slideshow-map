@@ -144,7 +144,8 @@ export default class Slideshow extends Threebox {
       description,
       lngLat,
       zoom,
-      pitch
+      pitch,
+      curve
     } = options;
 
     this.visible = false;
@@ -155,9 +156,8 @@ export default class Slideshow extends Threebox {
       // [0.005713705081944909, 0.010004240534200903]
       // center: [lng + 0.005713705081944909, lat + 0.010004240534200903],
       center: [lng, lat],
-      zoom,
-      pitch,
       bearing: (Math.random() * (BEARING_RANGE[1] - BEARING_RANGE[0]) | 0) + BEARING_RANGE[0],
+      ...options
     }, {
       options,
       cb

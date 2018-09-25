@@ -72,6 +72,7 @@ function main () {
 
       zoom: 14,
       pitch: 45,
+      // speed: 0.5,
 
       fontFamily: 'sans-serif',
 
