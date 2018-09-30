@@ -27,6 +27,10 @@ const getTileStyle = (tileUrl) => ({
 function attachTitleAndBorder (options) {
   const container = options.container;
   const vanCharts = VanCharts.init(document.getElementById(container) || container);
+  if (options.title) {
+    options.title.style = options.title.style || {};
+    options.title.style.lineHeight = 'normal';
+  }
   vanCharts.setOptions(Object.assign({
     "plotOptions": {
       "animation": false
