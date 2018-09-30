@@ -60,6 +60,8 @@ export default class RadioWave extends Component {
     if (this._running) {
       this._running.stop();
     }
+    const rings = this.obj.children;
+    rings.map(ring => ring.morphTargetInfluences[0] = 0);
     this._running = this.animation.start();
   }
 
