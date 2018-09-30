@@ -11,6 +11,7 @@ import { EffectComposer, BloomPass, RenderPass, KernelSize } from 'postprocessin
 
 if (__DEV__) {
   window.menu = new dat.GUI();
+  menu.closed = true;
 }
 
 function Threebox(map) {

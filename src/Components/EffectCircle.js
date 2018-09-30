@@ -8,7 +8,6 @@ import { Dom } from '../Utils/Svg';
 export default class EffectCircle extends Component {
   create (props) {
     this.video = new Dom('video', {
-      autoplay: true,
       loop: true,
       crossOrigin: 'anonymous',
       'webkit-playsinline': true,
@@ -17,6 +16,8 @@ export default class EffectCircle extends Component {
     this.video.style({
       display: 'none',
     });
+
+    this.video.node.muted = true;
 
     this.source = new Dom('source', {
       src: props.src
@@ -43,6 +44,7 @@ export default class EffectCircle extends Component {
 
   update ({ boxSize }) {
     this.video.node.currentTime = 0;
+    // play() is required for auto play
     this.video.node.play();
 
     const s = boxSize.x;

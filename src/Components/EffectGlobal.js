@@ -10,7 +10,6 @@ import { SPF } from '../constants';
 export default class EffectGlobal extends Component {
   create (props) {
     this.video = new Dom('video', {
-      autoplay: true,
       loop: true,
       crossOrigin: 'anonymous',
       'webkit-playsinline': true,
@@ -19,6 +18,8 @@ export default class EffectGlobal extends Component {
     this.video.style({
       display: 'none',
     });
+
+    this.video.node.muted = true;
 
     this.source = new Dom('source', {
       src: props.src
@@ -63,6 +64,8 @@ export default class EffectGlobal extends Component {
 
 
     this.video.node.currentTime = 0;
+    // play() is required for auto play
+    this.video.node.play();
     this.obj.visible = true;
     this.videoMesh.material.opacity = 0;
 
@@ -78,5 +81,7 @@ export default class EffectGlobal extends Component {
   leave () {
     this._animate.reverse();
     this._animate.resume();
+    this.video.node.pause();
+    this.video.node.currentTime = 0;
   }
 }
