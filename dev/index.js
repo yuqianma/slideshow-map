@@ -4,8 +4,8 @@ import config from '../config';
 
 const opt1 = {
   container: 'map',
-    // style: 'mapbox://styles/mapbox/dark-v9',
-    style: 'black',
+  // style: 'mapbox://styles/mapbox/dark-v9',
+  style: 'black',
   // style: {
   //   "version": 8,
   //   "sources": {
@@ -37,25 +37,25 @@ const opt1 = {
   pitch: 60,
   interval: 3000,
 
-  "title": {
-  // "backgroundColor": "rgba(255,255,255,0.7490196078431373)",
-  "borderRadius": 0,
-    "style": {
-    "fontFamily": "Microsoft YaHei UI",
-      "color": "#fff",
-      "fontSize": "20pt",
-      "fontWeight": ""
+  'title': {
+    // "backgroundColor": "rgba(255,255,255,0.7490196078431373)",
+    'borderRadius': 0,
+    'style': {
+      'fontFamily': 'Microsoft YaHei UI',
+      'color': '#fff',
+      'fontSize': '20pt',
+      'fontWeight': ''
+    },
+    'useHtml': false,
+    'text': '演示地图',
+    'align': 'left'
   },
-  "useHtml": false,
-    "text": "演示地图",
-    "align": "left"
-},
   border: {
-    "shadow": true,
-      "borderRadius": 10,
-      "borderWidth": 5,
-      "borderColor": "#0b9",
-      "backgroundColor": '#02192c'
+    'shadow': true,
+    'borderRadius': 10,
+    'borderWidth': 5,
+    'borderColor': '#0b9',
+    'backgroundColor': '#02192c'
   },
   locations: [{
     index: 1,
@@ -100,110 +100,116 @@ const opt1 = {
     ],
     description: '江苏省无锡市',
   }]
-}
+};
 
 const opt2 = {
-  "border": {
-    "borderColor": "#000000",
-    "borderRadius": 0,
-    "borderWidth": 0,
+  'border': {
+    'borderColor': '#000000',
+    'borderRadius': 0,
+    'borderWidth': 0,
     'backgroundColor': '#06334B'
   },
-  "refreshTime": 0,
-  "center": [132, 32],
-  "tooltip": {
-    "areaName": "",
-    "seriesName": "",
-    "description": "",
-    "fixed": false,
-    "value": "¤#0"
+  'refreshTime': 0,
+  'center': [132, 32],
+  'tooltip': {
+    'areaName': '',
+    'seriesName': '',
+    'description': '',
+    'fixed': false,
+    'value': '¤#0'
   },
-  "zoom": 11,
-  "title": {
-    "borderRadius": 0,
+  'zoom': 11,
+  'title': {
+    'borderRadius': 0,
     backgroundColor: '#ccc',
-    "extraCssText": "",
-    "useHtml": true,
-    "style": {
-      "fontFamily": "Microsoft YaHei",
-      "color": "rgba(0,0,0,1.0)",
-      "fontSize": 30,
-      "fontWeight": ""
+    'extraCssText': '',
+    'useHtml': true,
+    'style': {
+      'fontFamily': 'Microsoft YaHei',
+      'color': 'rgba(0,0,0,1.0)',
+      'fontSize': 30,
+      'fontWeight': ''
     },
-    "text": "测试测试测试测试",
-    "align": "left"
+    'text': '测试测试测试测试',
+    'align': 'left'
   },
-  "type": "point",
-  "exportImage": true,
-  "size": 10,
-  "playZoom": 11,
-  "style": "black",
-  "interval": 1000,
-  "locations": [{
-    "lngLat": ["120.299", "32.0"],
-    "areaName": "北京",
-    "seriesName": ["人口", "大学"],
-    "description": "测试",
-    "index": 1,
-    "value": ["333333", "666"],
-    "zoom": 4.5,
-    "pitch": 45,
-    "size": 4,
-    "fixed": false,
-    "type": "pillar",
-    "opacity": 1,
-    "contents": ["人口:￥333333", "大学:￥666"]
-  }, {
-    "lngLat": ["137.0", "23.0"],
-    "areaName": "无锡",
-    "seriesName": ["人口", "大学"],
-    "description": "也是假的",
-    "index": 2,
-    "value": ["3333333", "444"],
-    "zoom": 3.5,
-    "pitch": 45,
-    "size": 10,
-    "fixed": false,
-    "type": "point",
-    "opacity": 1,
-    "contents": ["人口:￥3333333", "大学:￥444"]
-  }, {
-    "lngLat": ["123", "47"],
-    "areaName": "南京",
-    "seriesName": ["大学"],
-    "description": "也是假的",
-    "index": 3,
-    "value": ["333"],
-    "zoom": 11,
-    "pitch": 45,
-    "size": 10,
-    "fixed": false,
-    "type": "point",
-    "opacity": 1,
-    "contents": ["大学:￥333"]
-  }, {
-    "lngLat": ["123", "47"],
-    "areaName": "假南京",
-    "seriesName": ["人口"],
-    "description": "也是假的",
-    "index": 4,
-    "value": ["0000"],
-    "zoom": 11,
-    "pitch": 45,
-    "size": 10,
-    "fixed": false,
-    "type": "point",
-    "opacity": 1,
-    "contents": ["人口:￥0000"]
-  }],
-  "opacity": 1,
-  "container": 'map',
+  'type': 'point',
+  'exportImage': true,
+  'size': 10,
+  'playZoom': 11,
+  'style': 'black',
+  'interval': 6000,
+  'locations': [{
+    'lngLat': ['20.299', '32.0'],
+    'areaName': '江苏省',
+    'seriesName': ['人口', '大学'],
+    'description': '测试',
+    'index': 1,
+    'value': ['333333', '666'],
+    'zoom': 4.5,
+    'pitch': 45,
+    'size': 4,
+    'fixed': true,
+    'type': 'pillar',
+    'opacity': 1,
+    'contents': [
+      // "人口:￥333333",
+      // "大学:￥666"
+      '区域电话：12345678900'
+    ]
+  },
+    //   {
+    //   "lngLat": ["137.0", "23.0"],
+    //   "areaName": "无锡",
+    //   "seriesName": ["人口", "大学"],
+    //   "description": "也是假的",
+    //   "index": 2,
+    //   "value": ["3333333", "444"],
+    //   "zoom": 3.5,
+    //   "pitch": 45,
+    //   "size": 10,
+    //   "fixed": false,
+    //   "type": "point",
+    //   "opacity": 1,
+    //   "contents": ["人口:￥3333333", "大学:￥444"]
+    // },
+    {
+      'lngLat': ['123', '47'],
+      'areaName': '南京',
+      'seriesName': ['大学'],
+      'description': '也是假的',
+      'index': 3,
+      'value': ['333'],
+      'zoom': 11,
+      'pitch': 45,
+      'size': 10,
+      'fixed': false,
+      'type': 'point',
+      'opacity': 1,
+      'contents': ['大学:￥333']
+    }, {
+      'lngLat': ['123', '47'],
+      'areaName': '假南京',
+      'seriesName': ['人口'],
+      'description': '也是假的',
+      'index': 4,
+      'value': ['0000'],
+      'zoom': 11,
+      'pitch': 45,
+      'size': 10,
+      'fixed': false,
+      'type': 'point',
+      'opacity': 1,
+      'contents': ['人口:￥0000']
+    }],
+  'opacity': 1,
+  'container': 'map',
   // "effectCircleUrl": "report?op=chart&cmd=get_webm&path=com/fr/plugin/chart/requiredFile/circle.webm",
   // "globalUrl": "report?op=chart&cmd=get_webm&path=com/fr/plugin/chart/requiredFile/global.webm",
-  "pitch": 60,
+  'pitch': 60,
   // "interactive": false,
   hash: true,
-}
+};
 
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);

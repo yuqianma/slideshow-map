@@ -40,6 +40,7 @@ export default class Slideshow extends Threebox {
     this.setupDefaultLights();
 
     this.map.on('moveend', (ev) => {
+      // console.log(window.elapse(), 'moveend');
       window.setTimeout(() => {
         this.animateComponents(ev);
       }, 0);
@@ -258,7 +259,7 @@ export default class Slideshow extends Threebox {
         boxSize
       });
 
-      delay(4000).start({
+      delay(3000).start({
         complete: cb
       });
 

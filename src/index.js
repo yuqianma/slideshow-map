@@ -7,6 +7,10 @@ const TILES = {
   SATELLITE: 'http://t3.tianditu.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'
 };
 
+const start = +new Date;
+
+// window.elapse = () => (+new Date - start) / 1000 | 0;
+
 const getTileStyle = (tileUrl) => ({
   "version": 8,
   "sources": {
@@ -133,14 +137,21 @@ class SlideshowMap {
 
           new Promise(resolve => {
             i = ++i % locations.length;
+            // console.log('---------------------');
+            // console.log(elapse(), 'flyTo', i);
             this.slideshow.flyTo(locations[i], resolve);
           })
             .then(() => new Promise(resolve => {
-              delay(interval).start({
+              // console.log(elapse(), 'animation end');
+              const timeGap = Math.max(interval - 6000, 0);
+              delay(timeGap).start({
                 complete: resolve
               });
             }))
-            .then(() => new Promise(resolve => this.slideshow.leave(resolve)))
+            .then(() => {
+              // console.log(elapse(), 'interval end');
+              return new Promise(resolve => this.slideshow.leave(resolve));
+            })
             .then(turn);
         };
 
