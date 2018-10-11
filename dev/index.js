@@ -149,7 +149,7 @@ const opt2 = {
     'zoom': 4.5,
     'pitch': 45,
     'size': 4,
-    'fixed': true,
+    'fixed': false,
     'type': 'pillar',
     'opacity': 1,
     'contents': [
@@ -158,21 +158,21 @@ const opt2 = {
       '区域电话：12345678900'
     ]
   },
-    //   {
-    //   "lngLat": ["137.0", "23.0"],
-    //   "areaName": "无锡",
-    //   "seriesName": ["人口", "大学"],
-    //   "description": "也是假的",
-    //   "index": 2,
-    //   "value": ["3333333", "444"],
-    //   "zoom": 3.5,
-    //   "pitch": 45,
-    //   "size": 10,
-    //   "fixed": false,
-    //   "type": "point",
-    //   "opacity": 1,
-    //   "contents": ["人口:￥3333333", "大学:￥444"]
-    // },
+      {
+      "lngLat": ["137.0", "23.0"],
+      "areaName": "无锡",
+      "seriesName": ["人口", "大学"],
+      "description": "也是假的",
+      "index": 2,
+      "value": ["3333333", "444"],
+      "zoom": 3.5,
+      "pitch": 45,
+      "size": 10,
+      "fixed": true,
+      "type": "point",
+      "opacity": 1,
+      "contents": ["人口:￥3333333", "大学:￥444"]
+    },
     {
       'lngLat': ['123', '47'],
       'areaName': '南京',
