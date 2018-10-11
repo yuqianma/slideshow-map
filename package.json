@@ -33,7 +33,7 @@
     "webpack-serve": "^0.3.1"
   },
   "dependencies": {
-    "mapbox-gl": "^0.44.2",
+    "mapbox-gl": "^0.50.0-beta.1",
     "popmotion": "^8.1.22",
     "postprocessing": "^4.4.2",
     "three": "^0.92.0",
