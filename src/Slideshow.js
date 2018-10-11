@@ -213,6 +213,8 @@ export default class Slideshow extends Threebox {
       return
     }
 
+    options.fontFamily = options.fontFamily || 'Microsoft YaHei, sans-serif';
+
     const {
       areaName,
       contents,
@@ -221,7 +223,7 @@ export default class Slideshow extends Threebox {
       fixed,
       opacity = 1,
       lngLat,
-      fontFamily = 'Microsoft YaHei, sans-serif'
+      fontFamily
     } = options;
 
     let size = options.size || 10;
