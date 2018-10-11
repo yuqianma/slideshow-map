@@ -221,7 +221,7 @@ export default class Slideshow extends Threebox {
       fixed,
       opacity = 1,
       lngLat,
-      fontFamily
+      fontFamily = 'Microsoft YaHei, sans-serif'
     } = options;
 
     let size = options.size || 10;
