@@ -110,7 +110,7 @@ class SlideshowMap {
     if (locations && locations.length) {
       let i = -1;
 
-      if (!__DEV__) {
+      if (__DEV__) {
 
         const turn = () => {
 

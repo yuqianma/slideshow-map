@@ -93,7 +93,7 @@ export default class Frame extends Component {
     });
 
     if (this._animate) {
-      this._animate.seek && this._animate.seek(1);
+      // this._animate.seek && this._animate.seek(1);
       this._animate.stop();
     }
 
