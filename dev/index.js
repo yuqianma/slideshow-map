@@ -138,7 +138,7 @@ const opt2 = {
   "size": 10,
   "playZoom": 11,
   "style": "black",
-  "interval": 5000,
+  "interval": 1000,
   "locations": [{
     "lngLat": ["120.299", "32.0"],
     "areaName": "北京",

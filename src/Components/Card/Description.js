@@ -81,22 +81,30 @@ export default class Description extends Component {
     this.outer.attr('opacity', 0);
     this.marker.attr({ opacity: 1 });
 
+    this._animates && this._animates.forEach(a => {
+      // a.seek && a.seek(1);
+      a.stop();
+    });
+
+    this._animates = [];
+    let i = -1;
+
     // infinity loop
-    tween({
+    this._animates[++i] = tween({
       from: 0, to: 360, duration: 500 * SPF, loop: Infinity, ease: easing.linear
     }).start((v) => {
       this.outer.style('transform', `rotate(${v}deg)`);
     });
 
     // core
-    timeline([
+    this._animates[++i] = timeline([
       16 * SPF,
       { track: 'r', from: 0, to: 3, duration: 76 * SPF, ease: easing.backOut }
     ]).start(v => {
       this.core.attr(v);
     });
 
-    delay(17 * SPF).start({
+    this._animates[++i] = delay(17 * SPF).start({
       complete: () => {
         // flash
         physics({
@@ -111,7 +119,7 @@ export default class Description extends Component {
     });
 
     this.inner.attr('opacity', 0);
-    delay(500).start({
+    this._animates[++i] = delay(500).start({
       complete: () => {
         physics({
           velocity: 1000,
@@ -125,7 +133,7 @@ export default class Description extends Component {
     });
 
     // text
-    this._textAnimate = timeline([
+    this._animates[++i] = this._textAnimate = timeline([
       36 * SPF,
       { track: 'i', from: 0, to: text.length, duration: 60 * SPF, ease: easing.backIn }
     ]).start(({i}) => {
@@ -137,8 +145,10 @@ export default class Description extends Component {
   leave () {
     this._textAnimate.reverse();
     this._textAnimate.resume();
-    tween({ from: 1, to: 0, duration: 60 * SPF }).start( opacity => {
+    const t = tween({ from: 1, to: 0, duration: 60 * SPF }).start( opacity => {
       this.marker.attr({ opacity });
     });
+
+    this._animates.push(t);
   }
 }

@@ -42,6 +42,11 @@ export default class Link extends Component {
     geometry.vertices[1].set(0, 0, 0);
     geometry.verticesNeedUpdate = true;
 
+    if (this._animate) {
+      // this._animate.seek && this._animate.seek(1);
+      this._animate.stop();
+    }
+
     this._animate = timeline([
       Durations[0],
       {

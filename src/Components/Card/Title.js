@@ -133,6 +133,11 @@ export default class Title extends Component {
     this.mainTextClip.attr({ x: indent, height });
     this.hollowBackground.attr({ width: 0 });
 
+    this._animates && this._animates.forEach(a => {
+      // a.seek && a.seek(1);
+      a.stop();
+    });
+
     this._animates = [];
     let i = -1;
 

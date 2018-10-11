@@ -76,6 +76,11 @@ export default class Item extends Component {
 
     const tScale = height / TRI.height * 0.5;
 
+    if (this._animate) {
+      // this._animate.seek && this._animate.seek(1);
+      this._animate.stop();
+    }
+
     this._animate = timeline([
       {
         track: 'v',

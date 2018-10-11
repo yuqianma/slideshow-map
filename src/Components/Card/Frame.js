@@ -92,6 +92,11 @@ export default class Frame extends Component {
       ].join(' ')
     });
 
+    if (this._animate) {
+      this._animate.seek && this._animate.seek(1);
+      this._animate.stop();
+    }
+
     this._animate = timeline([
       30 * SPF,
       { track: 'opacity', from: 0, to: 1, duration: 60 * SPF }

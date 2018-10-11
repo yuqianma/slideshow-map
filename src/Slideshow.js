@@ -13,7 +13,7 @@ import {
   getShapeSize, getLinkSize,
   getValidSize,
 } from './helper';
-import { timeline, easing } from 'popmotion';
+import { timeline, easing, delay } from 'popmotion';
 
 if (__DEV__) {
   window._easing = easing;
@@ -258,7 +258,9 @@ export default class Slideshow extends Threebox {
         boxSize
       });
 
-      setTimeout(cb, 4000);
+      delay(4000).start({
+        complete: cb
+      });
 
     } else {
       this.c.box.visible = false;
@@ -272,7 +274,9 @@ export default class Slideshow extends Threebox {
         opacity
       });
 
-      setTimeout(cb, 3000);
+      delay(3000).start({
+        complete: cb
+      });
     }
 
     const vector = this.projectToPlane(coords);

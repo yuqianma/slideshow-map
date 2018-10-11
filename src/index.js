@@ -1,5 +1,6 @@
 import Slideshow from './Slideshow';
 import mapboxgl from 'mapbox-gl';
+import { delay } from 'popmotion';
 
 const TILES = {
   BLACK: 'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
@@ -109,7 +110,7 @@ class SlideshowMap {
     if (locations && locations.length) {
       let i = -1;
 
-      if (__DEV__) {
+      if (!__DEV__) {
 
         const turn = () => {
 
@@ -134,7 +135,11 @@ class SlideshowMap {
             i = ++i % locations.length;
             this.slideshow.flyTo(locations[i], resolve);
           })
-            .then(() => new Promise(resolve => setTimeout(resolve, interval)))
+            .then(() => new Promise(resolve => {
+              delay(interval).start({
+                complete: resolve
+              });
+            }))
             .then(() => new Promise(resolve => this.slideshow.leave(resolve)))
             .then(turn);
         };
