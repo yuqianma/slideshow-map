@@ -414,7 +414,7 @@ export const calcFittedSize = ({
   }
   // a bit exceeded the boundary but don't need to ellipsis
   else if (wRatio <= r && hRatio <= r) {
-    const minR = Math.min(wRatio, hRatio);
+    const minR = Math.min(1 / wRatio, 1 / hRatio);
     fontSize = viewportWidth * FONT_SIZE_RATIO.MAX * minR;
     sizes = calcCardSize({
       areaName,

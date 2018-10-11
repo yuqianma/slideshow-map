@@ -39,7 +39,7 @@ describe('Layout', function () {
         // leftPadding: x, // +d
         topPadding: y,
         rightPadding: 2 * x,
-        bottomPadding: 2 * y
+        bottomPadding: 1.5 * y
       };
       Object.keys(tests).forEach(k => {
         expect(result).to.have.property(k, tests[k]);
@@ -241,13 +241,37 @@ describe('Layout', function () {
         // contentsSize,
         // frameSize,
       }
+    }, {
+      type: 'between',
+      input: {
+        viewportWidth: 1000,
+        width: 500,
+        height: 400,
+        areaName: '紫峰大厦',
+        contents: [
+          '长文字长文字长文字长文字长文',
+          '1',
+          '1',
+          '1',
+          '1',
+          '1',
+          '1',
+          '1'
+        ],
+        description: '南京',
+        fontFamily: 'sans-serif',
+        fixed: false,
+      },
+      output: {
+        fontSize: 13.87
+      }
     }];
 
     cases.forEach(({ type, input, output }) => {
       describe(type, function () {
         const result = calcFittedSize(input);
         it(`should have fontSize ${output.fontSize}`, function () {
-          expect(result.fontSize).to.be.equal(output.fontSize);
+          expect(result.fontSize).to.be.closeTo(output.fontSize, 0.1);
         });
         it(`should limit the width`, function () {
           expect(result.titleSize.width).to.be.at.most(input.width);
