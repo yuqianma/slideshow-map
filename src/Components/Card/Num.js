@@ -25,7 +25,7 @@ export default class Num extends Component {
 
     return new Svg('text', {
       opacity: 0.8,
-      fill: 'url(#num-g)',
+      fill: defs.getDef('num-g'),
     });
   }
 

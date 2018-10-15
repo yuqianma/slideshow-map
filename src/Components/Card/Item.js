@@ -23,7 +23,7 @@ export default class Item extends Component {
 
     this.textWidth = 0;
 
-    const group = new Svg('g', { filter: 'url(#glow2)' });
+    const group = new Svg('g', { filter: defs.getDef('glow2') });
     this.obj = group;
 
     group.append(this.marker = new Svg('path', {
@@ -31,7 +31,7 @@ export default class Item extends Component {
     }));
 
     group.append(this.text = new Svg('text', {
-      'clip-path': 'url(#list-text-clip)'
+      'clip-path': defs.getDef('list-text-clip')
     }));
 
     group.hide();

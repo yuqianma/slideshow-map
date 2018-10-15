@@ -16,18 +16,18 @@ export default class Title extends Component {
     this.defs = defs;
 
     const group = new Svg('g', {
-      'clip-path': 'url(#title-clip)'
+      'clip-path': defs.getDef('title-clip')
     });
 
     this.obj = group;
 
     group.append(this.mainBackground = new Svg('rect', {
-      fill: 'url(#title-main-background-g)'
+      fill: defs.getDef('title-main-background-g')
     }));
 
     group.append(this.mainText = new Svg('text', {
-      fill: 'url(#title-main-text-g)',
-      'clip-path': 'url(#title-main-text-clip)'
+      fill: defs.getDef('title-main-text-g'),
+      'clip-path': defs.getDef('title-main-text-clip')
     }));
 
     group.append(this.hollowBackground = new Svg('rect', {
@@ -35,11 +35,11 @@ export default class Title extends Component {
     }));
 
     group.append(this.hollowText = new Svg('text', {
-      'clip-path': 'url(#title-hollow-text-clip)'
+      'clip-path': defs.getDef('title-hollow-text-clip')
     }));
 
     group.append(this.bottomLine = new Svg('rect', {
-      fill: 'url(#title-main-background-g)',
+      fill: defs.getDef('title-main-background-g'),
     }));
 
     this.mainTextClip = defs.clipPath('title-main-text-clip', null, 'rect');

@@ -68,9 +68,11 @@ export class Defs extends Svg {
     super('defs');
 
     this.defs = {};
+    this._name = +new Date;
   }
 
   linearGradient (id, attrs, stops) {
+    id = this._name + id;
     let g = this.defs[id];
 
     if (!g) {
@@ -94,6 +96,7 @@ export class Defs extends Svg {
   }
 
   clipPath (id, attrs, type) {
+    id = this._name + id;
     let c = this.defs[id];
 
     if (!c) {
@@ -119,6 +122,7 @@ export class Defs extends Svg {
   }
 
   filter (id) {
+    id = this._name + id;
     let f = this.defs[id];
 
     if (!f) {
@@ -129,6 +133,10 @@ export class Defs extends Svg {
     // set the innerHTML directly;
 
     return f
+  }
+
+  getDef (id) {
+    return `url(#${this._name}${id})`;
   }
 }
 
