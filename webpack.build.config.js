@@ -1,6 +1,7 @@
 const path = require('path');
 const config = require('./webpack.config');
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -10,6 +11,9 @@ module.exports = {
   output: {
     filename: 'VanSlideshowMap.js',
     path: path.join(__dirname, 'dist')
+  },
+  optimization: {
+    minimizer: [new TerserPlugin()]
   },
   plugins: [
     new webpack.DefinePlugin({
