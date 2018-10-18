@@ -404,7 +404,7 @@ export const calcFittedSize = ({
   let linkScale = LINK_SCALE;
 
   const minViewport = Math.min(viewportWidth, viewportHeight);
-  const maxFontSize = Math.max(minViewport * FONT_SIZE_RATIO.MAX, MIN_FONT_SIZE),
+  const maxFontSize = Math.round(Math.max(minViewport * FONT_SIZE_RATIO.MAX, MIN_FONT_SIZE)),
         minFontSize = MIN_FONT_SIZE;
 
   let fontSize = maxFontSize;
@@ -454,7 +454,7 @@ export const calcFittedSize = ({
     // covered after scale
     // a bit exceeded the boundary but no need to ellipsis
     const minR = Math.min(1 / wRatio, 1 / hRatio);
-    fontSize = maxFontSize * minR;
+    fontSize = Math.floor(maxFontSize * minR);
     const tmp = getCardAreaSize();
     sizes = tmp.sizes;
   }
