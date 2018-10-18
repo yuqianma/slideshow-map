@@ -9,6 +9,7 @@ import {
 } from './constants';
 
 const S = 1.6e3;
+const MIN_FONT_SIZE = 10;
 
 // we have to know box size to calculate the link & card pos
 export const getShapeSize = (size, scale, height) => {
@@ -21,10 +22,14 @@ export const getShapeSize = (size, scale, height) => {
 };
 
 // x,y is left-bottom
-export const getValidSize = ({ x, y, width, height }) => {
-  const p = BOUND_PADDING * width;
-  const _width = width / 2 - x - p;
-  const _height = height / 2 - y - p;
+export const getValidSize = ({ withLink, x, y, width, height }) => {
+  const _width = width / 2 - x - BOUND_PADDING * width;
+  let _height = height / 2 - y;
+  if (!withLink) {
+    // 无连线，留出顶部padding
+    _height -= BOUND_PADDING * height;
+    // 有连线的情况不要顶部padding
+  }
   return {
     x,
     y,
@@ -43,9 +48,9 @@ export const getGlobalSize = fontSize => ({
   height: fontSize * 100 / 15
 });
 
-export const getLinkSize = fontSize => ({
-  width: fontSize * Math.cos(ANGLE) * LINK_SCALE,
-  height: fontSize * Math.sin(ANGLE) * LINK_SCALE
+export const getLinkSize = ({fontSize, scale = LINK_SCALE}) => ({
+  width: fontSize * Math.cos(ANGLE) * scale,
+  height: fontSize * Math.sin(ANGLE) * scale
 });
 
 export const getDescriptionHeight = fontSize => fontSize * 2.6;// approximately
@@ -263,9 +268,10 @@ const moveBounds = (sizes, { x, y }) => {
 
 const getPlacedSizesWithLink = ({
   fontSize,
-  sizes
+  sizes,
+  linkScale
 }) => {
-  const linkSize = getLinkSize(fontSize);
+  const linkSize = getLinkSize({ fontSize, scale: linkScale });
   const offsetX = linkSize.width;
   const offsetY = linkSize.height
     + sizes.descriptionSize.height
@@ -311,11 +317,12 @@ export const getPlacedSizes = (opt) => {
 const getAreaSize = ({
   fontSize,
   frameSize,
-  withLink
+  withLink,
+  linkScale,
 }) => {
   const gaps = getGaps(fontSize);
   const globalSize = getGlobalSize(fontSize);
-  const linkSize = withLink ? getLinkSize(fontSize) : { width: 0, height: 0};
+  const linkSize = withLink ? getLinkSize({fontSize, scale: linkScale}) : { width: 0, height: 0};
   const descriptionHeight = getDescriptionHeight(fontSize);
 
   return {
@@ -345,20 +352,26 @@ const cutCardHorizontalSizes = (sizes, dx) => {
 
 const cutCardVerticalSizes = (sizes, dy) => {
   const rowHeight = sizes.contentsSize.rowHeight;
-  const cutHeight = Math.ceil(dy / rowHeight) * rowHeight;
+  let cutHeight = Math.ceil(dy / rowHeight) * rowHeight;
 
   const contentsSizeHeight = sizes.contentsSize.height - cutHeight;
 
   if (contentsSizeHeight > rowHeight && sizes.frameSize.height > cutHeight) {
-    sizes.contentsSize.height -= cutHeight;
-    sizes.frameSize.height -= cutHeight;
-    sizes.descriptionSize.y += cutHeight;
+
+  } else {
+    // exceed, cut all
+    cutHeight = sizes.contentsSize.height;
   }
+
+  sizes.contentsSize.height -= cutHeight;
+  sizes.frameSize.height -= cutHeight;
+  sizes.descriptionSize.y += cutHeight;
 };
 
 /**
  * Fit card (link) into valid area
  * @param {number} viewportWidth - viewport width
+ * @param {number} viewportHeight- viewport height
  * @param {number} width         - valid width
  * @param {number} height        - valid height
  * @param {string} areaName      - title text
@@ -376,6 +389,7 @@ const cutCardVerticalSizes = (sizes, dy) => {
  */
 export const calcFittedSize = ({
   viewportWidth,
+  viewportHeight,
   width,
   height,
   areaName,
@@ -387,50 +401,16 @@ export const calcFittedSize = ({
 
   const withLink = !fixed;
 
-  let fontSize = viewportWidth * FONT_SIZE_RATIO.MAX;
+  let linkScale = LINK_SCALE;
 
-  let sizes = calcCardSize({
-    areaName,
-    contents,
-    description,
-    fontSize,
-    fontFamily
-  });
+  const minViewport = Math.min(viewportWidth, viewportHeight);
+  const maxFontSize = Math.max(minViewport * FONT_SIZE_RATIO.MAX, MIN_FONT_SIZE),
+        minFontSize = MIN_FONT_SIZE;
 
-  let areaSize = getAreaSize({
-    fontSize,
-    frameSize: sizes.frameSize,
-    withLink
-  });
+  let fontSize = maxFontSize;
 
-  const wRatio = areaSize.width / width;
-  const hRatio = areaSize.height / height;
-
-  const r = FONT_SIZE_RATIO.MAX / FONT_SIZE_RATIO.MIN;
-
-  // normal
-  if (wRatio <= 1 && hRatio <= 1) {
-
-  }
-  // a bit exceeded the boundary but don't need to ellipsis
-  else if (wRatio <= r && hRatio <= r) {
-    const minR = Math.min(1 / wRatio, 1 / hRatio);
-    fontSize = viewportWidth * FONT_SIZE_RATIO.MAX * minR;
-    sizes = calcCardSize({
-      areaName,
-      contents,
-      description,
-      fontSize,
-      fontFamily
-    });
-  }
-  else {
-    fontSize = viewportWidth * FONT_SIZE_RATIO.MIN;
-
-    // It's too troublesome to get accurate ellipsis.
-    // Simply cut the exceeded width; omit lines;
-
-    sizes = calcCardSize({
+  const getCardAreaSize = () => {
+    let sizes = calcCardSize({
       areaName,
       contents,
       description,
@@ -441,8 +421,53 @@ export const calcFittedSize = ({
     let areaSize = getAreaSize({
       fontSize,
       frameSize: sizes.frameSize,
-      withLink
+      withLink,
+      linkScale
     });
+
+    return {
+      sizes, areaSize
+    }
+  };
+
+  let { sizes, areaSize } = getCardAreaSize();
+
+  if (maxFontSize === MIN_FONT_SIZE
+    && (areaSize.width > width || areaSize.height > height)
+  ) {
+    // cannot be covered, decrease the link size
+    linkScale = 1.5; // according to vis
+    const tmp = getCardAreaSize();
+    sizes = tmp.sizes;
+    areaSize = tmp.areaSize;
+  }
+
+  const wRatio = areaSize.width / width;
+  const hRatio = areaSize.height / height;
+
+  const r = maxFontSize / minFontSize;
+
+  if (wRatio <= 1 && hRatio <= 1) {
+    // covered
+  }
+  else if (wRatio / r <= 1 && hRatio / r <= 1) {
+    // covered after scale
+    // a bit exceeded the boundary but no need to ellipsis
+    const minR = Math.min(1 / wRatio, 1 / hRatio);
+    fontSize = maxFontSize * minR;
+    const tmp = getCardAreaSize();
+    sizes = tmp.sizes;
+  }
+  else {
+    // cannot be covered, omit some lines
+    fontSize = minFontSize;
+
+    // It's too troublesome to get accurate ellipsis.
+    // Simply cut the exceeded width; omit lines;
+
+    const tmp = getCardAreaSize();
+    sizes = tmp.sizes;
+    areaSize = tmp.areaSize;
 
     // the length to cut
     const dx = areaSize.width - width;
@@ -462,7 +487,8 @@ export const calcFittedSize = ({
     sizes,
     width,
     height,
-    withLink
+    withLink,
+    linkScale
   });
 
   return {

@@ -72,7 +72,7 @@ export default class List extends Component {
       return item
     });
 
-    if (itemCount < contents.length) {
+    if (itemCount > 0 && itemCount < contents.length) {
       const item = new Item({ defs });
       this.obj.add(item.obj);
       item.position(0, -rowHeight * itemCount + rowHeight / 2, 0);

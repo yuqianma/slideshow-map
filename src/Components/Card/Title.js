@@ -7,6 +7,7 @@ import { getColorStr } from '../../Utils/Utils';
 import { Svg } from '../../Utils/Svg';
 import { timeline, easing } from 'popmotion';
 import { SPF } from '../../constants';
+import { getTruncated } from '../../helper';
 
 export default class Title extends Component {
   create ({
@@ -101,7 +102,11 @@ export default class Title extends Component {
 
 
     [this.mainText, this.hollowText].forEach(el => {
-      el.node.textContent = text;
+      el.node.textContent = getTruncated(
+        text,
+        width - indent - fontSize, // 标题 - 左边缩进 - 右边出血(约等于字体大小)
+        { fontSize, fontFamily, fontWeight: 'bold' }
+      );
       el.attr({
         x: indent,
         y: height / 2,

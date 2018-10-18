@@ -284,6 +284,7 @@ export default class Slideshow extends Threebox {
 
     const vector = this.projectToPlane(coords);
     const validSize = getValidSize({
+      withLink: !fixed,
       x: vector.x,
       y: vector.y,
       ...viewSize
@@ -293,6 +294,7 @@ export default class Slideshow extends Threebox {
     this.c.card.update({
       ...options,
       viewportWidth: viewSize.width,
+      viewportHeight: viewSize.height,
       width: validSize.width,
       height: validSize.height
     });

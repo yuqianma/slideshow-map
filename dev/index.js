@@ -80,10 +80,22 @@ const opt1 = {
       '建筑面积: 137529.00㎡',
       '楼层信息: 地上89层，地下3层',
       '开工日期: 2005年5月底',
-      '竣工日期: 2010年9月28日'
+      // '竣工日期: 2010年9月28日',
+      // '1',
+      // '2',
+      // '3',
+      // '3',
+      // '3',
+      // '3',
+      // '3',
+      // '3',
+      // '3',
+      // '3',
+      // '3',
+      // '3',
     ],
     description: '江苏省南京市',
-    fixed: true,
+    // fixed: true,
   }, {
     index: 2,
     type: 'point',
@@ -214,7 +226,7 @@ const opt2 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt2);
+  const slideshowMap = new SlideshowMap(opt1);
 }
 
 main();
