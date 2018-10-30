@@ -80,6 +80,13 @@ export default class Box extends Component {
 
   update ({ boxSize, opacity }) {
 
+    if (this._animation) {
+      this._animation.stop();
+    }
+    if (this._delay) {
+      this._delay.stop();
+    }
+
     const { x, y, z } = boxSize;
 
     this.material.opacity = opacity;
@@ -100,7 +107,7 @@ export default class Box extends Component {
 
   leave () {
     if (this._animation) {
-      delay(FrameDefault.Durations[1]).start({
+      this._delay = delay(FrameDefault.Durations[1]).start({
         complete: () => {
           this._animation.reverse();
           this._animation.resume();

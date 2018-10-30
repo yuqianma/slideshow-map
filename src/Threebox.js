@@ -88,6 +88,10 @@ function Threebox(map) {
 Threebox.prototype = {
   SymbolLayer3D: SymbolLayer3D,
 
+  resize: function () {
+    this.map.resize();
+  },
+
   update: function (timestamp) {
     // Update any animations
     //this.animationManager.update(timestamp);

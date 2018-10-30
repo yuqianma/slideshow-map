@@ -41,7 +41,7 @@ export default class Slideshow extends Threebox {
 
     this.map.on('moveend', (ev) => {
       // console.log(window.elapse(), 'moveend');
-      window.setTimeout(() => {
+      this._timeout = window.setTimeout(() => {
         this.animateComponents(ev);
       }, 0);
     });
@@ -173,6 +173,7 @@ export default class Slideshow extends Threebox {
 
   set visible (v) {
     this.scene.visible = v;
+    this.scene2.visible = v;
     this.svgScene.visible = v;
   }
 
@@ -186,12 +187,12 @@ export default class Slideshow extends Threebox {
   }
 
   leave (cb) {
-      this.c.box.leave();
+    this.c.box.leave();
       this.c.radioWave.leave();
       this.c.card.leave();
       this.c.effectCircle.leave();
 
-      timeline([
+      this._leaving = timeline([
         {
           duration: 2000,
           track: 'opacity',
@@ -206,6 +207,12 @@ export default class Slideshow extends Threebox {
         },
         complete: cb
       });
+  }
+
+  stop () {
+    this.map.stop();
+    this._leaving && this._leaving.stop();
+    clearTimeout(this._timeout);
   }
 
   animateComponents ({ options, cb }) {

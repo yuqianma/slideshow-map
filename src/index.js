@@ -31,12 +31,12 @@ const getTileStyle = (tileUrl) => ({
 
 function attachTitleAndBorder (options) {
   const container = options.container;
-  const vanCharts = VanCharts.init(document.getElementById(container) || container);
+  const vanChart = VanCharts.init(document.getElementById(container) || container);
   if (options.title) {
     options.title.style = options.title.style || {};
     options.title.style.lineHeight = 'normal';
   }
-  vanCharts.setOptions(Object.assign({
+  vanChart.setOptions(Object.assign({
     "plotOptions": {
       "animation": false
     },
@@ -45,6 +45,7 @@ function attachTitleAndBorder (options) {
     "chartType": "pointMap",
     title: options.title,
   }, options.border));
+  return vanChart;
 }
 
 function mergeDefaultOptions (options) {
@@ -65,7 +66,7 @@ class SlideshowMap {
     // 添加vancharts的标题和边框
     // 这样会导致在同一个container被vancharts和mapbox init了2遍
     // 看上去效果对就不管了……
-    attachTitleAndBorder(options);
+    this.vanChart = attachTitleAndBorder(options);
 
     this.slideshow = new Slideshow(options);
 
@@ -86,6 +87,7 @@ class SlideshowMap {
       // this.slideshow.flyTo(options.locations[1]);
       this.startShow();
       window._slideshowMap = this;
+      window._resize = this.resize.bind(this);
     } else {
 
       if (map.loaded()) {
@@ -106,6 +108,10 @@ class SlideshowMap {
 
   startShow () {
 
+    if (this._started && this._reject) {
+      this._reject('stop prev');
+    }
+
     this._started = true;
 
     // console.log('start');
@@ -114,34 +120,36 @@ class SlideshowMap {
     if (locations && locations.length) {
       let i = -1;
 
-      if (__DEV__) {
+      // if (__DEV__) {
+      //
+      //   const turn = () => {
+      //
+      //     new Promise(resolve => {
+      //       i = ++i % locations.length;
+      //       this.slideshow.flyTo(locations[i], resolve);
+      //     })
+      //       .then(() => new Promise(resolve => {
+      //         window._nextTurn = resolve;
+      //       }))
+      //       .then(() => new Promise(resolve => this.slideshow.leave(resolve)))
+      //       .then(turn);
+      //   };
+      //
+      //   turn();
+      //
+      // } else {
 
         const turn = () => {
 
-          new Promise(resolve => {
-            i = ++i % locations.length;
-            this.slideshow.flyTo(locations[i], resolve);
-          })
-            .then(() => new Promise(resolve => {
-              window._nextTurn = resolve;
-            }))
-            .then(() => new Promise(resolve => this.slideshow.leave(resolve)))
-            .then(turn);
-        };
-
-        turn();
-
-      } else {
-
-        const turn = () => {
-
-          new Promise(resolve => {
+          new Promise((resolve, reject) => {
+            this._reject = reject;
             i = ++i % locations.length;
             // console.log('---------------------');
             // console.log(elapse(), 'flyTo', i);
             this.slideshow.flyTo(locations[i], resolve);
           })
-            .then(() => new Promise(resolve => {
+            .then(() => new Promise((resolve, reject) => {
+              this._reject = reject;
               // console.log(elapse(), 'animation end');
               const timeGap = Math.max(interval - 6000, 0);
               delay(timeGap).start({
@@ -150,14 +158,27 @@ class SlideshowMap {
             }))
             .then(() => {
               // console.log(elapse(), 'interval end');
-              return new Promise(resolve => this.slideshow.leave(resolve));
+              return new Promise((resolve, reject) => {
+                this._reject = reject;
+                this.slideshow.leave(resolve)
+              });
             })
-            .then(turn);
+            .then(turn)
+            .catch((e) => {
+              console.log(e);
+            });
         };
 
         turn();
-      }
+      // }
     }
+  }
+
+  resize () {
+    this.vanChart.resize();
+    this.slideshow.stop();
+    this.slideshow.resize();
+    this.startShow();
   }
 
   static setAccessToken (accessToken) {
