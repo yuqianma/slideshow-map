@@ -223,10 +223,75 @@ const opt2 = {
   hash: true,
 };
 
+const opt3 = {
+  'border': {
+    'borderColor': '#000000',
+    'borderRadius': 0,
+    'borderWidth': 0,
+    'backgroundColor': '#06334B'
+  },
+  'refreshTime': 0,
+  'center': [132, 32],
+  'tooltip': {
+    'areaName': '',
+    'seriesName': '',
+    'description': '',
+    'fixed': false,
+    'value': '¤#0'
+  },
+  'zoom': 11,
+  'title': {
+    'borderRadius': 0,
+    backgroundColor: '#ccc',
+    'extraCssText': '',
+    'useHtml': true,
+    'style': {
+      'fontFamily': 'Microsoft YaHei',
+      'color': 'rgba(0,0,0,1.0)',
+      'fontSize': 30,
+      'fontWeight': ''
+    },
+    'text': '测试测试测试测试',
+    'align': 'left'
+  },
+  'type': 'point',
+  'exportImage': true,
+  'size': 10,
+  'playZoom': 11,
+  'style': 'black',
+  'interval': 10000,
+  'locations': [{
+    'lngLat': ['20.299', '32.0'],
+    'areaName': '温州市',
+    'seriesName': ['人口', '大学'],
+    'description': '绿地一期',
+    'index': 1,
+    'value': ['333333', '666'],
+    'zoom': 4.5,
+    'pitch': 45,
+    'size': 4,
+    'fixed': false,
+    'type': 'pillar',
+    'opacity': 1,
+    'contents': [
+      // "人口:￥333333",
+      // "大学:￥666"
+      '区域电话：12345678900'
+    ]
+  }],
+  'opacity': 1,
+  'container': 'map',
+  // "effectCircleUrl": "report?op=chart&cmd=get_webm&path=com/fr/plugin/chart/requiredFile/circle.webm",
+  // "globalUrl": "report?op=chart&cmd=get_webm&path=com/fr/plugin/chart/requiredFile/global.webm",
+  'pitch': 60,
+  // "interactive": false,
+  hash: true,
+};
+
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt1);
+  const slideshowMap = new SlideshowMap(opt3);
 }
 
 main();
