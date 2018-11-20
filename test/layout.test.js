@@ -95,7 +95,7 @@ describe('Layout', function () {
     });
   });
 
-  describe('getPlacedSizes', function () {
+  describe.skip('getPlacedSizes', function () {
     const fontSize = 10;
     const gaps = getGaps(fontSize);
     const globalSize = getGlobalSize(fontSize);
@@ -151,7 +151,7 @@ describe('Layout', function () {
 
   });
 
-  describe('calcContentsSize', function () {
+  describe.skip('calcContentsSize', function () {
     const cases = [{
       type: 'normal',
       input: {
