@@ -43,4 +43,11 @@ describe('Options Process', function () {
       });
     });
   });
+
+  describe('accessToken', function () {
+    it('should add accessToken to mapboxgl', function () {
+      $test.mergeDefaultOptions({ accessToken: 'somekey' });
+      expect($test.mapboxgl.accessToken).to.be.equal('somekey');
+    });
+  });
 });

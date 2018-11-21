@@ -64,12 +64,17 @@ function mergeDefaultOptions (options) {
 
   options.style = style;
 
+  if (options.accessToken) {
+    mapboxgl.accessToken = options.accessToken;
+  }
+
   return options
 }
 
 export const $test = {
   TILES,
-  mergeDefaultOptions
+  mergeDefaultOptions,
+  mapboxgl
 };
 
 class SlideshowMap {
@@ -89,13 +94,6 @@ class SlideshowMap {
     this._started = false;
 
     var map = this.slideshow.map;
-
-    // map.flyTo({
-    //   center: options.center,
-    //   zoom: options.zoom,
-    //   pitch: options.pitch
-    // });
-
 
     if (__DEV__) {
       // this.slideshow.flyTo(options.locations[1]);
