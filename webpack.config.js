@@ -6,7 +6,8 @@ const config = {
   mode: 'development',
   // devtool: 'cheap-eval-source-map',
   entry: {
-    main: './dev/index.js',
+    'debug': './debug/index.js',
+    'dev': './dev/index.js',
     'dev-three': './dev/three.js',
     'dev-mapbox': './dev/mapbox.js',
     'test': './test/index.js',
