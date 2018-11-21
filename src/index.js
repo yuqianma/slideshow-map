@@ -50,13 +50,27 @@ function attachTitleAndBorder (options) {
 
 function mergeDefaultOptions (options) {
   options = {...options};
-  let style = '' + options.style || 'BLACK';
-  style = style.toUpperCase();
-  if (TILES[style]) {
-    options.style = getTileStyle(TILES[style]);
+  const _style = options.style;
+  let style = _style;
+  if (typeof _style === 'string') {
+    const predefined = TILES[_style.toUpperCase()];
+    if (predefined) {
+      style = getTileStyle(predefined);
+    } else
+    if (_style.substr(0, 4) === 'http') {
+      style = getTileStyle(_style);
+    }
   }
+
+  options.style = style;
+
   return options
 }
+
+export const $test = {
+  TILES,
+  mergeDefaultOptions
+};
 
 class SlideshowMap {
   constructor (options) {

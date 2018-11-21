@@ -9,7 +9,7 @@ import { EffectComposer, BloomPass, RenderPass, KernelSize } from 'postprocessin
 
 //var AnimationManager = require("./Animation/AnimationManager.js");
 
-if (__DEV__) {
+if (__DEV__ && window.dat) {
   window.menu = new dat.GUI();
   menu.closed = true;
 }
@@ -135,7 +135,7 @@ Threebox.prototype = {
 
     this.bloomPass = pass;
 
-    if (__DEV__) {
+    if (__DEV__ && window.menu) {
       this.registerOptions();
     }
   },
