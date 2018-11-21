@@ -126,7 +126,7 @@ export default class Slideshow extends Threebox {
     }));
 
     this.addToMap(this.c.effectCircle = new EffectCircle({
-      src: effectCircleUrl || 'dev/circle2.webm'
+      src: effectCircleUrl || 'dev/circle.webm'
     }), DEV_NANJING);
 
     // 好乱……
