@@ -22,11 +22,10 @@ const config = {
       exclude: /node_modules/,
     }]
   },
-  serve: {
-    host: internalIp.v4.sync(),
-    // dev: {
-    //     publicPath:
-    // }
+  devServer: {
+    host: '0.0.0.0',
+    disableHostCheck: true,
+    useLocalIp: true
   },
   stats: {
     timings: true
