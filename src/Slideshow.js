@@ -386,8 +386,12 @@ export default class Slideshow extends Threebox {
       return {
         halt: () => {
           // console.log('leave halt');
+          const componentsToStop = animateComponents;
           animateComponents = [];
           this.playback.stop();
+          componentsToStop.forEach(c => {
+            c.afterLeave && c.afterLeave();
+          });
         }
       }
     });
