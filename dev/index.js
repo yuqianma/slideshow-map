@@ -273,7 +273,7 @@ const opt3 = {
     'pitch': 45,
     'size': 3,
     'fixed': false,
-    'type': 'point',
+    'type': 'pillar',
     'opacity': 0.8,
     'contents': [
       "人口:￥333333",
@@ -293,7 +293,7 @@ const opt3 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt2);
+  const slideshowMap = new SlideshowMap(opt3);
 }
 
 main();

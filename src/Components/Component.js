@@ -27,6 +27,8 @@ export default class Component {
     if (position) {
       this.position(...position);
     }
+
+    this.__running = false;
   }
 
   __enter (state) {

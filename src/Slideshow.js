@@ -203,7 +203,7 @@ export default class Slideshow extends Threebox {
 
       return {
         halt: () => {
-          console.log('map stop');
+          // console.log('map stop');
           this.map.stop();
         }
       };
@@ -309,7 +309,7 @@ export default class Slideshow extends Threebox {
         if (next) {
           enter(next, runNext);
         } else {
-          console.log('enter complete');
+          // console.log('enter complete');
           complete();
         }
       }
@@ -318,10 +318,13 @@ export default class Slideshow extends Threebox {
 
       return {
         halt: () => {
-          console.log('enter halt');
+          // console.log('enter halt');
+          const componentsToStop = animateComponents;
           animateComponents = [];
           this.playback.stop();
-          runningComponent.afterLeave && runningComponent.afterLeave();
+          componentsToStop.forEach(c => {
+            c.afterLeave && c.afterLeave();
+          });
         }
       }
     });
@@ -331,7 +334,7 @@ export default class Slideshow extends Threebox {
   _leave () {
     return action(({ complete }) => {
 
-      console.log('leave');
+      // console.log('leave');
 
       let animateComponents = [];
 
@@ -361,7 +364,7 @@ export default class Slideshow extends Threebox {
         this.playback = component.leaveAction().start({
           update: (v) => component.__leave(v),
           complete: () => {
-            console.log('after leave');
+            // console.log('after leave');
             component.afterLeave && component.afterLeave();
             complete();
           }
@@ -373,7 +376,7 @@ export default class Slideshow extends Threebox {
         if (next) {
           leave(next, runNext);
         } else {
-          console.log('leave complete');
+          // console.log('leave complete');
           complete();
         }
       }
@@ -382,7 +385,7 @@ export default class Slideshow extends Threebox {
 
       return {
         halt: () => {
-          console.log('leave halt');
+          // console.log('leave halt');
           animateComponents = [];
           this.playback.stop();
         }
