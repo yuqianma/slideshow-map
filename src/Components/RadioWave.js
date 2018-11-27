@@ -4,7 +4,7 @@
 
 import Component from './Component';
 import { RadioWave as Default } from '../constants';
-import { tween, stagger, easing } from 'popmotion';
+import { tween, stagger, action, easing } from 'popmotion';
 
 const {
   Color,
@@ -40,41 +40,74 @@ export default class RadioWave extends Component {
       group.add(ring);
     }
 
-    this.animation = this._animate(group);
+    group.visible = false;
+
+    this._animates = [];
 
     return group
   }
 
-  _animate (group) {
+  update (props) {
+    super.update(props);
+    const { shapeSize, opacity } = props;
+    const size = shapeSize.x / 80;
+    this.material.opacity = opacity;
+    this.obj.scale.set(size, size, size);
+  }
+
+  enterAction () {
+    return action(({ update, complete }) => {
+      update();
+      complete();
+    });
+  }
+
+  beforeEnter () {
+    const group = this.obj;
     const rings = group.children;
+    rings.map(ring => ring.morphTargetInfluences[0] = 0);
     const animations = rings.map(ring => tween({
       duration: LIFE_SPAN,
       ease: easing.linear,
       loop: Infinity,
     }).pipe((v) => ring.morphTargetInfluences[0] = v || 0));
 
-    return stagger(animations, LIFE_SPAN / RING_NUM * 2)
+    this._animates[0] = stagger(animations, LIFE_SPAN / RING_NUM * 2).start();
+
+    this.visible = true;
   }
 
-  _startAnimate () {
-    if (this._running) {
-      this._running.stop();
-    }
-    const rings = this.obj.children;
-    rings.map(ring => ring.morphTargetInfluences[0] = 0);
-    this._running = this.animation.start();
+  enter () {
+
   }
 
-  update ({ shapeSize, opacity }) {
-    const size = shapeSize.x / 80;
-    this.material.opacity = opacity;
-    this.obj.scale.set(size, size, size);
-    this._startAnimate();
+  leaveAction () {
+    return action(({ update, complete }) => {
+      update();
+      complete();
+    });
   }
 
   leave () {
-    // this._running && this._running.stop();
 
   }
+
+  afterLeave () {
+    this.visible = false;
+    this._animates.forEach(ani => ani.stop());
+    this._animates = [];
+  }
+
+  // update ({ shapeSize, opacity }) {
+  //   const size = shapeSize.x / 80;
+  //   this.material.opacity = opacity;
+  //   this.obj.scale.set(size, size, size);
+  //   this._startAnimate();
+  // }
+  //
+  // leave () {
+  //   // this._running && this._running.stop();
+  //
+  // }
 
 }

@@ -54,6 +54,7 @@ export default class Frame extends Component {
   }
 
   update (props) {
+    super.update(props);
     const {
       a, // corner triangle horizontal line
       b, // corner triangle vertical line,
@@ -92,24 +93,88 @@ export default class Frame extends Component {
       ].join(' ')
     });
 
-    if (this._animate) {
-      // this._animate.seek && this._animate.seek(1);
-      this._animate.stop();
-    }
+  }
 
-    this._animate = timeline([
-      30 * SPF,
+  enterAction () {
+    return timeline([
+      // 30 * SPF,
       { track: 'opacity', from: 0, to: 1, duration: 60 * SPF }
-    ]).start(({opacity}) => {
-      this.obj.attr({
-        opacity
-      });
+    ])
+  }
+
+  enter ({ opacity }) {
+    this.obj.attr({
+      opacity
     });
-
   }
 
-  leave () {
-    this._animate.reverse();
-    this._animate.resume();
+  leaveAction () {
+    return timeline([
+      { track: 'opacity', from: 1, to: 0, duration: 60 * SPF }
+    ])
   }
+
+  leave (state) {
+    this.enter(state);
+  }
+
+  // update (props) {
+  //   const {
+  //     a, // corner triangle horizontal line
+  //     b, // corner triangle vertical line,
+  //     xgap,
+  //     ygap,
+  //     width, // width & height are frame's
+  //     height,
+  //     color1,
+  //     color2,
+  //   } = props;
+  //
+  //   this._updateGradient(props);
+  //
+  //   this.frame.attr({
+  //     d: [
+  //       'M', a, 0,
+  //       'L', width, 0,
+  //       'L', width, height - b,
+  //       'L', width - a, height,
+  //       'L', 0, height,
+  //       'L', 0, b,
+  //       'Z'
+  //     ].join(' ')
+  //   });
+  //
+  //   this.background.attr({
+  //     fill: getColorStr(color1),
+  //     d: [
+  //       'M', a, -ygap,
+  //       'L', width + xgap, -ygap,
+  //       'L', width + xgap, height - b,
+  //       'L', width - a + xgap * 2, height - ygap,
+  //       'L', xgap, height - ygap,
+  //       'L', xgap, b - ygap * 2,
+  //       'Z'
+  //     ].join(' ')
+  //   });
+  //
+  //   if (this._animate) {
+  //     // this._animate.seek && this._animate.seek(1);
+  //     this._animate.stop();
+  //   }
+  //
+  //   this._animate = timeline([
+  //     30 * SPF,
+  //     { track: 'opacity', from: 0, to: 1, duration: 60 * SPF }
+  //   ]).start(({opacity}) => {
+  //     this.obj.attr({
+  //       opacity
+  //     });
+  //   });
+  //
+  // }
+  //
+  // leave () {
+  //   this._animate.reverse();
+  //   this._animate.resume();
+  // }
 }

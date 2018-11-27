@@ -64,6 +64,21 @@ function mergeDefaultOptions (options) {
 
   options.style = style;
 
+  options.fontFamily = options.fontFamily || 'Microsoft YaHei, sans-serif';
+
+  if (options.opacity == null) {
+    options.opacity = 1;
+  }
+
+  if (options.size == null) {
+    options.size = 10;
+  }
+
+  // 留出link空间
+  if (options.type === 'pillar') {
+    options.size /= 2;
+  }
+
   if (options.accessToken) {
     mapboxgl.accessToken = options.accessToken;
   }
@@ -93,10 +108,12 @@ class SlideshowMap {
 
     this._started = false;
 
-    var map = this.slideshow.map;
+    // point index
+    this._index = 0;
+
+    const map = this.slideshow.map;
 
     if (__DEV__) {
-      // this.slideshow.flyTo(options.locations[1]);
       this.startShow();
       window._slideshowMap = this;
       window._resize = this.resize.bind(this);
@@ -106,19 +123,30 @@ class SlideshowMap {
         this.startShow();
       } else {
 
-        setTimeout(() => {
-          !this._started && this.startShow();
-        }, 4000);
-
-        map.on('load', (e) => {
-          !this._started && this.startShow();
-        });
+        new Promise((res) => {
+          setTimeout(res, 4000);
+          map.on('load', res);
+        })
+          .then(() => {
+            this.startShow();
+          });
       }
 
     }
   }
 
   startShow () {
+    this.slideshow._turn(this.options.locations[0]).start({
+      update: (v) => {
+        // console.log(v);
+      },
+      complete: () => {
+        console.warn('turn end');
+      }
+    });
+  }
+
+  _startShow () {
 
     if (this._started && this._reject) {
       this._reject('stop prev');
@@ -126,63 +154,40 @@ class SlideshowMap {
 
     this._started = true;
 
-    // console.log('start');
     const locations = this.options.locations;
     const interval = this.options.interval;
     if (locations && locations.length) {
       let i = -1;
 
-      // if (__DEV__) {
-      //
-      //   const turn = () => {
-      //
-      //     new Promise(resolve => {
-      //       i = ++i % locations.length;
-      //       this.slideshow.flyTo(locations[i], resolve);
-      //     })
-      //       .then(() => new Promise(resolve => {
-      //         window._nextTurn = resolve;
-      //       }))
-      //       .then(() => new Promise(resolve => this.slideshow.leave(resolve)))
-      //       .then(turn);
-      //   };
-      //
-      //   turn();
-      //
-      // } else {
+      const turn = () => {
 
-        const turn = () => {
-
-          new Promise((resolve, reject) => {
+        new Promise((resolve, reject) => {
+          this._reject = reject;
+          i = ++i % locations.length;
+          this.slideshow.flyTo(locations[i], resolve);
+        })
+          .then(() => new Promise((resolve, reject) => {
             this._reject = reject;
-            i = ++i % locations.length;
-            // console.log('---------------------');
-            // console.log(elapse(), 'flyTo', i);
-            this.slideshow.flyTo(locations[i], resolve);
-          })
-            .then(() => new Promise((resolve, reject) => {
-              this._reject = reject;
-              // console.log(elapse(), 'animation end');
-              const timeGap = Math.max(interval - 6000, 0);
-              delay(timeGap).start({
-                complete: resolve
-              });
-            }))
-            .then(() => {
-              // console.log(elapse(), 'interval end');
-              return new Promise((resolve, reject) => {
-                this._reject = reject;
-                this.slideshow.leave(resolve)
-              });
-            })
-            .then(turn)
-            .catch((e) => {
-              console.log(e);
+            // console.log(elapse(), 'animation end');
+            const timeGap = Math.max(interval - 6000, 0);
+            delay(timeGap).start({
+              complete: resolve
             });
-        };
+          }))
+          .then(() => {
+            // console.log(elapse(), 'interval end');
+            return new Promise((resolve, reject) => {
+              this._reject = reject;
+              this.slideshow.leave(resolve)
+            });
+          })
+          .then(turn)
+          .catch((e) => {
+            console.log(e);
+          });
+      };
 
-        turn();
-      // }
+      turn();
     }
   }
 

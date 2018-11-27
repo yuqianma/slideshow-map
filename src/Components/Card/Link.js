@@ -28,29 +28,25 @@ export default class Link extends Component {
       color
     }) );
 
+    link.visible = false;
+
     return link;
   }
 
-  update (options) {
-    const {
-      width, height
-    } = options;
-
+  update (props) {
+    super.update(props);
     const geometry = this.obj.geometry;
 
     geometry.vertices[0].set(0, 0, 0);
     geometry.vertices[1].set(0, 0, 0);
     geometry.verticesNeedUpdate = true;
+  }
 
-    if (this._animate) {
-      // this._animate.seek && this._animate.seek(1);
-      this._animate.stop();
-    }
-
-    this._animate = timeline([
-      Durations[0],
+  enterAction () {
+    const { width, height } = this.props;
+    return timeline([
       {
-        track: 'v',
+        track: 'link',
         from: {
           x: 0,
           y: 0,
@@ -61,23 +57,46 @@ export default class Link extends Component {
         },
         duration: Durations[1]
       }
-      // Default.Durations[2],
-    ]).start(({v}) => {
-      geometry.vertices[1].setX(v.x);
-      geometry.vertices[1].setY(v.y);
-      geometry.verticesNeedUpdate = true;
-    });
+    ])
   }
 
-  leave () {
-    delay(FrameDefault.Durations[1] / 3).start({
-      complete: () => {
-        if (this._animate) {
-          this._animate.reverse();
-          this._animate.resume();
-        }
+  beforeEnter () {
+    this.visible = true;
+  }
+
+  enter ({ link }) {
+    const geometry = this.obj.geometry;
+
+    geometry.vertices[1].setX(link.x);
+    geometry.vertices[1].setY(link.y);
+    geometry.verticesNeedUpdate = true;
+  }
+
+  leaveAction () {
+    const { width, height } = this.props;
+    return timeline([
+      // Durations[0],
+      {
+        track: 'v',
+        from: {
+          x: width,
+          y: height,
+        },
+        to: {
+          x: 0,
+          y: 0,
+        },
+        duration: Durations[1]
       }
-    });
+    ])
+  }
+
+  leave (state) {
+    this.enter(state);
+  }
+
+  afterLeave () {
+    this.visible = false;
   }
 }
 

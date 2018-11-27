@@ -13,7 +13,13 @@ import {
   getShapeSize, getLinkSize,
   getValidSize,
 } from './helper';
-import { timeline, easing, delay } from 'popmotion';
+import {
+  action,
+  timeline,
+  easing,
+  delay,
+  chain
+} from 'popmotion';
 
 if (__DEV__) {
   window._easing = easing;
@@ -22,6 +28,7 @@ if (__DEV__) {
 const DEV_NANJING = [118.78, 32.04, 0];
 
 const BEARING_RANGE = [-75, -15];
+const getRandomBearing = () => (Math.random() * (BEARING_RANGE[1] - BEARING_RANGE[0]) | 0) + BEARING_RANGE[0];
 
 export default class Slideshow extends Threebox {
   constructor (options) {
@@ -39,14 +46,9 @@ export default class Slideshow extends Threebox {
 
     this.setupDefaultLights();
 
-    this.map.on('moveend', (ev) => {
-      // console.log(window.elapse(), 'moveend');
-      this._timeout = window.setTimeout(() => {
-        this.animateComponents(ev);
-      }, 0);
-    });
+    this._onmapmoveend = this._onmapmoveend.bind(this);
 
-    this.visible = false;
+    this.map.on('moveend', this._onmapmoveend);
   }
 
   // Add these helpers to use their inner methods.
@@ -57,7 +59,10 @@ export default class Slideshow extends Threebox {
   }
 
   getSize () {
-    return this.map.transform
+    const { width, height, scale } = this.map.transform;
+    return {
+      width, height, scale
+    }
   }
 
   projectToScene (lngLat, coords) {
@@ -92,32 +97,30 @@ export default class Slideshow extends Threebox {
     super.moveToCoordinate(object.obj || object, lnglat, options);
   }
 
-  addToMap (component, lnglat = [ 0, 0 ], options) {
+  addToMap (component, lnglat = [0, 0], options) {
     this.addAtCoordinate(component.obj, lnglat, options);
   }
 
-  addToPlane (component, coords = [ 0, 0 ]) {
+  addToPlane (component, coords = [0, 0]) {
     this.plane.add(component.obj);
   }
 
-  addToPlane2 (component, coords = [ 0, 0 ]) {
+  addToPlane2 (component, coords = [0, 0]) {
     this.plane2.add(component.obj);
   }
 
-  installComponents ({ globalUrl, effectCircleUrl }) {
+  installComponents ({globalUrl, effectCircleUrl}) {
     if (this.__installed) {
       console.error('Cannot install Objects twice!');
-      return
+      return;
     }
     this.__installed = true;
 
-    this.addToMap(this.c.box = new Box({}), DEV_NANJING);
+    this.addToMap(this.c.box = new Box({
+      src: effectCircleUrl
+    }), DEV_NANJING);
 
     this.addToMap(this.c.radioWave = new RadioWave(), DEV_NANJING);
-
-    this.c.effectGlobal = new EffectGlobal({
-      src: globalUrl || 'dev/global.webm'
-    });
 
     this.addToPlane(this.c.card = new Card({
       defs: this.defs,
@@ -125,9 +128,13 @@ export default class Slideshow extends Threebox {
       effectGlobal: this.c.effectGlobal
     }));
 
-    this.addToMap(this.c.effectCircle = new EffectCircle({
-      src: effectCircleUrl || 'dev/circle.webm'
-    }), DEV_NANJING);
+    this.c.effectGlobal = new EffectGlobal({
+      src: globalUrl || 'dev/global.webm'
+    });
+
+    // this.addToMap(this.c.effectCircle = new EffectCircle({
+    //   src: effectCircleUrl || 'dev/circle.webm'
+    // }), DEV_NANJING);
 
     // 好乱……
     // 因为svg放视频被chrome限制了
@@ -141,33 +148,66 @@ export default class Slideshow extends Threebox {
     this.c.card.update(options);
   }
 
+  _onmapmoveend () {
+    delay(1).start({
+      complete: () => {
+        this.__mapFlyComplete && this.__mapFlyComplete();
+      }
+    });
+  }
+
+  _turn (options) {
+    return chain(
+      this._flyTo(options),
+      this._enter(options)
+    );
+  }
+
+  _flyTo (options) {
+    return action(({ complete }) => {
+
+      this.__mapFlyComplete = complete;
+
+      this.map.flyTo({
+        center: [...options.lngLat],
+        bearing: getRandomBearing(),
+        ...options
+      });
+
+      return {
+        stop: () => this.map.stop()
+      };
+
+    });
+  }
+
   flyTo (options, cb) {
 
-    const {
-      areaName,
-      content,
-      description,
-      lngLat,
-      zoom,
-      pitch,
-      curve
-    } = options;
-
-    this.visible = false;
-
-    const [lng, lat] = lngLat;
-
-    this.map.flyTo({
-      // [0.005713705081944909, 0.010004240534200903]
-      // center: [lng + 0.005713705081944909, lat + 0.010004240534200903],
-      center: [lng, lat],
-      bearing: (Math.random() * (BEARING_RANGE[1] - BEARING_RANGE[0]) | 0) + BEARING_RANGE[0],
-      ...options
-    }, {
-      options,
-      cb
-    });
-
+    // const {
+    //   areaName,
+    //   content,
+    //   description,
+    //   lngLat,
+    //   zoom,
+    //   pitch,
+    //   curve
+    // } = options;
+    //
+    // // todo, no vis control in method
+    // this.visible = false;
+    //
+    // const [lng, lat] = lngLat;
+    //
+    // this.map.flyTo({
+    //   // [0.005713705081944909, 0.010004240534200903]
+    //   // center: [lng + 0.005713705081944909, lat + 0.010004240534200903],
+    //   center: [lng, lat],
+    //   bearing: (Math.random() * (BEARING_RANGE[1] - BEARING_RANGE[0]) | 0) + BEARING_RANGE[0],
+    //   ...options
+    // }, {
+    //   options,
+    //   cb
+    // });
 
   }
 
@@ -178,7 +218,7 @@ export default class Slideshow extends Threebox {
   }
 
   get visible () {
-    return this.world.visible
+    return this.world.visible;
   }
 
   setDomOpacity (v) {
@@ -188,25 +228,25 @@ export default class Slideshow extends Threebox {
 
   leave (cb) {
     this.c.box.leave();
-      this.c.radioWave.leave();
-      this.c.card.leave();
-      this.c.effectCircle.leave();
+    this.c.radioWave.leave();
+    this.c.card.leave();
+    this.c.effectCircle.leave();
 
-      this._leaving = timeline([
-        {
-          duration: 2000,
-          track: 'opacity',
-          ease: easing.easeOut,
-          from : 1,
-          to   : 0
-        },
-        1000
-      ]).start({
-        update: ({opacity}) => {
-          this.setDomOpacity(opacity);
-        },
-        complete: cb
-      });
+    this._leaving = timeline([
+      {
+        duration: 2000,
+        track: 'opacity',
+        ease: easing.easeOut,
+        from: 1,
+        to: 0
+      },
+      1000
+    ]).start({
+      update: ({opacity}) => {
+        this.setDomOpacity(opacity);
+      },
+      complete: cb
+    });
   }
 
   stop () {
@@ -215,101 +255,114 @@ export default class Slideshow extends Threebox {
     clearTimeout(this._timeout);
   }
 
-  animateComponents ({ options, cb }) {
-    if (!options) {
-      return
-    }
+  _updateBoxLight ({ size, viewSize, lngLat }) {
+    const boxSize = getShapeSize(size, viewSize.scale, viewSize.height);
+    const lightSize = this.projectToScene(lngLat, [boxSize.x, boxSize.y, boxSize.z]);
+    this.updatePointLights(lightSize);
+  }
 
-    options.fontFamily = options.fontFamily || 'Microsoft YaHei, sans-serif';
+  _enter (options) {
+    return action(({ complete }) => {
 
-    const {
-      areaName,
-      contents,
-      description,
-      type,
-      fixed,
-      opacity = 1,
-      lngLat,
-      fontFamily
-    } = options;
+      const viewSize = this.getSize();
 
-    let size = options.size || 10;
+      const props = {
+        ...options,
+        viewSize,
+      };
 
-    const coords = lngLat.slice();
+      const {
+        type,
+        lngLat,
+        fixed,
+        size,
+        opacity,
+      } = props;
 
-    const viewSize = this.getSize();
+      const planeCoords = lngLat.slice();
 
-    if (type === 'pillar') {
+      const { box, card, radioWave } = this.c;
 
-      // 留出link空间
-      if (!fixed) {
-        size /= 2;
+      console.log(type);
+
+      let animateComponents = [];
+
+      const shapeSize = getShapeSize(size, viewSize.scale, viewSize.height);
+
+      if (type === 'pillar') {
+
+        this._updateBoxLight(props);
+
+        this.moveToCoordinate(box, lngLat);
+
+        box.update({
+          ...props,
+          boxSize: shapeSize
+        });
+
+        // move card above pillar
+        planeCoords[2] = shapeSize.z;
+
+        animateComponents = [
+          box,
+          card
+        ];
+
+      } else {
+
+        this.moveToCoordinate(radioWave, lngLat);
+        radioWave.update({
+          shapeSize,
+          opacity
+        });
+
+        animateComponents = [
+          radioWave,
+          card
+        ];
       }
 
-      this.c.box.visible = true;
-      this.c.effectCircle.visible = true;
-      this.c.radioWave.visible = false;
-
-      const boxSize = getShapeSize(size, viewSize.scale, viewSize.height);
-
-      const lightSize = this.projectToScene(lngLat, [boxSize.x, boxSize.y, boxSize.z]);
-
-      this.updatePointLights(lightSize);
-
-      coords[2] = boxSize.z;
-      this.moveToCoordinate(this.c.box, lngLat);
-      this.moveToCoordinate(this.c.effectCircle, lngLat);
-      this.c.box.update({
-        boxSize,
-        opacity,
+      const vector = this.projectToPlane(planeCoords);
+      const validSize = getValidSize({
+        withLink: !fixed,
+        x: vector.x,
+        y: vector.y,
+        ...viewSize
       });
 
-      this.c.effectCircle.update({
-        boxSize
+      card.update({
+        ...options,
+        position: [vector.x, vector.y, 0],
+        viewportWidth: viewSize.width,
+        viewportHeight: viewSize.height,
+        width: validSize.width,
+        height: validSize.height
       });
 
-      delay(3000).start({
-        complete: cb
-      });
+      const enter = (component, complete) => {
+        this.playback = component.enterAction().start({
+          update: (v) => component.__enter(v),
+          complete
+        });
+      };
 
-    } else {
-      this.c.box.visible = false;
-      this.c.effectCircle.visible = false;
-      this.c.radioWave.visible = true;
+      function runNext () {
+        const next = animateComponents.shift();
+        if (next) {
+          enter(next, runNext);
+        } else {
+          complete();
+        }
+      }
 
-      coords[2] = 0;
-      this.moveToCoordinate(this.c.radioWave, lngLat);
-      this.c.radioWave.update({
-        shapeSize: getShapeSize(size, viewSize.scale, viewSize.height),
-        opacity
-      });
+      runNext();
 
-      delay(3000).start({
-        complete: cb
-      });
-    }
-
-    const vector = this.projectToPlane(coords);
-    const validSize = getValidSize({
-      withLink: !fixed,
-      x: vector.x,
-      y: vector.y,
-      ...viewSize
+      return {
+        stop: () => {
+          this.playback.stop();
+        }
+      }
     });
 
-    this.c.card.position(vector.x, vector.y, 0);
-    this.c.card.update({
-      ...options,
-      viewportWidth: viewSize.width,
-      viewportHeight: viewSize.height,
-      width: validSize.width,
-      height: validSize.height
-    });
-
-    // →_→越乱越坑
-    this.c.effectGlobal.position(vector.x, vector.y, 0);
-
-    this.visible = true;
-    this.setDomOpacity(1);
   }
 }

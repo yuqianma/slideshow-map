@@ -6,7 +6,7 @@ import Component from '../Component';
 import { SPF } from '../../constants';
 import { getColorStr } from '../../Utils/Utils';
 import { Svg } from '../../Utils/Svg';
-import { timeline, tween, physics, delay, easing } from 'popmotion';
+import { timeline, tween, physics, delay, chain, easing } from 'popmotion';
 
 const Path = {
   Outer: 'M-2.631,9.96c-0.149,0.403-0.531,0.652-0.938,0.652c-0.116,0-0.233-0.02-0.348-0.062  C-8.303,8.92-11.25,4.681-11.25,0c0-0.776,0.079-1.549,0.234-2.299c0.113-0.541,0.641-0.891,1.183-0.775  c0.541,0.112,0.889,0.642,0.776,1.183C-9.186-1.276-9.25-0.64-9.25,0c0,3.849,2.423,7.335,6.029,8.674  C-2.702,8.867-2.438,9.442-2.631,9.96z M11.015-2.3c-0.113-0.541-0.644-0.89-1.183-0.775C9.291-2.963,8.943-2.434,9.056-1.892  C9.185-1.273,9.25-0.637,9.25,0c0,3.851-2.426,7.338-6.035,8.676c-0.518,0.191-0.782,0.768-0.59,1.285  c0.149,0.403,0.531,0.652,0.938,0.652c0.115,0,0.233-0.02,0.348-0.062C8.301,8.924,11.25,4.684,11.25,0  C11.25-0.773,11.171-1.547,11.015-2.3z M-8.012-5.396c0.294,0,0.585-0.128,0.782-0.375C-5.462-7.982-2.827-9.25,0-9.25  c2.824,0,5.458,1.266,7.226,3.474c0.344,0.43,0.973,0.501,1.405,0.156c0.431-0.345,0.501-0.975,0.155-1.406  C6.638-9.71,3.436-11.25,0-11.25c-3.438,0-6.643,1.542-8.792,4.229C-9.137-6.589-9.066-5.96-8.636-5.615  C-8.451-5.468-8.23-5.396-8.012-5.396z',
@@ -46,6 +46,7 @@ export default class Description extends Component {
   }
 
   update (props) {
+    super.update(props);
 
     const {
       color,
@@ -70,85 +71,189 @@ export default class Description extends Component {
       style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: middle`,
     });
 
-    this.enter(props);
-
+    this.core.attr('r', 0);
+    this.outer.attr('opacity', 0);
+    this.marker.attr('opacity', 1);
+    this.inner.attr('opacity', 0);
   }
 
-  enter ({
-    text
-  }) {
+  enterAction () {
+    const { text } = this.props;
+    // 16 SPF
 
-    this.outer.attr('opacity', 0);
-    this.marker.attr({ opacity: 1 });
+    return timeline([
+      { track: 'r', from: 0, to: 3, duration: 76 * SPF, ease: easing.backOut },
 
-    this._animates && this._animates.forEach(a => {
-      // a.seek && a.seek(1);
-      a.stop();
-    });
+      0 * SPF,
+      { track: 'i', from: 0, to: text.length, duration: 60 * SPF, ease: easing.backIn }
+    ]);
+  }
+
+  beforeEnter (props) {
+    const {
+      color,
+      text,
+      fontSize,
+      fontFamily,
+    } = props;
 
     this._animates = [];
-    let i = -1;
 
-    // infinity loop
-    this._animates[++i] = tween({
+    this._animates[0] = tween({
       from: 0, to: 360, duration: 500 * SPF, loop: Infinity, ease: easing.linear
     }).start((v) => {
       this.outer.style('transform', `rotate(${v}deg)`);
     });
 
-    // core
-    this._animates[++i] = timeline([
-      16 * SPF,
-      { track: 'r', from: 0, to: 3, duration: 76 * SPF, ease: easing.backOut }
-    ]).start(v => {
-      this.core.attr(v);
+    this._animates[1] = physics({
+      velocity: 1000,
+      friction: 0.8,
+      to: 1,
+      springStrength: 1500
+    }).start((v) => {
+      this.outer.attr('opacity', v);
     });
 
-    this._animates[++i] = delay(17 * SPF).start({
-      complete: () => {
-        // flash
-        physics({
-          velocity: 1000,
-          friction: 0.8,
-          to: 1,
-          springStrength: 1500
-        }).start((v) => {
-          this.outer.attr('opacity', v);
-        });
-      }
-    });
-
-    this.inner.attr('opacity', 0);
-    this._animates[++i] = delay(500).start({
-      complete: () => {
-        physics({
-          velocity: 1000,
-          friction: 0.8,
-          to: 1,
-          springStrength: 1500
-        }).start((v) => {
-          this.inner.attr('opacity', v);
-        });
-      }
-    });
-
-    // text
-    this._animates[++i] = this._textAnimate = timeline([
-      36 * SPF,
-      { track: 'i', from: 0, to: text.length, duration: 60 * SPF, ease: easing.backIn }
-    ]).start(({i}) => {
-      this.text.node.textContent = text.substr(0, i);
+    this._animates[2] = chain(
+      delay(14 * SPF),
+      physics({
+        velocity: 1000,
+        friction: 0.8,
+        to: 1,
+        springStrength: 1500
+      })
+    ).start((v) => {
+      this.inner.attr('opacity', v);
     });
 
   }
 
-  leave () {
-    this._textAnimate.reverse();
-    this._textAnimate.resume();
-    const t = tween({ from: 1, to: 0, duration: 60 * SPF }).start( opacity => {
-      this.marker.attr({ opacity });
-    });
-
-    this._animates.push(t);
+  enter ({ r, i }) {
+    this.core.attr({ r });
+    this.text.node.textContent = this.props.text.substr(0, i);
   }
+
+  leaveAction () {
+    const { text } = this.props;
+    return timeline([
+      { track: 'i', from: text.length, to: 0, duration: 60 * SPF, ease: easing.backOut }
+    ]);
+  }
+
+  leave ({ i }) {
+    this.text.node.textContent = this.props.text.substr(0, i);
+    this.marker.attr({ opacity: i });
+  }
+
+  afterLeave () {
+    this._animates.forEach(ani => ani.stop());
+    this._animates = [];
+  }
+
+  // _update (props) {
+  //
+  //   const {
+  //     color,
+  //     text,
+  //     fontSize,
+  //     fontFamily,
+  //   } = props;
+  //
+  //   const height = fontSize * 2.6;
+  //
+  //   this.marker.node.style.transform = `translate(${fontSize / 2}px, ${height / 2}px) scale(${fontSize / 18})`;
+  //
+  //   this.marker.attr({
+  //     fill: getColorStr(color)
+  //   });
+  //
+  //   // this.text.textContent = text;
+  //   this.text.attr({
+  //     x: fontSize * 1.5,
+  //     y: height / 2,
+  //     fill: getColorStr(color),
+  //     style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: middle`,
+  //   });
+  //
+  //   this._enter(props);
+  //
+  // }
+  //
+  // _enter ({
+  //   text
+  // }) {
+  //
+  //   this.outer.attr('opacity', 0);
+  //   this.marker.attr({ opacity: 1 });
+  //
+  //   this._animates && this._animates.forEach(a => {
+  //     // a.seek && a.seek(1);
+  //     a.stop();
+  //   });
+  //
+  //   this._animates = [];
+  //   let i = -1;
+  //
+  //   // infinity loop
+  //   this._animates[++i] = tween({
+  //     from: 0, to: 360, duration: 500 * SPF, loop: Infinity, ease: easing.linear
+  //   }).start((v) => {
+  //     this.outer.style('transform', `rotate(${v}deg)`);
+  //   });
+  //
+  //   // core
+  //   this._animates[++i] = timeline([
+  //     16 * SPF,
+  //     { track: 'r', from: 0, to: 3, duration: 76 * SPF, ease: easing.backOut }
+  //   ]).start(v => {
+  //     this.core.attr(v);
+  //   });
+  //
+  //   this._animates[++i] = delay(17 * SPF).start({
+  //     complete: () => {
+  //       // flash
+  //       physics({
+  //         velocity: 1000,
+  //         friction: 0.8,
+  //         to: 1,
+  //         springStrength: 1500
+  //       }).start((v) => {
+  //         this.outer.attr('opacity', v);
+  //       });
+  //     }
+  //   });
+  //
+  //   this.inner.attr('opacity', 0);
+  //   this._animates[++i] = delay(500).start({
+  //     complete: () => {
+  //       physics({
+  //         velocity: 1000,
+  //         friction: 0.8,
+  //         to: 1,
+  //         springStrength: 1500
+  //       }).start((v) => {
+  //         this.inner.attr('opacity', v);
+  //       });
+  //     }
+  //   });
+  //
+  //   // text
+  //   this._animates[++i] = this._textAnimate = timeline([
+  //     36 * SPF,
+  //     { track: 'i', from: 0, to: text.length, duration: 60 * SPF, ease: easing.backIn }
+  //   ]).start(({i}) => {
+  //     this.text.node.textContent = text.substr(0, i);
+  //   });
+  //
+  // }
+  //
+  // _leave () {
+  //   this._textAnimate.reverse();
+  //   this._textAnimate.resume();
+  //   const t = tween({ from: 1, to: 0, duration: 60 * SPF }).start( opacity => {
+  //     this.marker.attr({ opacity });
+  //   });
+  //
+  //   this._animates.push(t);
+  // }
 }

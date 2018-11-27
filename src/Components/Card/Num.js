@@ -30,6 +30,7 @@ export default class Num extends Component {
   }
 
   update (props) {
+    super.update(props);
     let {
       num,
       fontSize,
@@ -45,26 +46,69 @@ export default class Num extends Component {
       'text-anchor': 'right',
       style: `font-weight: bold; font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: alphabetic`,
     });
+  }
 
-    if (this._animate) {
-      // this._animate.seek && this._animate.seek(1);
-      this._animate.stop();
-    }
-
-    this._animate = timeline([
-      45 * SPF,
+  enterAction () {
+    return timeline([
+      // 45 * SPF,
       { track: 'v', from: 0, to: 1, duration: 60 * SPF}
-    ]).start( ({v}) => {
-      this.stops[1].attr({
-        offset: `${Math.min(v * 200, 100)}%`,
-        'stop-color': `rgba(255, 255, 255, ${v < 0.5 ? 0 : (v - 0.5) * 2})`
-      });
+    ]);
+  }
+
+  enter ({ v }) {
+    this.stops[1].attr({
+      offset: `${Math.min(v * 200, 100)}%`,
+      'stop-color': `rgba(255, 255, 255, ${v < 0.5 ? 0 : (v - 0.5) * 2})`
     });
-
   }
 
-  leave () {
-    this._animate.reverse();
-    this._animate.resume();
+  leaveAction () {
+    return timeline([
+      // 45 * SPF,
+      { track: 'v', from: 1, to: 0, duration: 60 * SPF}
+    ]);
   }
+
+  leave (state) {
+    this.enter(state);
+  }
+
+  // update (props) {
+  //   let {
+  //     num,
+  //     fontSize,
+  //     fontFamily,
+  //   } = props;
+  //
+  //   fontSize *= 3.5;
+  //
+  //   this.obj.node.textContent = (num + '').padStart(2, '0');
+  //   this.obj.attr({
+  //     x: - fontSize / 2 - props.a,
+  //     y: fontSize / 2 + props.b / 4,
+  //     'text-anchor': 'right',
+  //     style: `font-weight: bold; font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: alphabetic`,
+  //   });
+  //
+  //   if (this._animate) {
+  //     // this._animate.seek && this._animate.seek(1);
+  //     this._animate.stop();
+  //   }
+  //
+  //   this._animate = timeline([
+  //     45 * SPF,
+  //     { track: 'v', from: 0, to: 1, duration: 60 * SPF}
+  //   ]).start( ({v}) => {
+  //     this.stops[1].attr({
+  //       offset: `${Math.min(v * 200, 100)}%`,
+  //       'stop-color': `rgba(255, 255, 255, ${v < 0.5 ? 0 : (v - 0.5) * 2})`
+  //     });
+  //   });
+  //
+  // }
+  //
+  // leave () {
+  //   this._animate.reverse();
+  //   this._animate.resume();
+  // }
 }

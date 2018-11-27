@@ -4,8 +4,9 @@
 
 import Component from './Component';
 import { Box as Default, Frame as FrameDefault } from '../constants';
-import { delay, timeline } from 'popmotion';
+import { timeline } from 'popmotion';
 import { getShapeSize } from '../helper';
+import EffectCircle from './EffectCircle';
 
 const {
   Color,
@@ -19,19 +20,27 @@ export default class Box extends Component {
     width = 1,
     height = 1,
     depth = 1,
-    color = Color
+    color = Color,
+    src,
   }) {
 
-    const mesh = new THREE.Object3D();
+    const group = new THREE.Group();
+    this.obj = group;
 
-    const box = new THREE.BoxGeometry(
+    const box = new THREE.Object3D();
+    this.box = box;
+    group.add(box);
+
+    this.add(this.circle = new EffectCircle({ src }));
+
+    const boxGeometry = new THREE.BoxGeometry(
       width, height, depth, SEGMENTS, SEGMENTS, SEGMENTS
     );
-    box.translate(0, 0, box.parameters.depth / 2);
+    boxGeometry.translate(0, 0, boxGeometry.parameters.depth / 2);
 
     // todo, try three.meshline
     const wireFrame = new THREE.LineSegments(
-      new THREE.EdgesGeometry(box),
+      new THREE.EdgesGeometry(boxGeometry),
       new THREE.LineBasicMaterial({
         color: 0x00fffc,
         // transparent: true,
@@ -43,9 +52,9 @@ export default class Box extends Component {
     // wireFrame.material.opacity = 1;
     // wireFrame.material.transparent = true;
 
-    mesh.add(wireFrame);
+    box.add(wireFrame);
 
-    this.material = new THREE.MeshPhongMaterial({
+    const boxMaterial = new THREE.MeshPhongMaterial({
       color: 0x2194ce,
       transparent: true,
       opacity: 0.8,
@@ -55,64 +64,85 @@ export default class Box extends Component {
       // flatShading: true
     });
 
+    this.boxMaterial = boxMaterial;
+
     if (__DEV__) {
       const params = {
-        opacity: this.material.opacity,
-        shininess: this.material.shininess
+        opacity: boxMaterial.opacity,
+        shininess: boxMaterial.shininess
       };
 
       const folder = menu.addFolder('box');
       folder.add(params, 'opacity').min(0).max(1).step(0.01).onChange(() => {
-        this.material.opacity = params.opacity;
+        boxMaterial.opacity = params.opacity;
       });
       folder.add(params, 'shininess').min(0).max(200).step(1).onChange(() => {
-        this.material.shininess = params.shininess;
+        boxMaterial.shininess = params.shininess;
       });
     }
 
-    mesh.add(new THREE.Mesh(
-      box,
-      this.material
+    box.add(new THREE.Mesh(
+      boxGeometry,
+      boxMaterial
     ));
 
-    return mesh;
+    this.visible = false;
+
+    return group;
   }
 
-  update ({ boxSize, opacity }) {
-
-    if (this._animation) {
-      this._animation.stop();
-    }
-    if (this._delay) {
-      this._delay.stop();
-    }
+  update (props) {
+    super.update(props);
+    const { opacity, boxSize } = props;
 
     const { x, y, z } = boxSize;
+    this.boxMaterial.opacity = opacity;
+    this.box.scale.set(x, y, 1e-6);
 
-    this.material.opacity = opacity;
+    this.circle.update(this.props);
+  }
 
-    this.obj.scale.set(x, y, 1e-6);
+  enterAction () {
+    const { boxSize } = this.props;
+    const { z } = boxSize;
 
-    this._animation = timeline([
+    return timeline([
       {
         track: 'z',
         from: 1e-6,
         to: z,
         duration: Durations[0]
       }
-    ]).start(({ z }) => {
-      this.obj.scale.setZ(z);
-    });
+    ]);
   }
 
-  leave () {
-    if (this._animation) {
-      this._delay = delay(FrameDefault.Durations[1]).start({
-        complete: () => {
-          this._animation.reverse();
-          this._animation.resume();
-        }
-      });
-    }
+  beforeEnter () {
+    this.visible = true;
+    this.circle.play();
+  }
+
+  enter ({ z }) {
+    this.box.scale.setZ(z);
+  }
+
+  leaveAction () {
+    return timeline([
+      Durations[1],
+      {
+        track: 'z',
+        from: this.obj.scale.z,
+        to: 1e-6,
+        duration: Durations[2]
+      }
+    ]);
+  }
+
+  leave ({ z }) {
+    this.box.scale.setZ(z);
+  }
+
+  afterLeave () {
+    this.visible = false;
+    this.circle.stop();
   }
 }

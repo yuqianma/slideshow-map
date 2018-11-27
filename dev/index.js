@@ -267,15 +267,15 @@ const opt3 = {
     'description': '绿地一期',
     'index': 1,
     'value': ['333333', '666'],
-    'zoom': 4.5,
+    'zoom': 4,
     'pitch': 45,
-    'size': 4,
+    'size': 3,
     'fixed': false,
-    'type': 'pillar',
-    'opacity': 1,
+    'type': 'point',
+    'opacity': 0.8,
     'contents': [
-      // "人口:￥333333",
-      // "大学:￥666"
+      "人口:￥333333",
+      "大学:￥666",
       '区域电话：12345678900'
     ]
   }],
