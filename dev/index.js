@@ -150,7 +150,7 @@ const opt2 = {
   'size': 10,
   'playZoom': 11,
   'style': 'black',
-  'interval': 6000,
+  'interval': 10000,
   'locations': [{
     'lngLat': ['20.299', '32.0'],
     'areaName': '江苏省',
@@ -161,13 +161,15 @@ const opt2 = {
     'zoom': 4.5,
     'pitch': 45,
     'size': 4,
-    'fixed': false,
+    // 'fixed': true,
     'type': 'pillar',
-    'opacity': 1,
+    'opacity': 0.7,
     'contents': [
-      // "人口:￥333333",
-      // "大学:￥666"
-      '区域电话：12345678900'
+      "人口:￥333333",
+      "大学:￥666",
+      '区域电话：12345678900',
+      'aaaaaa',
+      'bbbbbbb'
     ]
   },
       {
@@ -180,8 +182,8 @@ const opt2 = {
       "zoom": 3.5,
       "pitch": 45,
       "size": 10,
-      "fixed": true,
-      "type": "point",
+      "fixed": false,
+      "type": "pillar",
       "opacity": 1,
       "contents": ["人口:￥3333333", "大学:￥444"]
     },
@@ -259,7 +261,7 @@ const opt3 = {
   'size': 10,
   'playZoom': 11,
   'style': 'black',
-  'interval': 10000,
+  'interval': 7000,
   'locations': [{
     'lngLat': ['20.299', '32.0'],
     'areaName': '温州市',
@@ -275,8 +277,8 @@ const opt3 = {
     'opacity': 0.8,
     'contents': [
       "人口:￥333333",
-      "大学:￥666",
-      '区域电话：12345678900'
+      // "大学:￥666",
+      // '区域电话：12345678900'
     ]
   }],
   'opacity': 1,
@@ -291,7 +293,7 @@ const opt3 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt3);
+  const slideshowMap = new SlideshowMap(opt2);
 }
 
 main();

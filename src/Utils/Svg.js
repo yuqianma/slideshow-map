@@ -14,6 +14,8 @@ export class Svg extends THREE.SVGObject {
     if (props) {
       this.attr(props);
     }
+
+    this._visible = true;
   }
 
   attr (props, _) {

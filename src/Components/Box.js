@@ -3,14 +3,13 @@
  */
 
 import Component from './Component';
-import { Box as Default, Frame as FrameDefault } from '../constants';
+import { Box as Default, SPF } from '../constants';
 import { timeline } from 'popmotion';
 import { getShapeSize } from '../helper';
 import EffectCircle from './EffectCircle';
 
 const {
   Color,
-  Durations
 } = Default;
 
 const SEGMENTS = 1;
@@ -43,14 +42,13 @@ export default class Box extends Component {
       new THREE.EdgesGeometry(boxGeometry),
       new THREE.LineBasicMaterial({
         color: 0x00fffc,
-        // transparent: true,
+        transparent: true,
         // opacity: 0.1,
         linewidth: 0.0015,
       })
     );
-    // wireFrame.material.color = color;
-    // wireFrame.material.opacity = 1;
-    // wireFrame.material.transparent = true;
+
+    this.wireFrame = wireFrame;
 
     box.add(wireFrame);
 
@@ -96,23 +94,22 @@ export default class Box extends Component {
     const { opacity, boxSize } = props;
 
     const { x, y, z } = boxSize;
-    this.boxMaterial.opacity = opacity;
+    this.boxMaterial.opacity = 0;
     this.box.scale.set(x, y, 1e-6);
 
     this.circle.update(this.props);
   }
 
   enterAction () {
-    const { boxSize } = this.props;
+    const { boxSize, opacity } = this.props;
     const { z } = boxSize;
 
     return timeline([
-      {
-        track: 'z',
-        from: 1e-6,
-        to: z,
-        duration: Durations[0]
-      }
+      [
+        { track: 'z', from: 1e-6, to: z, duration: 30 * SPF },
+        { track: 'opacity', from: 0, to: opacity, duration: 10 * SPF },
+        { track: 'allOpacity', from: 0, to: 1, duration: 10 * SPF }
+      ]
     ]);
   }
 
@@ -121,24 +118,28 @@ export default class Box extends Component {
     this.circle.play();
   }
 
-  enter ({ z }) {
+  enter ({ z, opacity, allOpacity }) {
     this.box.scale.setZ(z);
+    this.boxMaterial.opacity = opacity;
+
+    this.wireFrame.material.opacity = allOpacity;
+    this.circle.opacity = allOpacity;
   }
 
   leaveAction () {
     return timeline([
-      Durations[1],
-      {
-        track: 'z',
-        from: this.obj.scale.z,
-        to: 1e-6,
-        duration: Durations[2]
-      }
+      { track: 'z', from: this.props.boxSize.z, to: 1e-6, duration: 30 * SPF },
+
+      0,
+      [
+        { track: 'opacity', from: this.props.opacity, to: 0, duration: 30 * SPF },
+        { track: 'allOpacity', from: 1, to: 0, duration: 30 * SPF }
+      ]
     ]);
   }
 
-  leave ({ z }) {
-    this.box.scale.setZ(z);
+  leave (state) {
+    this.enter(state);
   }
 
   afterLeave () {

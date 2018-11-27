@@ -43,6 +43,15 @@ export default class EffectCircle extends Component {
     return new THREE.Mesh( geometry, mat );
   }
 
+  get opacity () {
+    return this.obj.material.opacity;
+  }
+
+  set opacity (v) {
+    this.obj.material.opacity = v;
+    return true;
+  }
+
   play () {
     this.video.node.currentTime = 0;
     // play() is required for auto play

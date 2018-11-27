@@ -70,14 +70,14 @@ export default class Link extends Component {
     geometry.vertices[1].setX(link.x);
     geometry.vertices[1].setY(link.y);
     geometry.verticesNeedUpdate = true;
+
   }
 
   leaveAction () {
     const { width, height } = this.props;
     return timeline([
-      // Durations[0],
       {
-        track: 'v',
+        track: 'link',
         from: {
           x: width,
           y: height,

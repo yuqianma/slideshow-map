@@ -156,11 +156,38 @@ export default class Slideshow extends Threebox {
     });
   }
 
-  _turn (options) {
-    return chain(
-      this._flyTo(options),
-      this._enter(options)
-    );
+  set visible (v) {
+    this.scene.visible = v;
+    this.scene2.visible = v;
+    this.svgScene.visible = v;
+  }
+
+  get visible () {
+    return this.world.visible
+  }
+
+  enter (options) {
+    return action(({ complete }) => {
+      let playback;
+
+      playback = this._flyTo(options).start({
+        complete: () => {
+          playback = this._enter(options).start({
+            complete
+          });
+        }
+      });
+
+      return {
+        halt: () => {
+          playback.halt();
+        }
+      }
+    });
+  }
+
+  leave () {
+    return this._leave();
   }
 
   _flyTo (options) {
@@ -175,84 +202,13 @@ export default class Slideshow extends Threebox {
       });
 
       return {
-        stop: () => this.map.stop()
+        halt: () => {
+          console.log('map stop');
+          this.map.stop();
+        }
       };
 
     });
-  }
-
-  flyTo (options, cb) {
-
-    // const {
-    //   areaName,
-    //   content,
-    //   description,
-    //   lngLat,
-    //   zoom,
-    //   pitch,
-    //   curve
-    // } = options;
-    //
-    // // todo, no vis control in method
-    // this.visible = false;
-    //
-    // const [lng, lat] = lngLat;
-    //
-    // this.map.flyTo({
-    //   // [0.005713705081944909, 0.010004240534200903]
-    //   // center: [lng + 0.005713705081944909, lat + 0.010004240534200903],
-    //   center: [lng, lat],
-    //   bearing: (Math.random() * (BEARING_RANGE[1] - BEARING_RANGE[0]) | 0) + BEARING_RANGE[0],
-    //   ...options
-    // }, {
-    //   options,
-    //   cb
-    // });
-
-  }
-
-  set visible (v) {
-    this.scene.visible = v;
-    this.scene2.visible = v;
-    this.svgScene.visible = v;
-  }
-
-  get visible () {
-    return this.world.visible;
-  }
-
-  setDomOpacity (v) {
-    this.renderer.domElement.style.opacity = v;
-    this.svgRenderer.domElement.style.opacity = v;
-  }
-
-  leave (cb) {
-    this.c.box.leave();
-    this.c.radioWave.leave();
-    this.c.card.leave();
-    this.c.effectCircle.leave();
-
-    this._leaving = timeline([
-      {
-        duration: 2000,
-        track: 'opacity',
-        ease: easing.easeOut,
-        from: 1,
-        to: 0
-      },
-      1000
-    ]).start({
-      update: ({opacity}) => {
-        this.setDomOpacity(opacity);
-      },
-      complete: cb
-    });
-  }
-
-  stop () {
-    this.map.stop();
-    this._leaving && this._leaving.stop();
-    clearTimeout(this._timeout);
   }
 
   _updateBoxLight ({ size, viewSize, lngLat }) {
@@ -282,8 +238,6 @@ export default class Slideshow extends Threebox {
       const planeCoords = lngLat.slice();
 
       const { box, card, radioWave } = this.c;
-
-      console.log(type);
 
       let animateComponents = [];
 
@@ -339,7 +293,11 @@ export default class Slideshow extends Threebox {
         height: validSize.height
       });
 
+      let runningComponent;
+
       const enter = (component, complete) => {
+        runningComponent = component;
+
         this.playback = component.enterAction().start({
           update: (v) => component.__enter(v),
           complete
@@ -351,6 +309,7 @@ export default class Slideshow extends Threebox {
         if (next) {
           enter(next, runNext);
         } else {
+          console.log('enter complete');
           complete();
         }
       }
@@ -358,11 +317,76 @@ export default class Slideshow extends Threebox {
       runNext();
 
       return {
-        stop: () => {
+        halt: () => {
+          console.log('enter halt');
+          animateComponents = [];
           this.playback.stop();
+          runningComponent.afterLeave && runningComponent.afterLeave();
         }
       }
     });
 
+  }
+
+  _leave () {
+    return action(({ complete }) => {
+
+      console.log('leave');
+
+      let animateComponents = [];
+
+      const { box, card, radioWave } = this.c;
+
+      if (this.c.box.visible) {
+
+        animateComponents = [
+          card,
+          box
+        ];
+
+      } else {
+
+        animateComponents = [
+          card,
+          radioWave
+        ];
+
+      }
+
+      let runningComponent;
+
+      const leave = (component, complete) => {
+        runningComponent = component;
+
+        this.playback = component.leaveAction().start({
+          update: (v) => component.__leave(v),
+          complete: () => {
+            console.log('after leave');
+            component.afterLeave && component.afterLeave();
+            complete();
+          }
+        });
+      };
+
+      function runNext () {
+        const next = animateComponents.shift();
+        if (next) {
+          leave(next, runNext);
+        } else {
+          console.log('leave complete');
+          complete();
+        }
+      }
+
+      runNext();
+
+      return {
+        halt: () => {
+          console.log('leave halt');
+          animateComponents = [];
+          this.playback.stop();
+        }
+      }
+    });
   }
 }

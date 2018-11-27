@@ -8,9 +8,11 @@ export default class Component {
 
     this.children = [];
 
-    this.obj = this.create(this.props) || this.obj;
-
     this.__running = false;
+
+    this._animates = [];
+
+    this.obj = this.create(this.props) || this.obj;
   }
 
   create () {
@@ -38,6 +40,7 @@ export default class Component {
 
   __leave (state) {
     this.leave(state);
+    this.__running = false;
   }
 
   add (component) {
@@ -64,6 +67,7 @@ export default class Component {
   }
 
   set visible (v) {
-    this.obj.visible = v
+    this.obj.visible = v;
+    return true;
   }
 }

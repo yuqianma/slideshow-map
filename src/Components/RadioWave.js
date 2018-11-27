@@ -3,7 +3,7 @@
  */
 
 import Component from './Component';
-import { RadioWave as Default } from '../constants';
+import { RadioWave as Default, SPF } from '../constants';
 import { tween, stagger, action, easing } from 'popmotion';
 
 const {
@@ -82,14 +82,15 @@ export default class RadioWave extends Component {
   }
 
   leaveAction () {
-    return action(({ update, complete }) => {
-      update();
-      complete();
+    return tween({
+      from: this.props.opacity,
+      to: 0,
+      duration: 20 * SPF
     });
   }
 
-  leave () {
-
+  leave (opacity) {
+    this.material.opacity = opacity;
   }
 
   afterLeave () {
@@ -97,17 +98,5 @@ export default class RadioWave extends Component {
     this._animates.forEach(ani => ani.stop());
     this._animates = [];
   }
-
-  // update ({ shapeSize, opacity }) {
-  //   const size = shapeSize.x / 80;
-  //   this.material.opacity = opacity;
-  //   this.obj.scale.set(size, size, size);
-  //   this._startAnimate();
-  // }
-  //
-  // leave () {
-  //   // this._running && this._running.stop();
-  //
-  // }
 
 }

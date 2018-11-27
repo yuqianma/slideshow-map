@@ -1,6 +1,6 @@
 import Slideshow from './Slideshow';
 import mapboxgl from 'mapbox-gl';
-import { delay } from 'popmotion';
+import { delay, chain, action } from 'popmotion';
 
 const TILES = {
   BLACK: 'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
@@ -48,6 +48,23 @@ function attachTitleAndBorder (options) {
   return vanChart;
 }
 
+function locationDefaultOptions (options) {
+  options.fontFamily = options.fontFamily || 'Microsoft YaHei, sans-serif';
+
+  if (options.opacity == null) {
+    options.opacity = 1;
+  }
+
+  if (options.size == null) {
+    options.size = 10;
+  }
+
+  // 留出link空间
+  if (options.type === 'pillar') {
+    options.size /= 2;
+  }
+}
+
 function mergeDefaultOptions (options) {
   options = {...options};
   const _style = options.style;
@@ -64,19 +81,10 @@ function mergeDefaultOptions (options) {
 
   options.style = style;
 
-  options.fontFamily = options.fontFamily || 'Microsoft YaHei, sans-serif';
-
-  if (options.opacity == null) {
-    options.opacity = 1;
-  }
-
-  if (options.size == null) {
-    options.size = 10;
-  }
-
-  // 留出link空间
-  if (options.type === 'pillar') {
-    options.size /= 2;
+  if (options.locations) {
+    options.locations.forEach(opt => {
+      locationDefaultOptions(opt);
+    });
   }
 
   if (options.accessToken) {
@@ -136,64 +144,63 @@ class SlideshowMap {
   }
 
   startShow () {
-    this.slideshow._turn(this.options.locations[0]).start({
-      update: (v) => {
-        // console.log(v);
-      },
-      complete: () => {
-        console.warn('turn end');
-      }
-    });
+    this.slideshow.visible = true;
+    this._turn();
   }
 
-  _startShow () {
+  stop () {
+    this.slideshow.visible = false;
+    this.playback.halt();
+  }
 
-    if (this._started && this._reject) {
-      this._reject('stop prev');
-    }
-
-    this._started = true;
+  _turn () {
 
     const locations = this.options.locations;
-    const interval = this.options.interval;
-    if (locations && locations.length) {
-      let i = -1;
+    const timeGap = this.options.interval - 6000;
 
-      const turn = () => {
+    this.playback = action(({complete}) => {
+      let playback;
 
-        new Promise((resolve, reject) => {
-          this._reject = reject;
-          i = ++i % locations.length;
-          this.slideshow.flyTo(locations[i], resolve);
-        })
-          .then(() => new Promise((resolve, reject) => {
-            this._reject = reject;
-            // console.log(elapse(), 'animation end');
-            const timeGap = Math.max(interval - 6000, 0);
-            delay(timeGap).start({
-              complete: resolve
+      playback = this.slideshow.enter(locations[this._index]).start({
+        complete: () => {
+          playback = action(({complete}) => {
+            const d = delay(timeGap).start({
+              complete,
             });
-          }))
-          .then(() => {
-            // console.log(elapse(), 'interval end');
-            return new Promise((resolve, reject) => {
-              this._reject = reject;
-              this.slideshow.leave(resolve)
-            });
-          })
-          .then(turn)
-          .catch((e) => {
-            console.log(e);
+
+            return {
+              halt: () => { d.stop() }
+            }
+
+          }).start({
+            complete: () => {
+              playback = this.slideshow.leave().start({
+                complete
+              });
+            }
           });
-      };
+        }
+      });
 
-      turn();
-    }
+      return {
+        halt: () => {
+          playback.halt();
+        }
+      }
+
+    }).start({
+      complete: () => {
+        this._index = ++this._index % locations.length;
+        // console.warn(this._index);
+        this._turn()
+      }
+    });
+
   }
 
   resize () {
+    this.stop();
     this.vanChart.resize();
-    this.slideshow.stop();
     this.slideshow.resize();
     this.startShow();
   }

@@ -70,6 +70,14 @@ export default class Card extends Component {
     createFilter(defs);
 
     this.visible = false;
+
+    this.cardComponents = [
+      this.title,
+      this.num,
+      this.frame,
+      this.list,
+      this.description
+    ]
   }
 
   update (props) {
@@ -165,16 +173,18 @@ export default class Card extends Component {
   }
 
   enterAction () {
-    return chain(
-      this.link.enterAction(),
-      parallel(
-        this.title.enterAction(),
-        this.num.enterAction(),
-        this.frame.enterAction(),
-        this.list.enterAction(),
-        this.description.enterAction()
-      )
+    const card = parallel(
+      ...this.cardComponents.map(c => c.enterAction())
     );
+
+    if (this.props.fixed) {
+      return card;
+    } else {
+      return chain(
+        this.link.enterAction(),
+        card
+      );
+    }
   }
 
   beforeEnter () {
@@ -186,13 +196,7 @@ export default class Card extends Component {
       this.link.__enter(state);
     } else
     if (state.length) {
-      [
-        this.title,
-        this.num,
-        this.frame,
-        this.list,
-        this.description
-      ].forEach((c, i) => {
+      this.cardComponents.forEach((c, i) => {
         const v = state[i];
         v && c.__enter(v);
       });
@@ -200,16 +204,18 @@ export default class Card extends Component {
   }
 
   leaveAction () {
-    return chain(
-      parallel(
-        this.title.enterAction(),
-        this.num.enterAction(),
-        this.frame.enterAction(),
-        this.list.enterAction(),
-        this.description.enterAction()
-      ),
-      this.link.enterAction()
+    const card = parallel(
+      ...this.cardComponents.map(c => c.leaveAction())
     );
+
+    if (this.props.fixed) {
+      return card;
+    } else {
+      return chain(
+        card,
+        this.link.leaveAction()
+      );
+    }
   }
 
   leave (state) {
@@ -217,13 +223,7 @@ export default class Card extends Component {
       this.link.__leave(state);
     } else
     if (state.length) {
-      [
-        this.title,
-        this.num,
-        this.frame,
-        this.list,
-        this.description
-      ].forEach((c, i) => {
+      this.cardComponents.forEach((c, i) => {
         const v = state[i];
         v && c.__leave(v);
       });
@@ -232,106 +232,13 @@ export default class Card extends Component {
 
   afterLeave () {
     this.visible = false;
+    this.children.forEach(c => {
+      c.afterLeave && c.afterLeave();
+    });
+
+    // this.effectGlobal.afterLeave && this.effectGlobal.afterLeave();
   }
 
-  // update (props) {
-  //
-  //   const {
-  //     index,
-  //     areaName,
-  //     contents,
-  //     description,
-  //     fontFamily,
-  //   } = props;
-  //
-  //   const {
-  //     fontSize,
-  //     titleSize,
-  //     contentsSize,
-  //     frameSize,
-  //     descriptionSize,
-  //     linkSize,
-  //   } = calcFittedSize(props);
-  //
-  //   const gaps = getGaps(fontSize);
-  //
-  //   if (linkSize) {
-  //     this.link.position(linkSize.x, linkSize.y, 0);
-  //     this.link.update(linkSize);
-  //   }
-  //
-  //   this.defs.clipPath('title-clip', {
-  //     d: [
-  //       'M', titleSize.d, 0,
-  //       'L', titleSize.width, 0,
-  //       'L', titleSize.width, titleSize.height + gaps.y,
-  //       'L', 0, titleSize.height + gaps.x,
-  //       'L', 0, titleSize.height,
-  //       'Z'
-  //     ].join(' ')
-  //   });
-  //   this.title.position(titleSize.x, titleSize.y, 0);
-  //   this.title.update({
-  //     indent: titleSize.d,
-  //     text: areaName,
-  //     fontSize: fontSize * TITLE_FONT_SIZE_SCALE,
-  //     fontFamily,
-  //     backgroundColor1: Gradient[0],
-  //     backgroundColor2: Gradient[1],
-  //     textColor1: Gradient[1],
-  //     textColor2: '#000',
-  //     bottomLineColor: Gradient[1],
-  //     ...titleSize
-  //   });
-  //
-  //   this.num.position(frameSize.x, frameSize.y, 0);
-  //   this.num.update({
-  //     num: index,
-  //     fontSize,
-  //     fontFamily,
-  //     ...frameSize
-  //   });
-  //
-  //   // this.global.position(frameSize.x, frameSize.y, 0);
-  //   // this.global.update(frameSize);
-  //
-  //   // this.effectGlobal.position(frameSize.x, frameSize.y, 0);
-  //   this.effectGlobal.update(frameSize);
-  //
-  //   this.frame.position(frameSize.x, frameSize.y, 0);
-  //   this.frame.update({
-  //     xgap: gaps.x,
-  //     ygap: gaps.y,
-  //     color1: Gradient[0],
-  //     color2: Gradient[1],
-  //     ...frameSize
-  //   });
-  //
-  //   this.list.position(contentsSize.x, contentsSize.y, 0);
-  //   this.list.update({
-  //     contents,
-  //     fontSize,
-  //     fontFamily,
-  //     ...contentsSize
-  //   });
-  //
-  //   this.description.position(descriptionSize.x, descriptionSize.y, 0);
-  //   this.description.update({
-  //     color: Color,
-  //     text: description,
-  //     fontSize,
-  //     fontFamily
-  //   });
-  // }
-
-  // leave () {
-  //   this.frame.leave();
-  //   this.num.leave();
-  //   this.title.leave();
-  //   this.list.leave();
-  //   this.description.leave();
-  //   this.link.leave();
-  // }
 }
 
 
