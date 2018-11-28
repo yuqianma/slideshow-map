@@ -1,15 +1,12 @@
 import Slideshow from './Slideshow';
 import mapboxgl from 'mapbox-gl';
 import { delay, chain, action } from 'popmotion';
+import debounce from './Utils/debounce'
 
 const TILES = {
   BLACK: 'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
   SATELLITE: 'http://t3.tianditu.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'
 };
-
-const start = +new Date;
-
-// window.elapse = () => (+new Date - start) / 1000 | 0;
 
 const getTileStyle = (tileUrl) => ({
   "version": 8,
@@ -100,10 +97,19 @@ export const $test = {
   mapboxgl
 };
 
+const instances = {};
+
+let __id = -1;
+const getId = () => ++__id;
+
 class SlideshowMap {
   constructor (options) {
     options = mergeDefaultOptions(options);
     this.options = options;
+
+    this.id = getId();
+
+    instances[this.id] = this;
 
     // 添加vancharts的标题和边框
     // 这样会导致在同一个container被vancharts和mapbox init了2遍
@@ -124,7 +130,6 @@ class SlideshowMap {
     if (__DEV__) {
       this.startShow();
       window._slideshowMap = this;
-      window._resize = this.resize.bind(this);
     } else {
 
       if (map.loaded()) {
@@ -141,6 +146,8 @@ class SlideshowMap {
       }
 
     }
+
+    this.resize = debounce(this.resize.bind(this), 300);
   }
 
   startShow () {
@@ -205,6 +212,10 @@ class SlideshowMap {
     this.startShow();
   }
 
+  dispose () {
+    delete instances[this.id];
+  }
+
   static setAccessToken (accessToken) {
     mapboxgl.accessToken = accessToken;
   }
@@ -213,5 +224,6 @@ class SlideshowMap {
 window.Van = window.Van || {};
 
 window.Van.SlideshowMap = SlideshowMap;
+SlideshowMap.instances = instances;
 
 export default SlideshowMap

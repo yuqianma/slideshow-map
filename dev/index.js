@@ -273,11 +273,11 @@ const opt3 = {
     'pitch': 45,
     'size': 5,
     'fixed': false,
-    'type': 'pillar',
+    'type': 'point',
     'opacity': 0.8,
     'contents': [
       "人口:￥333333",
-      // "大学:￥666",
+      "大学:￥666",
       // '区域电话：12345678900'
     ]
   }],
@@ -293,7 +293,7 @@ const opt3 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt2);
+  const slideshowMap = new SlideshowMap(opt3);
 }
 
 main();

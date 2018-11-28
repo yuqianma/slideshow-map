@@ -56,10 +56,8 @@ export default class RadioWave extends Component {
   }
 
   enterAction () {
-    return action(({ update, complete }) => {
-      update();
-      complete();
-    });
+    // return an empty action
+    return tween({ from: 0, to: 1 });
   }
 
   beforeEnter () {

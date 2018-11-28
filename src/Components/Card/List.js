@@ -8,7 +8,7 @@ import { measureText } from '../../Utils/Svg';
 import { parallel } from 'popmotion';
 import Item from './Item';
 import { getTruncated } from '../../helper';
-import { action } from 'popmotion/lib/index';
+import { action, tween } from 'popmotion/lib/index';
 
 export default class List extends Component {
   create ({ defs }) {
@@ -81,10 +81,8 @@ export default class List extends Component {
 
   enterAction () {
     if (!this.items.length) {
-      return action(({ update, complete }) => {
-        update([]);
-        complete();
-      });
+      // return an empty action to keep the api the same as normal
+      return tween({ from: 0, to: 1, duration: 1 });
     }
     const itemNo = this.items.length - 1;
     const all = this.items.map((item, i) => item.enterAction({ delay: itemNo ? i / itemNo * 30 * SPF : 0 }));
@@ -97,17 +95,16 @@ export default class List extends Component {
   }
 
   enter (values) {
-    values.map((v, i) => {
-      this.items[i].enter(v);
-    });
+    if (Array.isArray(values)) {
+      values.map((v, i) => {
+        this.items[i].enter(v);
+      });
+    }
   }
 
   leaveAction () {
     if (!this.items.length) {
-      return action(({ update, complete }) => {
-        update([]);
-        complete();
-      });
+      return tween({ from: 0, to: 1, duration: 1 });
     }
 
     const itemNo = this.items.length - 1;

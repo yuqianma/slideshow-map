@@ -9,7 +9,7 @@ import {
 } from './constants';
 
 const S = 1.6e3;
-const MIN_FONT_SIZE = 10;
+const MIN_FONT_SIZE = 8;
 
 // we have to know box size to calculate the link & card pos
 export const getShapeSize = (size, scale, height) => {
