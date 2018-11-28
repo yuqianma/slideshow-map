@@ -27,8 +27,9 @@ const getTileStyle = (tileUrl) => ({
 });
 
 function attachTitleAndBorder (options) {
-  const container = options.container;
-  const vanChart = VanCharts.init(document.getElementById(container) || container);
+  const container = document.getElementById(options.container) || options.container;
+  container.style.boxSizing = 'border-box';
+  const vanChart = VanCharts.init(container);
   if (options.title) {
     options.title.style = options.title.style || {};
     options.title.style.lineHeight = 'normal';

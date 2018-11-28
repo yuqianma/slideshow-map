@@ -227,9 +227,9 @@ const opt2 = {
 
 const opt3 = {
   'border': {
-    'borderColor': '#000000',
-    'borderRadius': 0,
-    'borderWidth': 0,
+    'borderColor': 'red',
+    'borderRadius': 5,
+    'borderWidth': 5,
     'backgroundColor': '#06334B'
   },
   'refreshTime': 0,
