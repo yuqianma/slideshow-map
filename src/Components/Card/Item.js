@@ -67,7 +67,8 @@ export default class Item extends Component {
     this.text.attr({
       fill: textColor,
       y: height / 2,
-      style: `font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: central`,
+      dy: fontSize * 1 / 3,
+      style: `font-size: ${fontSize}; font-family: ${fontFamily};`,
     });
 
   }
