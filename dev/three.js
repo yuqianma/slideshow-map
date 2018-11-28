@@ -279,29 +279,34 @@ function video () {
   video.muted = true;
 
   video.append(source);
-  document.body.appendChild(video);
+
+
+  // document.body.appendChild(video);
 
   const canvas = document.createElement('canvas');
   document.body.appendChild(canvas);
   canvas.style.border = '1px solid #0b9';
-  canvas.width = 256;
-  canvas.height = 256;
+  canvas.width = 200;
+  canvas.height = 220;
   const ctx = canvas.getContext('2d');
 
   video.addEventListener('play', function () {
+    console.log('start');
     var $this = this; //cache
     (function loop() {
       if (!$this.paused && !$this.ended) {
         ctx.clearRect(0, 0, 256, 256);
         ctx.drawImage($this, 0, 0);
         setTimeout(loop, 1000 / 30); // drawing at 30fps
+      } else {
+        console.log('stop');
       }
     })();
   }, 0);
 
   const texture = new THREE.Texture( canvas );
-  // texture.minFilter = THREE.LinearFilter;
-  // texture.magFilter = THREE.LinearFilter;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
   texture.format = THREE.RGBAFormat;
 
   texture.onUpdate = function (v) {
@@ -321,13 +326,15 @@ function video () {
   }
   frame();
 
-  const geometry = new THREE.PlaneGeometry( 20, 20, 1 );
+  const geometry = new THREE.PlaneGeometry( 20, 22, 1 );
 
   const videoMesh = new THREE.Mesh( geometry, mat );
 
   scene.add(videoMesh);
 
   video.play();
+
+  window.video = video;
 }
 
 video();

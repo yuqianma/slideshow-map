@@ -3,41 +3,22 @@
  */
 
 import Component from './Component';
-import { Dom } from '../Utils/Svg';
 import { timeline } from 'popmotion';
 import { SPF } from '../constants';
+import { getVideoTexture } from '../Utils/getVideoTexture';
 
 export default class EffectGlobal extends Component {
   create (props) {
-    this.video = new Dom('video', {
-      loop: true,
-      crossOrigin: 'anonymous',
-      'webkit-playsinline': true,
-      'playsinline': true,
+    this.texture = getVideoTexture({
+      src: props.src || 'dev/global.webm',
+      width: 200,
+      height: 220
     });
-    this.video.style({
-      display: 'none',
-    });
-
-    this.video.node.muted = true;
-
-    this.source = new Dom('source', {
-      src: props.src
-    });
-
-    this.video.append(this.source);
-    // document.body.appendChild(this.video.node);
-
-    const texture = new THREE.VideoTexture( this.video.node );
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-    texture.format = THREE.RGBAFormat;
 
     const mat = new THREE.MeshBasicMaterial({
-      // color: 0xffffff,
       opacity: 0.5,
       transparent: true,
-      map: texture
+      map: this.texture
     });
 
     const geometry = new THREE.PlaneGeometry( 200, 220, 1 );
@@ -55,33 +36,46 @@ export default class EffectGlobal extends Component {
     return this.obj;
   }
 
-  update (frameSize) {
-    // console.log(frameSize);
-    // mesh has been translated in `animateComponents`
+  update (props) {
+    super.update(props);
+    const frameSize = props;
     const s = frameSize.a / 200 * 2.5;
     this.videoMesh.scale.set(s, s, 1);
     this.wrapper.position.set(frameSize.x - frameSize.a * 0.5, frameSize.y + frameSize.b * 0.3, 0);
 
-
-    this.video.node.currentTime = 0;
-    // play() is required for auto play
-    this.video.node.play();
-    this.obj.visible = true;
-    this.videoMesh.material.opacity = 0;
-
-    this._animate = timeline([
-      45 * SPF,
-      { track: 'v', from: 0, to: 1, duration: 60 * SPF}
-    ]).start( ({v}) => {
-      this.videoMesh.material.opacity = v;
-    });
-    // this.video.node.play();
+    this.obj.visible = false;
   }
 
-  leave () {
-    this._animate.reverse();
-    this._animate.resume();
-    this.video.node.pause();
-    this.video.node.currentTime = 0;
+  enterAction () {
+    return timeline([
+      { track: 'v', from: 0, to: 1, duration: 60 * SPF}
+    ]);
+  }
+
+  beforeEnter () {
+    this.texture.video.currentTime = 0;
+    // play() is required for auto play
+    this.texture.video.play();
+    this.obj.visible = true;
+    this.videoMesh.material.opacity = 0;
+  }
+
+  enter ({ v }) {
+    this.videoMesh.material.opacity = v;
+  }
+
+  leaveAction () {
+    return timeline([
+      { track: 'v', from: 1, to: 0, duration: 60 * SPF}
+    ]);
+  }
+
+  leave (state) {
+    this.enter(state);
+  }
+
+  afterLeave () {
+    this.texture.video.pause();
+    this.texture.video.currentTime = 0;
   }
 }

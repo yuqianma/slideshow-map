@@ -20,7 +20,6 @@ import Title from './Title';
 import List from './List';
 import Description from './Description';
 import Num from './Num';
-import Global from './Global';
 import Link from './Link';
 
 const {
@@ -43,7 +42,6 @@ export default class Card extends Component {
   create ({
     defs,
     svg,
-    // globalUrl,
     effectGlobal
   }) {
 
@@ -74,9 +72,10 @@ export default class Card extends Component {
     this.cardComponents = [
       this.title,
       this.num,
+      this.effectGlobal,
       this.frame,
       this.list,
-      this.description
+      this.description,
     ]
   }
 
@@ -144,7 +143,12 @@ export default class Card extends Component {
       ...frameSize
     });
 
-    // this.effectGlobal.update(frameSize);
+    this.effectGlobal.update({
+      // this component isn't inner the group
+      // set position manually
+      position: props.position,
+      ...frameSize
+    });
 
     this.frame.update({
       position: [frameSize.x, frameSize.y, 0],
@@ -236,7 +240,7 @@ export default class Card extends Component {
       c.afterLeave && c.afterLeave();
     });
 
-    // this.effectGlobal.afterLeave && this.effectGlobal.afterLeave();
+    this.effectGlobal.afterLeave && this.effectGlobal.afterLeave();
   }
 
 }

@@ -261,7 +261,7 @@ const opt3 = {
   'size': 10,
   'playZoom': 11,
   'style': 'black',
-  'interval': 7000,
+  'interval': 70000,
   'locations': [{
     'lngLat': ['20.299', '32.0'],
     'areaName': '温州市',
@@ -271,7 +271,7 @@ const opt3 = {
     'value': ['333333', '666'],
     'zoom': 4,
     'pitch': 45,
-    'size': 3,
+    'size': 5,
     'fixed': false,
     'type': 'pillar',
     'opacity': 0.8,

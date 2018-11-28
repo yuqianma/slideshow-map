@@ -122,15 +122,15 @@ export default class Slideshow extends Threebox {
 
     this.addToMap(this.c.radioWave = new RadioWave(), DEV_NANJING);
 
+    this.c.effectGlobal = new EffectGlobal({
+      src: globalUrl
+    });
+
     this.addToPlane(this.c.card = new Card({
       defs: this.defs,
       svg: this.svgRenderer.domElement,
       effectGlobal: this.c.effectGlobal
     }));
-
-    this.c.effectGlobal = new EffectGlobal({
-      src: globalUrl || 'dev/global.webm'
-    });
 
     // this.addToMap(this.c.effectCircle = new EffectCircle({
     //   src: effectCircleUrl || 'dev/circle.webm'
@@ -290,7 +290,7 @@ export default class Slideshow extends Threebox {
         viewportWidth: viewSize.width,
         viewportHeight: viewSize.height,
         width: validSize.width,
-        height: validSize.height
+        height: validSize.height,
       });
 
       let runningComponent;
