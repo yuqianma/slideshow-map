@@ -261,7 +261,7 @@ const opt3 = {
   'size': 10,
   'playZoom': 11,
   'style': 'black',
-  'interval': 70000,
+  'interval': 7000,
   'locations': [{
     'lngLat': ['20.299', '32.0'],
     'areaName': '温州市',
@@ -293,7 +293,7 @@ const opt3 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt3);
+  const slideshowMap = new SlideshowMap(opt2);
 }
 
 main();

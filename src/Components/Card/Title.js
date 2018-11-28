@@ -129,6 +129,8 @@ export default class Title extends Component {
     this.hollowTextClip.attr({ height });
     this.mainTextClip.attr({ x: indent, height });
     this.hollowBackground.attr({ width: 0 });
+
+    this.obj.attr({ opacity: 0 });
   }
 
   enterAction () {

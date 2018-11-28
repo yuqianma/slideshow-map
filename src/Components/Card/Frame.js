@@ -93,6 +93,7 @@ export default class Frame extends Component {
       ].join(' ')
     });
 
+    this.obj.attr({ opacity: 0 });
   }
 
   enterAction () {

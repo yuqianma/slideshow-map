@@ -46,6 +46,8 @@ export default class Num extends Component {
       'text-anchor': 'right',
       style: `font-weight: bold; font-size: ${fontSize}; font-family: ${fontFamily}; dominant-baseline: alphabetic`,
     });
+
+    this.obj.visible = false;
   }
 
   enterAction () {
@@ -53,6 +55,10 @@ export default class Num extends Component {
       // 45 * SPF,
       { track: 'v', from: 0, to: 1, duration: 60 * SPF}
     ]);
+  }
+
+  beforeEnter () {
+    this.obj.visible = true;
   }
 
   enter ({ v }) {

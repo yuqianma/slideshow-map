@@ -75,6 +75,8 @@ export default class Description extends Component {
     this.outer.attr('opacity', 0);
     this.marker.attr('opacity', 1);
     this.inner.attr('opacity', 0);
+
+    this.obj.visible = false;
   }
 
   enterAction () {
@@ -126,6 +128,7 @@ export default class Description extends Component {
       this.inner.attr('opacity', v);
     });
 
+    this.obj.visible = true;
   }
 
   enter ({ r, i }) {
