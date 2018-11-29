@@ -208,29 +208,28 @@ export default class Card extends Component {
   }
 
   leaveAction () {
-    const card = parallel(
-      ...this.cardComponents.map(c => c.leaveAction())
-    );
+    const cardActions = this.cardComponents.map(c => c.leaveAction());
 
     if (this.props.fixed) {
-      return card;
+      return parallel(...cardActions);
     } else {
-      return chain(
-        card,
+      return parallel(
+        ...cardActions,
         this.link.leaveAction()
       );
     }
   }
 
   leave (state) {
-    if (state.link) {
-      this.link.__leave(state);
-    } else
-    if (state.length) {
-      this.cardComponents.forEach((c, i) => {
-        const v = state[i];
-        v && c.__leave(v);
-      });
+    this.cardComponents.forEach((c, i) => {
+      const v = state[i];
+      v && c.__leave(v);
+    });
+
+    const linkState = state[this.cardComponents.length];
+
+    if (linkState) {
+      this.link.__leave(linkState);
     }
   }
 

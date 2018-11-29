@@ -150,7 +150,7 @@ const opt2 = {
   'size': 10,
   'playZoom': 11,
   'style': 'black',
-  'interval': 10000,
+  'interval': 6000,
   'locations': [{
     'lngLat': ['20.299', '32.0'],
     'areaName': '江苏省',
@@ -161,7 +161,7 @@ const opt2 = {
     'zoom': 4.5,
     'pitch': 45,
     'size': 4,
-    // 'fixed': true,
+    'fixed': true,
     'type': 'pillar',
     'opacity': 0.7,
     'contents': [
@@ -183,7 +183,7 @@ const opt2 = {
       "pitch": 45,
       "size": 10,
       "fixed": false,
-      "type": "pillar",
+      "type": "point",
       "opacity": 1,
       "contents": ["人口:￥3333333", "大学:￥444"]
     },
@@ -294,7 +294,7 @@ const opt3 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt3);
+  const slideshowMap = new SlideshowMap(opt2);
 }
 
 main();
