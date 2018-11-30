@@ -25,6 +25,7 @@ function CameraSync(map, camera, world, plane, plane2) {
   // Listen for move events from the map and update the Three.js camera
   const _this = this;
   this.map.on('move', function () {
+    // console.log('update');
     _this.updateCamera();
   });
   this.updateCamera();

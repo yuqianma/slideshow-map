@@ -152,6 +152,7 @@ export default class Slideshow extends Threebox {
     delay(1).start({
       complete: () => {
         this.__mapFlyComplete && this.__mapFlyComplete();
+        this.__mapFlyComplete = null;
       }
     });
   }
@@ -204,6 +205,7 @@ export default class Slideshow extends Threebox {
       return {
         halt: () => {
           // console.log('map stop');
+          this.__mapFlyComplete = null;
           this.map.stop();
         }
       };
@@ -219,6 +221,7 @@ export default class Slideshow extends Threebox {
 
   _enter (options) {
     return action(({ complete }) => {
+      // console.log('component enter', options);
 
       const viewSize = this.getSize();
 

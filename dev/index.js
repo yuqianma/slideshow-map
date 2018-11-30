@@ -1,6 +1,7 @@
 // import * as THREE from '../src/three';
 import SlideshowMap from '../src/index';
 import config from '../config';
+import { timeline } from 'popmotion';
 
 const opt1 = {
   container: 'map',
@@ -122,7 +123,7 @@ const opt2 = {
     'backgroundColor': '#06334B'
   },
   'refreshTime': 0,
-  'center': [132, 32],
+  'center': [32, 42],
   'tooltip': {
     'areaName': '',
     'seriesName': '',
@@ -130,7 +131,7 @@ const opt2 = {
     'fixed': false,
     'value': '¤#0'
   },
-  'zoom': 11,
+  'zoom': 8,
   'title': {
     'borderRadius': 0,
     backgroundColor: '#ccc',
@@ -161,8 +162,8 @@ const opt2 = {
     'zoom': 4.5,
     'pitch': 45,
     'size': 4,
-    'fixed': true,
-    'type': 'pillar',
+    // 'fixed': true,
+    'type': 'point',
     'opacity': 0.7,
     'contents': [
       "人口:￥333333",
@@ -222,7 +223,7 @@ const opt2 = {
   // "globalUrl": "report?op=chart&cmd=get_webm&path=com/fr/plugin/chart/requiredFile/global.webm",
   'pitch': 60,
   // "interactive": false,
-  hash: true,
+  // hash: true,
 };
 
 const opt3 = {
@@ -295,6 +296,20 @@ function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
   const slideshowMap = new SlideshowMap(opt2);
+
+  function resize (num) {
+    const dom = document.getElementById('map');
+    dom.style.width = num + '%';
+    dom.style.height = num + '%';
+    slideshowMap.resize();
+  }
+
+  // timeline([
+  //   300,
+  //   { track: 'v', from: 100, to: 80, duration: 700 }
+  // ]).start(({v}) => {
+  //   resize(v);
+  // });
 }
 
 main();
@@ -304,3 +319,4 @@ window._next = function () {
     window._nextTurn();
   }
 };
+

@@ -148,17 +148,24 @@ class SlideshowMap {
 
     }
 
-    this.resize = debounce(this.resize.bind(this), 300);
+    this.debouncedStartShow = debounce(this.startShow.bind(this), 300);
   }
 
   startShow () {
-    this.slideshow.visible = true;
-    this._turn();
+    if (!this._started) {
+      // console.warn('start', performance.now());
+      this._turn();
+      this.slideshow.visible = true;
+      this._started = true;
+    }
   }
 
   stop () {
-    this.slideshow.visible = false;
-    this.playback.halt();
+    if (this._started) {
+      this.slideshow.visible = false;
+      this.playback.halt();
+      this._started = false;
+    }
   }
 
   _turn () {
@@ -210,7 +217,7 @@ class SlideshowMap {
     this.stop();
     this.vanChart.resize();
     this.slideshow.resize();
-    this.startShow();
+    this.debouncedStartShow();
   }
 
   dispose () {
