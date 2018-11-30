@@ -20,7 +20,7 @@ export const BOUND_PADDING = 0.03;
 // a ratio to viewport width
 export const FONT_SIZE_RATIO = {
   // MIN: 0.012,
-  MAX: 0.015
+  MAX: 0.018
 };
 
 export const TITLE_FONT_SIZE_SCALE = 1.4;
