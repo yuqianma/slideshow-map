@@ -356,7 +356,7 @@ const cutCardVerticalSizes = (sizes, dy) => {
 
   const contentsSizeHeight = sizes.contentsSize.height - cutHeight;
 
-  if (contentsSizeHeight > rowHeight && sizes.frameSize.height > cutHeight) {
+  if (contentsSizeHeight >= rowHeight && sizes.frameSize.height >= cutHeight) {
 
   } else {
     // exceed, cut all
