@@ -234,4 +234,7 @@ window.Van = window.Van || {};
 window.Van.SlideshowMap = SlideshowMap;
 SlideshowMap.instances = instances;
 
+SlideshowMap.hash = __HASH__;
+SlideshowMap.buildTime = __BUILD_TIME__;
+
 export default SlideshowMap

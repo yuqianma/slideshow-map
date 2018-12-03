@@ -2,6 +2,10 @@ const path = require('path');
 const config = require('./webpack.config');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
+const git = require('git-rev-sync');
+
+const __HASH__ = git.short(),
+  __BUILD_TIME__ = new Date().toLocaleString();
 
 module.exports = {
   mode: 'production',
@@ -18,6 +22,8 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       '__DEV__': JSON.stringify(false),
+      '__HASH__': JSON.stringify(__HASH__),
+      '__BUILD_TIME__': JSON.stringify(__BUILD_TIME__)
     }),
     new webpack.ProvidePlugin({
       THREE: [path.join(__dirname, 'src/LibThree.js'), 'THREE'],
