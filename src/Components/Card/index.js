@@ -169,6 +169,7 @@ export default class Card extends Component {
 
     this.description.update({
       position: [descriptionSize.x, descriptionSize.y, 0],
+      width: descriptionSize.width,
       color: Color,
       text: description,
       fontSize,
