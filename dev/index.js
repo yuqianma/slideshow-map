@@ -262,7 +262,7 @@ const opt3 = {
   'size': 10,
   'playZoom': 11,
   'style': 'black',
-  'interval': 70000,
+  'interval': 7000,
   'locations': [{
     'lngLat': ['20.299', '32.0'],
     'areaName': '温州市',
@@ -289,7 +289,7 @@ const opt3 = {
   // "globalUrl": "report?op=chart&cmd=get_webm&path=com/fr/plugin/chart/requiredFile/global.webm",
   'pitch': 60,
   // "interactive": false,
-  hash: true,
+  // hash: true,
 };
 
 function main () {
