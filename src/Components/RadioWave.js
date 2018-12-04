@@ -53,6 +53,8 @@ export default class RadioWave extends Component {
     const size = shapeSize.x / 80;
     this.material.opacity = opacity;
     this.obj.scale.set(size, size, size);
+
+    this.obj.children.forEach(ring => ring.morphTargetInfluences[0] = 0);
   }
 
   enterAction () {
@@ -95,6 +97,9 @@ export default class RadioWave extends Component {
     this.visible = false;
     this._animates.forEach(ani => ani.stop());
     this._animates = [];
+
+    this.obj.children.forEach(ring => ring.morphTargetInfluences[0] = 0);
+
   }
 
 }

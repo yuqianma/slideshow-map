@@ -267,7 +267,7 @@ const opt3 = {
     'lngLat': ['20.299', '32.0'],
     'areaName': '温州市',
     'seriesName': ['人口', '大学'],
-    'description': '绿地一期',
+    'description': '绿地一期AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
     'index': 1,
     'value': ['333333', '666'],
     'zoom': 4,
@@ -289,13 +289,13 @@ const opt3 = {
   // "globalUrl": "report?op=chart&cmd=get_webm&path=com/fr/plugin/chart/requiredFile/global.webm",
   'pitch': 60,
   // "interactive": false,
-  // hash: true,
+  hash: true,
 };
 
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt3);
+  const slideshowMap = new SlideshowMap(opt2);
 
   function resize (num) {
     const dom = document.getElementById('map');

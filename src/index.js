@@ -148,14 +148,13 @@ class SlideshowMap {
 
     }
 
-    this.debouncedStartShow = debounce(this.startShow.bind(this), 300);
+    this.debouncedStartShow = debounce(this.startShow.bind(this), 0);
   }
 
   startShow () {
     if (!this._started) {
       // console.warn('start', performance.now());
       this._turn();
-      this.slideshow.visible = true;
       this._started = true;
     }
   }

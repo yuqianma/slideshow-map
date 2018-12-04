@@ -222,6 +222,7 @@ export default class Slideshow extends Threebox {
   _enter (options) {
     return action(({ complete }) => {
       // console.log('component enter', options);
+      this.visible = true;
 
       const viewSize = this.getSize();
 

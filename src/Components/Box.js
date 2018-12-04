@@ -98,6 +98,7 @@ export default class Box extends Component {
     this.box.scale.set(x, y, 1e-6);
 
     this.circle.update(this.props);
+    this.circle.opacity = 0;
   }
 
   enterAction () {
