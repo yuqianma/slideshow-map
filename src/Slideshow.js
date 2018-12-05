@@ -232,6 +232,7 @@ export default class Slideshow extends Threebox {
       };
 
       const {
+        showCard,
         type,
         lngLat,
         fixed,
@@ -263,7 +264,6 @@ export default class Slideshow extends Threebox {
 
         animateComponents = [
           box,
-          card
         ];
 
       } else {
@@ -276,26 +276,30 @@ export default class Slideshow extends Threebox {
 
         animateComponents = [
           radioWave,
-          card
         ];
       }
 
-      const vector = this.projectToPlane(planeCoords);
-      const validSize = getValidSize({
-        withLink: !fixed,
-        x: vector.x,
-        y: vector.y,
-        ...viewSize
-      });
+      if (showCard) {
 
-      card.update({
-        ...options,
-        position: [vector.x, vector.y, 0],
-        viewportWidth: viewSize.width,
-        viewportHeight: viewSize.height,
-        width: validSize.width,
-        height: validSize.height,
-      });
+        animateComponents.push(card);
+
+        const vector = this.projectToPlane(planeCoords);
+        const validSize = getValidSize({
+          withLink: !fixed,
+          x: vector.x,
+          y: vector.y,
+          ...viewSize
+        });
+
+        card.update({
+          ...options,
+          position: [vector.x, vector.y, 0],
+          viewportWidth: viewSize.width,
+          viewportHeight: viewSize.height,
+          width: validSize.width,
+          height: validSize.height,
+        });
+      }
 
       let runningComponent;
 
@@ -344,20 +348,14 @@ export default class Slideshow extends Threebox {
 
       const { box, card, radioWave } = this.c;
 
+      if (this.c.card.visible) {
+        animateComponents.push(card);
+      }
+
       if (this.c.box.visible) {
-
-        animateComponents = [
-          card,
-          box
-        ];
-
+        animateComponents.push(box);
       } else {
-
-        animateComponents = [
-          card,
-          radioWave
-        ];
-
+        animateComponents.push(radioWave);
       }
 
       let runningComponent;

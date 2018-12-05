@@ -61,6 +61,10 @@ function locationDefaultOptions (options) {
   if (options.type === 'pillar') {
     options.size /= 2;
   }
+
+  if (options.showCard === undefined) {
+    options.showCard = true;
+  }
 }
 
 function mergeDefaultOptions (options) {

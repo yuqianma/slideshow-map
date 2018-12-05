@@ -151,8 +151,9 @@ const opt2 = {
   'size': 10,
   'playZoom': 11,
   'style': 'black',
-  'interval': 6000,
+  'interval': 8000,
   'locations': [{
+    showCard: false,
     'lngLat': ['20.299', '32.0'],
     'areaName': '江苏省',
     'seriesName': ['人口', '大学'],
@@ -163,7 +164,7 @@ const opt2 = {
     'pitch': 45,
     'size': 4,
     // 'fixed': true,
-    'type': 'point',
+    'type': 'pillar',
     'opacity': 0.7,
     'contents': [
       "人口:￥333333",
@@ -174,6 +175,7 @@ const opt2 = {
     ]
   },
       {
+        // showCard: false,
       "lngLat": ["137.0", "23.0"],
       "areaName": "无锡",
       "seriesName": ["人口", "大学"],
@@ -189,6 +191,7 @@ const opt2 = {
       "contents": ["人口:￥3333333", "大学:￥444"]
     },
     {
+      showCard: false,
       'lngLat': ['123', '47'],
       'areaName': '南京',
       'seriesName': ['大学'],
@@ -199,7 +202,7 @@ const opt2 = {
       'pitch': 45,
       'size': 10,
       'fixed': false,
-      'type': 'point',
+      'type': 'pillar',
       'opacity': 1,
       'contents': ['大学:￥333']
     }, {
