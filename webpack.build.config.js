@@ -7,6 +7,8 @@ const git = require('git-rev-sync');
 const __HASH__ = git.short(),
   __BUILD_TIME__ = new Date().toLocaleString();
 
+console.log(__HASH__);
+
 module.exports = {
   mode: 'production',
   entry: {
