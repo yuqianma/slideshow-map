@@ -36,6 +36,8 @@ export default class Slideshow extends Threebox {
       options.interactive = false;
     }
 
+    options.trackResize = false;
+
     super(new mapboxgl.Map(options));
 
     this.__installed = false;
