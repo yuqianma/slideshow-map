@@ -64,7 +64,7 @@ export default class List extends Component {
       return item;
     });
 
-    if (itemCount > 0 && itemCount < contents.length) {
+    if (itemCount >= 0 && itemCount < contents.length) {
       const item = new Item({ defs });
       this.add(item);
       item.update({
@@ -97,7 +97,7 @@ export default class List extends Component {
   enter (values) {
     if (Array.isArray(values)) {
       values.map((v, i) => {
-        this.items[i].enter(v);
+        this.items[i] && this.items[i].enter(v);
       });
     }
   }
