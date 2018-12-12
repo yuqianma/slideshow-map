@@ -1,7 +1,7 @@
 // import * as THREE from '../src/three';
 import SlideshowMap from '../src/index';
 import config from '../config';
-import { timeline } from 'popmotion';
+import { opt4 } from './data';
 
 const opt1 = {
   container: 'map',
@@ -298,28 +298,7 @@ const opt3 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt3);
-
-  function resize (num) {
-    const dom = document.getElementById('map');
-    dom.style.width = num + '%';
-    dom.style.height = num + '%';
-    slideshowMap.resize();
-  }
-
-  // timeline([
-  //   300,
-  //   { track: 'v', from: 100, to: 80, duration: 700 }
-  // ]).start(({v}) => {
-  //   resize(v);
-  // });
+  const slideshowMap = new SlideshowMap(opt4);
 }
 
 main();
-
-window._next = function () {
-  if (window._nextTurn) {
-    window._nextTurn();
-  }
-};
-

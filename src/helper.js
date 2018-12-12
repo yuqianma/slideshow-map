@@ -74,11 +74,11 @@ export function calcContentsSize ({
   const maxWidth = Math.max(...sizes.map(s => s.width));
   const maxHeight = Math.max(...sizes.map(s => s.height));
 
-  const rowHeight = maxHeight * lineHeight;
+  const rowHeight = +(maxHeight * lineHeight).toFixed(2);
 
   return {
     width: maxWidth,
-    height: rowHeight * sizes.length,
+    height: +(rowHeight * sizes.length).toFixed(2),
     rowHeight
   }
 }

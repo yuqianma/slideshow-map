@@ -285,7 +285,13 @@ export default class Slideshow extends Threebox {
 
         animateComponents.push(card);
 
+        // project 因为js精度问题，可能有误差，反映到屏幕上差1px之类的
         const vector = this.projectToPlane(planeCoords);
+
+        // 如果是10.x 和12.x的话还是没用
+        vector.x = Math.round(vector.x);
+        vector.y = Math.round(vector.y);
+
         const validSize = getValidSize({
           withLink: !fixed,
           x: vector.x,
