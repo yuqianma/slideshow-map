@@ -1,7 +1,7 @@
 import Slideshow from './Slideshow';
 import mapboxgl from 'mapbox-gl';
 import { delay, chain, action } from 'popmotion';
-import debounce from './Utils/debounce'
+import debounce from './Utils/debounce';
 
 const TILES = {
   BLACK: 'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
@@ -25,26 +25,6 @@ const getTileStyle = (tileUrl) => ({
     "maxzoom": 22
   }]
 });
-
-function attachTitleAndBorder (options) {
-  const container = document.getElementById(options.container) || options.container;
-  container.style.boxSizing = 'border-box';
-  const vanChart = VanCharts.init(container);
-  if (options.title) {
-    options.title.style = options.title.style || {};
-    options.title.style.lineHeight = 'normal';
-  }
-  vanChart.setOptions(Object.assign({
-    "plotOptions": {
-      "animation": false
-    },
-    "geo": {},
-    "series": [],
-    "chartType": "pointMap",
-    title: options.title,
-  }, options.border));
-  return vanChart;
-}
 
 function locationDefaultOptions (options) {
   options.fontFamily = options.fontFamily || 'Microsoft YaHei, sans-serif';
@@ -107,8 +87,9 @@ const instances = {};
 let __id = -1;
 const getId = () => ++__id;
 
-class SlideshowMap {
+class SlideshowMap extends mapboxgl.Evented {
   constructor (options) {
+    super();
     options = mergeDefaultOptions(options);
     this.options = options;
 
@@ -119,16 +100,18 @@ class SlideshowMap {
     // 添加vancharts的标题和边框
     // 这样会导致在同一个container被vancharts和mapbox init了2遍
     // 看上去效果对就不管了……
-    this.vanChart = attachTitleAndBorder(options);
+    this.vanChart = this.attachTitleAndBorder(options);
 
     this.slideshow = new Slideshow(options);
 
     this.slideshow.installComponents(options);
 
-    this._started = false;
+    // this._started = false;
+    //
+    // // point index
+    // this._index = 0;
 
-    // point index
-    this._index = 0;
+    this._refresh(options);
 
     const map = this.slideshow.map;
 
@@ -155,6 +138,41 @@ class SlideshowMap {
     this.debouncedStartShow = debounce(this.startShow.bind(this), 0);
   }
 
+  attachTitleAndBorder (options) {
+    const container = document.getElementById(options.container) || options.container;
+    container.style.boxSizing = 'border-box';
+    const vanChart = VanCharts.init(container);
+    return vanChart;
+  }
+
+  refreshTitleAndBorder (vanChart, options) {
+    if (options.title) {
+      options.title.style = options.title.style || {};
+      options.title.style.lineHeight = 'normal';
+    }
+    vanChart.setOptions(Object.assign({
+      "plotOptions": {
+        "animation": false
+      },
+      "geo": {},
+      "series": [],
+      "chartType": "pointMap",
+      title: options.title,
+    }, options.border));
+  }
+
+  _refresh(options) {
+    this.stop();
+    this.refreshTitleAndBorder(this.vanChart, options);
+    this._index = 0;
+  }
+
+  refresh(options) {
+    this.options = mergeDefaultOptions(options);
+    this._refresh(this.options);
+    this.startShow();
+  }
+
   startShow () {
     if (!this._started) {
       // console.warn('start', performance.now());
@@ -166,7 +184,7 @@ class SlideshowMap {
   stop () {
     if (this._started) {
       this.slideshow.visible = false;
-      this.playback.halt();
+      this.playback && this.playback.halt();
       this._started = false;
     }
   }
@@ -176,10 +194,12 @@ class SlideshowMap {
     const locations = this.options.locations;
     const timeGap = this.options.interval - 6000;
 
+    const props = locations[this._index];
+
     this.playback = action(({complete}) => {
       let playback;
 
-      playback = this.slideshow.enter(locations[this._index]).start({
+      playback = this.slideshow.enter(props).start({
         complete: () => {
           playback = action(({complete}) => {
             const d = delay(timeGap).start({
@@ -192,6 +212,9 @@ class SlideshowMap {
 
           }).start({
             complete: () => {
+              // CHART-3727
+              // https://kms.finedevelop.com/pages/viewpage.action?pageId=46741459
+              this.fire('exitBegin', props);
               playback = this.slideshow.leave().start({
                 complete
               });
@@ -208,6 +231,7 @@ class SlideshowMap {
 
     }).start({
       complete: () => {
+        this.fire('exitEnd', props);
         this._index = ++this._index % locations.length;
         // console.warn(this._index);
         this._turn()

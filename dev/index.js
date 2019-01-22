@@ -299,6 +299,17 @@ function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
   const slideshowMap = new SlideshowMap(opt4);
+
+  // slideshowMap.on('exitBegin', function (e) {
+  //   console.log('exitBegin', e);
+  // });
+  // slideshowMap.on('exitEnd', function (e, data) {
+  //   console.log('exitEnd', e);
+  // });
+  //
+  // setTimeout(() => {
+  //   slideshowMap.refresh(opt1);
+  // }, 3000);
 }
 
 main();
