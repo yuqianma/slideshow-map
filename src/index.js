@@ -189,6 +189,22 @@ class SlideshowMap extends mapboxgl.Evented {
     }
   }
 
+  _getSingleItem(index = this._index) {
+    const { areaName, value } = this.options.locations[index];
+    return {
+      areaName,
+      value,
+    }
+  }
+
+  // CHART-3727
+  // https://kms.finedevelop.com/pages/viewpage.action?pageId=46741459
+  _getItem(index = this._index) {
+    const item = this._getSingleItem(index);
+    item.nextItem = this._getSingleItem(this._getNextIndex(index));
+    return item;
+  }
+
   _turn () {
 
     const locations = this.options.locations;
@@ -214,7 +230,7 @@ class SlideshowMap extends mapboxgl.Evented {
             complete: () => {
               // CHART-3727
               // https://kms.finedevelop.com/pages/viewpage.action?pageId=46741459
-              this.fire('exitBegin', props);
+              this.fire('exitBegin', this._getItem());
               playback = this.slideshow.leave().start({
                 complete
               });
@@ -231,13 +247,17 @@ class SlideshowMap extends mapboxgl.Evented {
 
     }).start({
       complete: () => {
-        this.fire('exitEnd', props);
-        this._index = ++this._index % locations.length;
+        this.fire('exitEnd', this._getItem());
+        this._index = this._getNextIndex();
         // console.warn(this._index);
         this._turn()
       }
     });
 
+  }
+
+  _getNextIndex(index = this._index) {
+    return ++index % this.options.locations.length;
   }
 
   resize () {

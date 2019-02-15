@@ -301,10 +301,10 @@ function main () {
   const slideshowMap = new SlideshowMap(opt4);
 
   // slideshowMap.on('exitBegin', function (e) {
-  //   console.log('exitBegin', e);
+  //   console.log('exitBegin', e, e.nextItem);
   // });
   // slideshowMap.on('exitEnd', function (e, data) {
-  //   console.log('exitEnd', e);
+  //   console.log('exitEnd', e, e.nextItem);
   // });
   //
   // setTimeout(() => {
