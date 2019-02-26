@@ -6,7 +6,7 @@ import { opt4 } from './data';
 const opt1 = {
   container: 'map',
   // style: 'mapbox://styles/mapbox/dark-v9',
-  style: 'black',
+  style: 'satellite',
   // style: {
   //   "version": 8,
   //   "sources": {
@@ -298,7 +298,7 @@ const opt3 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt4);
+  const slideshowMap = new SlideshowMap(opt1);
 
   // slideshowMap.on('exitBegin', function (e) {
   //   console.log('exitBegin', e, e.nextItem);

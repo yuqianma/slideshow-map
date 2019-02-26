@@ -4,8 +4,8 @@ import { delay, chain, action } from 'popmotion';
 import debounce from './Utils/debounce';
 
 const TILES = {
-  BLACK: 'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
-  SATELLITE: 'http://t3.tianditu.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'
+  black: 'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
+  satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 };
 
 const getTileStyle = (tileUrl) => ({
@@ -52,7 +52,7 @@ function mergeDefaultOptions (options) {
   const _style = options.style;
   let style = _style;
   if (typeof _style === 'string') {
-    const predefined = TILES[_style.toUpperCase()];
+    const predefined = SlideshowMap.TILES[_style.toLowerCase()];
     if (predefined) {
       style = getTileStyle(predefined);
     } else
@@ -283,5 +283,7 @@ SlideshowMap.instances = instances;
 
 SlideshowMap.hash = __HASH__;
 SlideshowMap.buildTime = __BUILD_TIME__;
+
+SlideshowMap.TILES = TILES;
 
 export default SlideshowMap
