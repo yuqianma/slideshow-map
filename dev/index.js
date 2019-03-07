@@ -151,7 +151,7 @@ const opt2 = {
   'size': 10,
   'playZoom': 11,
   'style': 'black',
-  'interval': 6000,
+  'interval': 600000,
   'locations': [{
     // showCard: false,
     'lngLat': ['20.299', '32.0'],
@@ -162,33 +162,33 @@ const opt2 = {
     'value': ['333333', '666'],
     'zoom': 4.5,
     'pitch': 45,
-    'size': 4,
+    'size': 5,
     // 'fixed': true,
-    'type': 'pillar',
+    // 'type': 'pillar',
     'opacity': 0.7,
     'contents': [
-      "人口:￥333333",
-      "大学:￥666",
-      '区域电话：12345678900',
-      'aaaaaa',
-      'bbbbbbb'
+      '人口:￥333333',
+      // "大学:￥666",
+      // '区域电话：12345678900',
+      // 'aaaaaa',
+      // 'bbbbbbb'
     ]
   },
-      {
-        // showCard: false,
-      "lngLat": ["137.0", "23.0"],
-      "areaName": "无锡",
-      "seriesName": ["人口", "大学"],
-      "description": "也是假的",
-      "index": 2,
-      "value": ["3333333", "444"],
-      "zoom": 3.5,
-      "pitch": 45,
-      "size": 10,
-      "fixed": false,
-      "type": "pillar",
-      "opacity": 1,
-      "contents": ["人口:￥3333333", "大学:￥444"]
+    {
+      // showCard: false,
+      'lngLat': ['137.0', '23.0'],
+      'areaName': '无锡',
+      'seriesName': ['人口', '大学'],
+      'description': '也是假的',
+      'index': 2,
+      'value': ['3333333', '444'],
+      'zoom': 3.5,
+      'pitch': 45,
+      'size': 10,
+      'fixed': false,
+      'type': 'pillar',
+      'opacity': 1,
+      'contents': ['人口:￥3333333', '大学:￥444']
     },
     {
       showCard: false,
@@ -280,8 +280,8 @@ const opt3 = {
     'type': 'pillar',
     'opacity': 0.8,
     'contents': [
-      "人口:￥333333",
-      "大学:￥666",
+      '人口:￥333333',
+      '大学:￥666',
       'Abghf',
       '区域电话：12345678900'
     ]
@@ -295,10 +295,64 @@ const opt3 = {
   hash: true,
 };
 
+const opt5 = {
+  'trialLicenseWater': '正在试用功能——扩展图表',
+  'hyperLink': {},
+  'refreshTime': 0,
+  'emptyDataTip': {
+    'enabled': true,
+    'content': [{'style': {'fontSize': '24px', 'fontFamily': 'PingFangSC-Regular,Microsoft Yahei', 'color': '#979797'}}]
+  },
+  'language': 'zh_CN',
+  'style': 'black',
+  'zoom': '6',
+  'playZoom': '6',
+  'interval': 8000,
+  'title': {
+    'useHtml': true,
+    'text': '',
+    'style': {
+      'fontFamily': 'Microsoft YaHei',
+      'fontSize': 21.333333333333332,
+      'color': 'rgba(255,255,255,1.0)',
+      'fontWeight': ''
+    },
+    'align': 'left',
+    'borderRadius': 0,
+    'opacity': 100
+  },
+  'border': {'borderColor': 'rgb(0,0,0)', 'borderWidth': 0, 'borderRadius': 0},
+  'type': 'pillar',
+  'size': 4,
+  'opacity': 1,
+  'tooltip': {'areaName': '', 'seriesName': '', 'value': '', 'description': '', 'showCard': true, 'fixed': false},
+  'center': ['13', '53'],
+  'locations': [{
+    'lngLat': [13, 53],
+    'areaName': '二十个',
+    'description': '',
+    'seriesName': ['3大V'],
+    'value': ['252']
+  }, {
+    'lngLat': [44, 52],
+    'areaName': '缩放',
+    'description': '',
+    'seriesName': ['电动车'],
+    'value': ['234']
+  }, {
+    'lngLat': [53, 84],
+    'areaName': '方式',
+    'description': '',
+    'seriesName': ['大幅度'],
+    'value': ['324']
+  }, {'lngLat': [21, 53], 'areaName': '方式', 'description': '', 'seriesName': ['地方'], 'value': ['244']}],
+  'exportImage': true
+};
+
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt1);
+  const slideshowMap = new SlideshowMap(opt2);
 
   // slideshowMap.on('exitBegin', function (e) {
   //   console.log('exitBegin', e, e.nextItem);
