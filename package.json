@@ -6,7 +6,9 @@
   "scripts": {
     "start": "webpack-dev-server --open",
     "dev": "webpack-dev-server",
-    "build": "webpack --config webpack.build.config.js",
+    "build": "npm run build:default && npm run build:min",
+    "build:default": "webpack --config webpack.build.config.js",
+    "build:min": "webpack --config webpack.build.min.config.js",
     "build:dev": "webpack --config webpack.build.dev.config.js"
   },
   "repository": {

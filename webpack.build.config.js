@@ -19,7 +19,7 @@ module.exports = {
     path: path.join(__dirname, 'dist')
   },
   optimization: {
-    minimizer: [new TerserPlugin()]
+    minimize: false
   },
   plugins: [
     new webpack.DefinePlugin({
