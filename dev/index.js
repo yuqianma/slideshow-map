@@ -296,15 +296,8 @@ const opt3 = {
 };
 
 const opt5 = {
-  'trialLicenseWater': '正在试用功能——扩展图表',
-  'hyperLink': {},
-  'refreshTime': 0,
-  'emptyDataTip': {
-    'enabled': true,
-    'content': [{'style': {'fontSize': '24px', 'fontFamily': 'PingFangSC-Regular,Microsoft Yahei', 'color': '#979797'}}]
-  },
+  style: 'black',
   'language': 'zh_CN',
-  'style': 'black',
   'zoom': '6',
   'playZoom': '6',
   'interval': 8000,
@@ -313,9 +306,11 @@ const opt5 = {
     'text': '',
     'style': {
       'fontFamily': 'Microsoft YaHei',
-      'fontSize': 21.333333333333332,
+      'fontSize': '21.333333333333332px',
       'color': 'rgba(255,255,255,1.0)',
-      'fontWeight': ''
+      'fontWeight': '',
+      'lineHeight': 'normal',
+      'FONT_SCALE': 1
     },
     'align': 'left',
     'borderRadius': 0,
@@ -328,31 +323,53 @@ const opt5 = {
   'tooltip': {'areaName': '', 'seriesName': '', 'value': '', 'description': '', 'showCard': true, 'fixed': false},
   'center': ['13', '53'],
   'locations': [{
-    'lngLat': [13, 53],
-    'areaName': '二十个',
-    'description': '',
-    'seriesName': ['3大V'],
-    'value': ['252']
-  }, {
-    'lngLat': [44, 52],
-    'areaName': '缩放',
-    'description': '',
-    'seriesName': ['电动车'],
-    'value': ['234']
-  }, {
-    'lngLat': [53, 84],
+    // CHART-4011
+    // pillar出界
+    // https://zh.wikipedia.org/wiki/%E9%BA%A5%E5%8D%A1%E6%89%98%E6%8A%95%E5%BD%B1%E6%B3%95
+    // bug原因：两级地图变形了，计算时没考虑这个，暂缓……
+    'lngLat': [53, 74],
     'areaName': '方式',
     'description': '',
     'seriesName': ['大幅度'],
-    'value': ['324']
-  }, {'lngLat': [21, 53], 'areaName': '方式', 'description': '', 'seriesName': ['地方'], 'value': ['244']}],
-  'exportImage': true
+    'value': ['324'],
+    'zoom': '6',
+    'pitch': 45,
+    'size': 10,
+    'showCard': true,
+    'fixed': false,
+    'type': 'pillar',
+    'opacity': 1,
+    'index': 3,
+    'contents': ['大幅度:324'],
+    'fontFamily': 'Microsoft YaHei, sans-serif'
+  }, {
+    'lngLat': [13, 0],
+    'areaName': '二十个',
+    'description': '',
+    'seriesName': ['3大V'],
+    'value': ['252'],
+    'zoom': '6',
+    'pitch': 45,
+    'size': 10,
+    'showCard': true,
+    'fixed': false,
+    'type': 'pillar',
+    'opacity': 1,
+    'index': 1,
+    'contents': ['3大V:252'],
+    'fontFamily': 'Microsoft YaHei, sans-serif'
+  }],
+  'exportImage': true,
+  'container': 'map',
+  'pitch': 60,
+  'interactive': false,
+  'trackResize': false
 };
 
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt2);
+  const slideshowMap = new SlideshowMap(opt5);
 
   // slideshowMap.on('exitBegin', function (e) {
   //   console.log('exitBegin', e, e.nextItem);
