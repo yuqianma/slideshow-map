@@ -323,7 +323,7 @@ const opt5 = {
   'tooltip': {'areaName': '', 'seriesName': '', 'value': '', 'description': '', 'showCard': true, 'fixed': false},
   'center': ['13', '53'],
   'locations': [{
-    // CHART-4011
+    // CHART-4039
     // pillar出界
     // https://zh.wikipedia.org/wiki/%E9%BA%A5%E5%8D%A1%E6%89%98%E6%8A%95%E5%BD%B1%E6%B3%95
     // bug原因：两级地图变形了，计算时没考虑这个，暂缓……
