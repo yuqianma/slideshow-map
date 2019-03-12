@@ -7,6 +7,4 @@ config.optimization = {
   minimizer: [new TerserPlugin()]
 }
 
-console.log(config);
-
 module.exports = config;

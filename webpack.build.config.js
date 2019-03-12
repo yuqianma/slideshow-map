@@ -1,7 +1,6 @@
 const path = require('path');
 const config = require('./webpack.config');
 const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
 const git = require('git-rev-sync');
 
 const __HASH__ = git.short(),
@@ -18,6 +17,11 @@ module.exports = {
     filename: 'VanSlideshowMap.js',
     path: path.join(__dirname, 'dist')
   },
+  module: {
+    rules: [
+      { test: /\.js$/, loader: 'babel-loader' }
+    ]
+  },
   optimization: {
     minimize: false
   },
@@ -29,7 +33,6 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       THREE: [path.join(__dirname, 'src/LibThree.js'), 'THREE'],
-      expect: ['chai', 'expect']
     }),
   ]
 };
