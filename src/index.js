@@ -268,6 +268,8 @@ class SlideshowMap extends mapboxgl.Evented {
   }
 
   dispose () {
+    this.stop();
+    this.vanChart.clear();
     delete instances[this.id];
   }
 
