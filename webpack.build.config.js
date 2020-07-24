@@ -17,11 +17,11 @@ module.exports = {
     filename: 'VanSlideshowMap.js',
     path: path.join(__dirname, 'dist')
   },
-  module: {
-    rules: [
-      { test: /\.js$/, loader: 'babel-loader' }
-    ]
-  },
+  // module: {
+  //   rules: [
+  //     { test: /\.js$/, loader: 'babel-loader' }
+  //   ]
+  // },
   optimization: {
     minimize: false
   },

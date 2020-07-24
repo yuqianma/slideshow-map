@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>slideshow Map</title>
+    <link href="dev/vancharts.css" rel='stylesheet'/>
+    <script src="dev/vancharts-all.js"></script>
     <link href="node_modules/mapbox-gl/dist/mapbox-gl.css" rel='stylesheet'/>
     <style>
         body {
@@ -36,7 +38,7 @@
 </body>
 <script src="./dist/VanSlideshowMap.js"></script>
 <script>
-    var SlideshowMap = VanBigScreen.SlideshowMap;
+    var SlideshowMap = Van.SlideshowMap;
   SlideshowMap.setAccessToken('pk.eyJ1IjoibWF5cTA0MjIiLCJhIjoiY2phamMwOHV4MjllajMzbnFyeTMwcmZvYiJ9.aFMw4Aws5zY9Y4NwYqFMlQ');
 
   var slideshowMap = new SlideshowMap({
