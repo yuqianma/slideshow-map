@@ -1147,13 +1147,12 @@ const opt7 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  const slideshowMap = new SlideshowMap(opt6);
+  let slideshowMap = new SlideshowMap(opt6);
 
-  // setTimeout(() => {
-  //   slideshowMap.dispose();
-  //   document.getElementById('map').innerHTML = '';
-  //   new SlideshowMap(opt7);
-  // }, 3000);
+  setInterval(() => {
+    slideshowMap.dispose();
+    slideshowMap = new SlideshowMap(opt7);
+  }, 5000);
 
   // slideshowMap.on('exitBegin', function (e) {
   //   console.log('exitBegin', e, e.nextItem);

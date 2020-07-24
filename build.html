@@ -36,12 +36,12 @@
 
 
 </body>
-<script src="./dist/VanSlideshowMap.js"></script>
+<script src="./dist/VanSlideshowMap.min.js"></script>
 <script>
     var SlideshowMap = Van.SlideshowMap;
   SlideshowMap.setAccessToken('pk.eyJ1IjoibWF5cTA0MjIiLCJhIjoiY2phamMwOHV4MjllajMzbnFyeTMwcmZvYiJ9.aFMw4Aws5zY9Y4NwYqFMlQ');
 
-  var slideshowMap = new SlideshowMap({
+  var opt = {
     container: 'map',
     style: 'mapbox://styles/mapbox/dark-v9',
     center: [118.78 - 0.1, 32.04 - 0.1],
@@ -90,6 +90,14 @@
       ],
       description: '江苏省无锡市',
     }]
-  });
+  };
+
+  var slideshowMap = new SlideshowMap(opt);
+
+  setInterval(() => {
+    slideshowMap.dispose();
+    slideshowMap = new SlideshowMap(opt);
+    // slideshowMap.refresh(opt);
+  }, 5000);
 </script>
 </html>
