@@ -425,6 +425,17 @@ Threebox.prototype = {
       this.lights[1].syncParams();
       this.lights[1].folder.__controllers.forEach(c => c.updateDisplay());
     }
+  },
+
+  dispose: function () {
+    cancelAnimationFrame(this._updateid);
+    this.clock.stop();
+    // this.scene.dispose();
+    // this.scene2.dispose();
+    this.renderer.renderLists.dispose();
+    this.renderer.dispose();
+    this.svgRenderer.clear();
+    this.map.remove();
   }
 };
 

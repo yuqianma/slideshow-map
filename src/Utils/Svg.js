@@ -19,12 +19,16 @@ export class Svg extends THREE.SVGObject {
   }
 
   attr (props, _) {
-    if (arguments.length === 2) {
-      this.node.setAttribute(props, _);
-      return this
-    }
-    for (let k in props) {
-      this.node.setAttribute(k, props[k]);
+    try {
+      if (arguments.length === 2) {
+        this.node.setAttribute(props, _);
+        return this
+      }
+      for (let k in props) {
+        this.node.setAttribute(k, props[k]);
+      }
+    } catch (e) {
+      console.error(e);
     }
     return this
   }

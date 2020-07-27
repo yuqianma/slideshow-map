@@ -419,7 +419,7 @@ const opt6 = {
     'value': ['2432', '2546'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -435,7 +435,7 @@ const opt6 = {
     'value': ['3821', '3218'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -451,7 +451,7 @@ const opt6 = {
     'value': ['3243', '581'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -467,7 +467,7 @@ const opt6 = {
     'value': ['2842', '4217'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -483,7 +483,7 @@ const opt6 = {
     'value': ['2387', '1371'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -499,7 +499,7 @@ const opt6 = {
     'value': ['1963', '4376'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -515,7 +515,7 @@ const opt6 = {
     'value': ['3472', '1377'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -531,7 +531,7 @@ const opt6 = {
     'value': ['2900', '4513'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -547,7 +547,7 @@ const opt6 = {
     'value': ['1900', '1323'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -563,7 +563,7 @@ const opt6 = {
     'value': ['1800', '4908'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -579,7 +579,7 @@ const opt6 = {
     'value': ['1700', '2045'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -595,7 +595,7 @@ const opt6 = {
     'value': ['1300', '3640'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -611,7 +611,7 @@ const opt6 = {
     'value': ['2100', '713'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -627,7 +627,7 @@ const opt6 = {
     'value': ['2000', '3727'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -643,7 +643,7 @@ const opt6 = {
     'value': ['2300', '2629'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -659,7 +659,7 @@ const opt6 = {
     'value': ['1800', '865'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -675,7 +675,7 @@ const opt6 = {
     'value': ['1400', '4158'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -691,7 +691,7 @@ const opt6 = {
     'value': ['3500', '1322'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -707,7 +707,7 @@ const opt6 = {
     'value': ['2300', '3194'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -723,7 +723,7 @@ const opt6 = {
     'value': ['2302', '2079'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -739,7 +739,7 @@ const opt6 = {
     'value': ['2303', '2170'],
     'zoom': 11,
     'pitch': 45,
-    'size': 2.5,
+    'size': 8,
     'showCard': true,
     'fixed': true,
     'type': 'pillar',
@@ -1147,14 +1147,22 @@ const opt7 = {
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
-  let slideshowMap = new SlideshowMap(opt6);
+  const getOpt = (opt) => JSON.parse(JSON.stringify(opt));
 
-  setInterval(() => {
-    var option = JSON.parse(JSON.stringify(opt7));
-    delete option.container;
+  let slideshowMap = new SlideshowMap(getOpt(opt6));
+  window._slideshowMap = slideshowMap;
+
+  window._refresh = () => {
+    opt6.locations.reverse();
+    var option = getOpt(opt6);
+    // delete option.container;
     // slideshowMap.dispose();
     // slideshowMap = new SlideshowMap(option);
     slideshowMap.refresh(option);
+  }
+
+  setInterval(() => {
+    _refresh();
   }, 5000);
 
   // slideshowMap.on('exitBegin', function (e) {

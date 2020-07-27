@@ -97,6 +97,10 @@ class SlideshowMap extends mapboxgl.Evented {
 
     instances[this.id] = this;
 
+    this._flying = false;
+
+    this._nextOptions = null;
+
     // 添加vancharts的标题和边框
     // 这样会导致在同一个container被vancharts和mapbox init了2遍
     // 看上去效果对就不管了……
@@ -168,9 +172,19 @@ class SlideshowMap extends mapboxgl.Evented {
   }
 
   refresh(options) {
+    if (this._flying) {
+      this._nextOptions = options;
+      return;
+    }
+    this._nextOptions = null;
     this.options = mergeDefaultOptions(options);
-    this._refresh(this.options);
-    this.startShow();
+    delay(1).start({
+      complete: () => {
+        this._refresh(this.options);
+        this.startShow();
+      }
+    });
+    
   }
 
   startShow () {
@@ -205,6 +219,13 @@ class SlideshowMap extends mapboxgl.Evented {
     return item;
   }
 
+  _setFlying(flag) {
+    this._flying = flag;
+    if (flag === false && this._nextOptions) {
+      this.refresh(this._nextOptions);
+    }
+  }
+
   _turn () {
 
     const locations = this.options.locations;
@@ -215,9 +236,11 @@ class SlideshowMap extends mapboxgl.Evented {
     this.playback = action(({complete}) => {
       let playback;
 
+      this._setFlying(true);
       playback = this.slideshow.enter(props).start({
         complete: () => {
           playback = action(({complete}) => {
+            this._setFlying(false);
             const d = delay(timeGap).start({
               complete,
             });
@@ -231,6 +254,7 @@ class SlideshowMap extends mapboxgl.Evented {
               // CHART-3727
               // https://kms.finedevelop.com/pages/viewpage.action?pageId=46741459
               this.fire('exitBegin', this._getItem());
+              this._setFlying(true);
               playback = this.slideshow.leave().start({
                 complete
               });
@@ -270,6 +294,10 @@ class SlideshowMap extends mapboxgl.Evented {
   dispose () {
     this.stop();
     this.vanChart.clear();
+    this.slideshow.dispose();
+    const options = this.options;
+    const container = document.getElementById(options.container) || options.container;
+    container.innerHTML = '';
     delete instances[this.id];
   }
 
