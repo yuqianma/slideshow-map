@@ -95,9 +95,11 @@
   var slideshowMap = new SlideshowMap(opt);
 
   setInterval(() => {
-    slideshowMap.dispose();
-    slideshowMap = new SlideshowMap(opt);
-    // slideshowMap.refresh(opt);
+    var option = JSON.parse(JSON.stringify(opt));
+    option.container = undefined;
+    // slideshowMap.dispose();
+    // slideshowMap = new SlideshowMap(option);
+    slideshowMap.refresh(option);
   }, 5000);
 </script>
 </html>

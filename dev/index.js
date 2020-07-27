@@ -1150,8 +1150,11 @@ function main () {
   let slideshowMap = new SlideshowMap(opt6);
 
   setInterval(() => {
-    slideshowMap.dispose();
-    slideshowMap = new SlideshowMap(opt7);
+    var option = JSON.parse(JSON.stringify(opt7));
+    delete option.container;
+    // slideshowMap.dispose();
+    // slideshowMap = new SlideshowMap(option);
+    slideshowMap.refresh(option);
   }, 5000);
 
   // slideshowMap.on('exitBegin', function (e) {
