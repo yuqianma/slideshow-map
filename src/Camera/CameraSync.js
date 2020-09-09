@@ -38,6 +38,8 @@ CameraSync.prototype = {
       return;
     }
 
+    console.log(this.map.transform);
+
     // Build a projection matrix, paralleling the code found in Mapbox GL JS
     const fov = 0.6435011087932844;
     const cameraToCenterDistance = 0.5 / Math.tan(fov / 2) * this.map.transform.height;
@@ -79,7 +81,9 @@ CameraSync.prototype = {
 
     scale.makeScale(zoomPow, zoomPow, zoomPow);
     translateCenter.makeTranslation(ThreeboxConstants.WORLD_SIZE / 2, -ThreeboxConstants.WORLD_SIZE / 2, 0);
-    translateMap.makeTranslation(-this.map.transform.x, this.map.transform.y, 0);
+    // https://github.com/mapbox/mapbox-gl-js/commit/cedefd66f6519f20b9f73a1389e02afa868ca39f#diff-5dddfe9d7b5b4413ee54284bc1f7966d
+    // transform.x -> transform.point.x
+    translateMap.makeTranslation(-this.map.transform.point.x, this.map.transform.point.y, 0);
     rotateMap.makeRotationZ(Math.PI);
     this.world.matrix = new THREE.Matrix4;
     this.world.matrix
