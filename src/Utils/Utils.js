@@ -1,4 +1,4 @@
-// import * as THREE from '../three';
+import { MainColor } from '../constants';
 
 export function prettyPrintMatrix(uglymatrix) {
   uglymatrix = uglymatrix.elements || uglymatrix;
@@ -59,3 +59,23 @@ export function degreeify(rad) {
 }
 
 export const getColorStr = color => new THREE.Color(color).getStyle();
+
+const DefaultColorHue = (function () {
+  const hsl = {};
+  new THREE.Color(MainColor).getHSL(hsl);
+  return hsl.h;
+})();
+
+export const getRotatedColor = (refColor, color) => {
+  if (!color) {
+    __DEV__ && console.warn('no color');
+    color = MainColor;
+  }
+
+  const colorHSL = new THREE.Color(color).getHSL({});
+  const hueOffset = colorHSL.h - DefaultColorHue;
+
+  const c = new THREE.Color(refColor);
+  c.offsetHSL(hueOffset, 0, 0);
+  return c;
+}

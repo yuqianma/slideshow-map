@@ -32,7 +32,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      '__DEV__': JSON.stringify(false),
+      '__DEV__': JSON.stringify(true),
       '__HASH__': JSON.stringify(0),
       '__BUILD_TIME__': JSON.stringify(new Date().toLocaleString())
     }),

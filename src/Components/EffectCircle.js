@@ -4,7 +4,9 @@
 
 import Component from './Component';
 
-import { getVideoTexture } from '../Utils/getVideoTexture'
+import { getVideoTexture } from '../Utils/getVideoTexture';
+import { MainColor } from '../constants';
+import { getRotatedColor } from '../Utils/Utils'
 
 export default class EffectCircle extends Component {
   create (props) {
@@ -22,7 +24,9 @@ export default class EffectCircle extends Component {
 
     const geometry = new THREE.PlaneGeometry( 8, 8, 1 );
 
-    return new THREE.Mesh( geometry, mat );
+    const mesh = new THREE.Mesh( geometry, mat );
+
+    return mesh;
   }
 
   get opacity () {
@@ -44,10 +48,13 @@ export default class EffectCircle extends Component {
     this.texture.video.pause();
   }
 
-  update ({ boxSize }) {
+  update ({ boxSize, color }) {
 
     const s = boxSize.x;
 
     this.obj.scale.set(s, s, 1);
+
+    this.obj.material.color.set(getRotatedColor(MainColor, color));
+
   }
 }

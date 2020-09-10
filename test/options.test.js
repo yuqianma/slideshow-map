@@ -7,10 +7,10 @@ describe('Options Process', function () {
   describe('Style', function () {
     it('should convert default style name: `black`/`satellite` to mapbox tiles', function () {
       expect($test.mergeDefaultOptions({ style: 'black' })).to.nested.include({
-        'style.sources.image-tiles.tiles[0]': $test.TILES.BLACK
+        'style.sources.image-tiles.tiles[0]': $test.TILES.black
       });
       expect($test.mergeDefaultOptions({ style: 'satellite' })).to.nested.include({
-        'style.sources.image-tiles.tiles[0]': $test.TILES.SATELLITE
+        'style.sources.image-tiles.tiles[0]': $test.TILES.satellite
       });
     });
 

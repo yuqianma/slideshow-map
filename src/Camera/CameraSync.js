@@ -38,8 +38,6 @@ CameraSync.prototype = {
       return;
     }
 
-    console.log(this.map.transform);
-
     // Build a projection matrix, paralleling the code found in Mapbox GL JS
     const fov = 0.6435011087932844;
     const cameraToCenterDistance = 0.5 / Math.tan(fov / 2) * this.map.transform.height;

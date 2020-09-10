@@ -35,6 +35,7 @@ export const Frame = {
 
 export const Box = {
   Color: MainColor,
+  WireFrameColor: 0x2194ce,
   Durations: [ 30 * SPF, 232 * SPF, 30 * SPF ]
 };
 
@@ -49,5 +50,8 @@ export const RadioWave = {
 
 export const Card = {
   Color: MainColor,
-  Gradient: [MainColor, 0x358bff]
+  Gradient: [
+    MainColor,
+    0x358bff
+  ]
 };

@@ -5,6 +5,7 @@
 import Component from '../Component';
 import { Link as Default, Frame as FrameDefault } from '../../constants';
 import { timeline, delay } from 'popmotion';
+import { getRotatedColor } from '../../Utils/Utils';
 
 const {
   Color,
@@ -36,6 +37,8 @@ export default class Link extends Component {
   update (props) {
     super.update(props);
     const geometry = this.obj.geometry;
+
+    this.obj.material.color = getRotatedColor(Color, props.color);
 
     geometry.vertices[0].set(0, 0, 0);
     geometry.vertices[1].set(0, 0, 0);

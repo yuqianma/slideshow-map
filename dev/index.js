@@ -6,7 +6,7 @@ import { opt4 } from './data';
 const opt1 = {
   container: 'map',
   // style: 'mapbox://styles/mapbox/dark-v9',
-  style: 'satellite',
+  style: 'black',
   // style: {
   //   "version": 8,
   //   "sources": {
@@ -64,7 +64,8 @@ const opt1 = {
     size: 5,
     opacity: 0.8,
 
-    // color: '#0bd',
+    color: '#e55',
+    labelScale: 1,
 
     // it's not center
     lngLat: [118.77680629491806, 32.0620757594658],
@@ -105,6 +106,8 @@ const opt1 = {
     lngLat: [120.299, 31.568],
     zoom: 14.21,
     pitch: 50,
+    color: '#0f0',
+    labelScale: 1,
     areaName: '江苏省无锡市',
     contents: [
       'AAAAAAAAAAAAAAAAAAAAA',
@@ -388,7 +391,7 @@ const opt6 = {
   },
   'zoom': 11,
   'playZoom': 11,
-  'interval': 8000,
+  'interval': 80000,
   'title': {
     'useHtml': true,
     'text': '传参分类名',
@@ -421,7 +424,7 @@ const opt6 = {
     'pitch': 45,
     'size': 8,
     'showCard': true,
-    'fixed': true,
+    // 'fixed': true,
     'type': 'pillar',
     'opacity': 1,
     'index': 1,
@@ -1144,26 +1147,61 @@ const opt7 = {
   'trackResize': false
 };
 
+const CHART15570 = {
+  "trialLicenseWater": "正在试用功能——扩展图表",
+  "hyperLink": {},
+  "refreshTime": 0,
+  "emptyDataTip": {
+    "emptyDataImage": { "src": "/webroot/decision/view/report?op=fr_attach&cmd=ah_image&id=EMPTY_CHART_IMAGE_ID_PRE", "width": 505, "height": 465, "auto": true },
+    "enabled": true, "content": [{ "style": { "fontSize": "24px", "fontFamily": "PingFangSC-Regular,Microsoft Yahei", "color": "#979797" } }]
+  }, "language": "en_US",
+  "style": {
+    "version": 8, "sources": { "image-tiles": { "type": "raster", "tiles": ["https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}"], "tileSize": 256 } },
+    "layers": [{ "id": "simple-tiles", "type": "raster", "source": "image-tiles", "minzoom": 0, "maxzoom": 22 }]
+  },
+  "zoom": 11, "playZoom": 11, "interval": 100000,
+  "title": {
+    "useHtml": true,
+    "text": "经纬度、区域名、说明信息一致时才算通一条数据",
+    "style": { "fontFamily": "楷体", "fontSize": "12px", "color": "rgba(255,255,255,1.0)", "fontWeight": "bold", "fontStyle": "italic", "lineHeight": "normal", "FONT_SCALE": 1, "fill": "rgba(255,255,255,1.0)" },
+    "align": "left", "borderRadius": 0, "opacity": 100
+  },
+  "border": { "borderColor": "rgba(0,0,0,1.0)", "borderWidth": 0, "borderRadius": 0 },
+  "type": "pillar", "size": 5, "opacity": 1, "tooltip": { "areaName": "", "seriesName": "", "value": "", "description": "", "showCard": true, "fixed": true },
+  "center": ["121.45", "45.01"],
+  "locations": [
+    // { "lngLat": [121.45, 45.01], "areaName": "A", "description": "哈哈哈哈", "seriesName": ["销售额"], "value": ["1600000000"], "zoom": 11, "pitch": 45, "size": 2.5, "showCard": true, "fixed": true, "type": "pillar", "opacity": 1, "index": 1, "contents": ["销售额:1600000000"], "fontFamily": "Microsoft YaHei, sans-serif" },
+    // { "lngLat": [121.45, 45.01], "areaName": "A", "description": "一样一样", "seriesName": ["利润额"], "value": ["160000"], "zoom": 11, "pitch": 45, "size": 2.5, "showCard": true, "fixed": true, "type": "pillar", "opacity": 1, "index": 2, "contents": ["利润额:160000"], "fontFamily": "Microsoft YaHei, sans-serif" },
+    { "lngLat": [130.45, 43.1], "areaName": "B", "description": "哈哈哈哈", "seriesName": ["销售额"], "value": ["17000000"], "zoom": 11, "pitch": 45, "size": 2.5, "showCard": true, "fixed": true, "type": "pillar", "opacity": 1, "index": 3, "contents": ["销售额:17000000"], "fontFamily": "Microsoft YaHei, sans-serif" },
+    { "lngLat": [130.45, 43.1], "areaName": "B", "description": "呀呀呀呀呀呀", "seriesName": ["利润额"], "value": ["1800000000000000"], "zoom": 11, "pitch": 45, "size": 2.5, "showCard": true, "fixed": true, "type": "pillar", "opacity": 1, "index": 4, "contents": ["利润额:1800000000000000"], "fontFamily": "Microsoft YaHei, sans-serif" },
+    { "lngLat": [124.45, 42.01], "areaName": "C", "description": "哈哈哈哈哈", "seriesName": ["销售额"], "value": ["190000000000000000000000"], "zoom": 11, "pitch": 45, "size": 2.5, "showCard": true, "fixed": true, "type": "pillar", "opacity": 1, "index": 5, "contents": ["销售额:190000000000000000000000"], "fontFamily": "Microsoft YaHei, sans-serif" },
+    { "lngLat": [124.45, 42.01], "areaName": "C", "description": "呀呀呀呀呀呀", "seriesName": ["利润额"], "value": ["200000000000000000"], "zoom": 11, "pitch": 45, "size": 2.5, "showCard": true, "fixed": true, "type": "pillar", "opacity": 1, "index": 6, "contents": ["利润额:200000000000000000"], "fontFamily": "Microsoft YaHei, sans-serif" }
+  ], "autoLink": {},
+  "container": 'map',
+  "pitch": 60, "interactive": false,
+  "trackResize": false
+};
+
 function main () {
   SlideshowMap.setAccessToken(config.accessToken);
 
   const getOpt = (opt) => JSON.parse(JSON.stringify(opt));
 
-  let slideshowMap = new SlideshowMap(getOpt(opt6));
+  let slideshowMap = new SlideshowMap(getOpt(opt1));
   window._slideshowMap = slideshowMap;
 
-  window._refresh = () => {
-    opt6.locations.reverse();
-    var option = getOpt(opt6);
-    // delete option.container;
-    // slideshowMap.dispose();
-    // slideshowMap = new SlideshowMap(option);
-    slideshowMap.refresh(option);
-  }
+  // window._refresh = () => {
+  //   opt6.locations.reverse();
+  //   var option = getOpt(opt6);
+  //   // delete option.container;
+  //   // slideshowMap.dispose();
+  //   // slideshowMap = new SlideshowMap(option);
+  //   slideshowMap.refresh(option);
+  // }
 
-  setInterval(() => {
-    _refresh();
-  }, 5000);
+  // setInterval(() => {
+  //   _refresh();
+  // }, 5000);
 
   // slideshowMap.on('exitBegin', function (e) {
   //   console.log('exitBegin', e, e.nextItem);

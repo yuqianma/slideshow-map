@@ -5,6 +5,7 @@
 import Component from '../Component';
 import { delay, chain, composite, parallel } from 'popmotion';
 import { Svg } from '../../Utils/Svg';
+import { getRotatedColor } from '../../Utils/Utils';
 
 import {
   Card as Default,
@@ -88,6 +89,7 @@ export default class Card extends Component {
       contents,
       description,
       fontFamily,
+      color,
     } = props;
 
     const {
@@ -104,11 +106,21 @@ export default class Card extends Component {
     if (linkSize) {
       this.link.update({
         position: [linkSize.x, linkSize.y, 0],
+        color,
         ...linkSize
       });
     } else {
-      this.link.update();
+      this.link.update({
+        color
+      });
     }
+
+    const rotatedColor = getRotatedColor(Color, color).getStyle();
+
+    const gradient = [
+      getRotatedColor(Gradient[0], color).getStyle(),
+      getRotatedColor(Gradient[1], color).getStyle()
+    ];
 
     this.defs.clipPath('title-clip', {
       d: [
@@ -127,11 +139,11 @@ export default class Card extends Component {
       text: areaName,
       fontSize: fontSize * TITLE_FONT_SIZE_SCALE,
       fontFamily,
-      backgroundColor1: Gradient[0],
-      backgroundColor2: Gradient[1],
-      textColor1: Gradient[1],
+      backgroundColor1: gradient[0],
+      backgroundColor2: gradient[1],
+      textColor1: gradient[1],
       textColor2: '#000',
-      bottomLineColor: Gradient[1],
+      bottomLineColor: gradient[1],
       ...titleSize
     });
 
@@ -147,6 +159,7 @@ export default class Card extends Component {
       // this component isn't inner the group
       // set position manually
       position: props.position,
+      color,
       ...frameSize
     });
 
@@ -154,8 +167,8 @@ export default class Card extends Component {
       position: [frameSize.x, frameSize.y, 0],
       xgap: gaps.x,
       ygap: gaps.y,
-      color1: Gradient[0],
-      color2: Gradient[1],
+      color1: gradient[0],
+      color2: gradient[1],
       ...frameSize
     });
 
@@ -164,13 +177,14 @@ export default class Card extends Component {
       contents,
       fontSize,
       fontFamily,
+      color: rotatedColor,
       ...contentsSize
     });
 
     this.description.update({
       position: [descriptionSize.x, descriptionSize.y, 0],
       width: descriptionSize.width,
-      color: Color,
+      color: rotatedColor,
       text: description,
       fontSize,
       fontFamily

@@ -13,6 +13,10 @@ export function getVideoTexture ({
   video.crossOrigin = 'anonymous';
   video.muted = true;
 
+  // video.style.zIndex = 10000;
+  // video.style.position = 'absolute';
+  // document.body.appendChild(video);
+
   const source = document.createElement('source');
   source.src = src;
   video.append(source);
@@ -21,6 +25,11 @@ export function getVideoTexture ({
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
+  ctx.filter = 'saturate(0)';
+
+  // canvas.style.zIndex = 10000;
+  // canvas.style.position = 'absolute';
+  // document.body.appendChild(canvas);
 
   const texture = new THREE.Texture( canvas );
   texture.minFilter = THREE.LinearFilter;

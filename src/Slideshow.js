@@ -32,6 +32,7 @@ const getRandomBearing = () => (Math.random() * (BEARING_RANGE[1] - BEARING_RANG
 
 export default class Slideshow extends Threebox {
   constructor (options) {
+    options.interactive = true;
     if (!__DEV__) {
       options.interactive = false;
     }
@@ -240,6 +241,7 @@ export default class Slideshow extends Threebox {
         fixed,
         size,
         opacity,
+        color,
       } = props;
 
       const planeCoords = lngLat.slice();
@@ -273,7 +275,8 @@ export default class Slideshow extends Threebox {
         this.moveToCoordinate(radioWave, lngLat);
         radioWave.update({
           shapeSize,
-          opacity
+          opacity,
+          color
         });
 
         animateComponents = [

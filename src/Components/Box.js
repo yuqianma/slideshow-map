@@ -5,11 +5,12 @@
 import Component from './Component';
 import { Box as Default, SPF } from '../constants';
 import { timeline } from 'popmotion';
-import { getShapeSize } from '../helper';
 import EffectCircle from './EffectCircle';
+import { getRotatedColor } from '../Utils/Utils';
 
 const {
   Color,
+  WireFrameColor,
 } = Default;
 
 const SEGMENTS = 1;
@@ -37,15 +38,19 @@ export default class Box extends Component {
     );
     boxGeometry.translate(0, 0, boxGeometry.parameters.depth / 2);
 
+    const wireFrameMaterial = new THREE.LineBasicMaterial({
+      color: getRotatedColor(Color, color),
+      transparent: true,
+      // opacity: 0.1,
+      linewidth: 0.0015,
+    });
+
+    this.wireFrameMaterial = wireFrameMaterial;
+
     // todo, try three.meshline
     const wireFrame = new THREE.LineSegments(
       new THREE.EdgesGeometry(boxGeometry),
-      new THREE.LineBasicMaterial({
-        color: 0x00fffc,
-        transparent: true,
-        // opacity: 0.1,
-        linewidth: 0.0015,
-      })
+      wireFrameMaterial
     );
 
     this.wireFrame = wireFrame;
@@ -53,7 +58,7 @@ export default class Box extends Component {
     box.add(wireFrame);
 
     const boxMaterial = new THREE.MeshPhongMaterial({
-      color: 0x2194ce,
+      color: getRotatedColor(WireFrameColor, color),
       transparent: true,
       opacity: 0.8,
       // shininess: 40,
@@ -91,11 +96,24 @@ export default class Box extends Component {
 
   update (props) {
     super.update(props);
-    const { opacity, boxSize } = props;
+    const { opacity, boxSize, color } = props;
 
     const { x, y, z } = boxSize;
     this.boxMaterial.opacity = 0;
     this.box.scale.set(x, y, 1e-6);
+
+    this.boxMaterial.color = getRotatedColor(Color, color);
+    this.wireFrameMaterial.color = getRotatedColor(WireFrameColor, color);
+    
+    if (__DEV__) {
+      const boxColor = this.boxMaterial.color;
+      const boxColorHex = boxColor.getHexString();
+      console.log(`%cbox ${boxColorHex}`, 'background: #' + boxColorHex, boxColor.getHSL({}));
+
+      const wireFrameColor = this.wireFrameMaterial.color;
+      const wireFrameHex = wireFrameColor.getHexString();
+      console.log(`%cwireFrame ${wireFrameHex}`, 'background: #' + wireFrameHex, wireFrameColor.getHSL({}));
+    }
 
     this.circle.update(this.props);
     this.circle.opacity = 0;

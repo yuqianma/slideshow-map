@@ -33,7 +33,8 @@ export default class List extends Component {
       height,
       rowHeight,
       fontSize,
-      fontFamily
+      fontFamily,
+      color
     } = props;
 
     const defs = this.defs;
@@ -58,7 +59,8 @@ export default class List extends Component {
         text: getTruncated(text, width, { fontSize, fontFamily }),
         height: rowHeight,
         fontSize,
-        fontFamily
+        fontFamily,
+        markerColor: color,
       });
 
       return item;

@@ -6,6 +6,8 @@ import Component from './Component';
 import { timeline } from 'popmotion';
 import { SPF } from '../constants';
 import { getVideoTexture } from '../Utils/getVideoTexture';
+import { getRotatedColor } from '../Utils/Utils';
+import { MainColor } from '../constants';
 
 export default class EffectGlobal extends Component {
   create (props) {
@@ -42,6 +44,8 @@ export default class EffectGlobal extends Component {
     const s = frameSize.a / 200 * 2.5;
     this.videoMesh.scale.set(s, s, 1);
     this.wrapper.position.set(frameSize.x - frameSize.a * 0.5, frameSize.y + frameSize.b * 0.3, 0);
+
+    this.videoMesh.material.color.set(getRotatedColor(MainColor, props.color));
 
     this.obj.visible = false;
   }

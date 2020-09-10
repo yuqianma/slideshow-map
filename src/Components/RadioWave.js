@@ -5,6 +5,7 @@
 import Component from './Component';
 import { RadioWave as Default, SPF } from '../constants';
 import { tween, stagger, action, easing } from 'popmotion';
+import { getRotatedColor } from '../Utils/Utils';
 
 const {
   Color,
@@ -55,9 +56,11 @@ export default class RadioWave extends Component {
 
   update (props) {
     super.update(props);
-    const { shapeSize, opacity } = props;
+    const { shapeSize, opacity, color } = props;
     const size = shapeSize.x / 80;
     this.material.opacity = opacity;
+    
+    this.material.color = getRotatedColor(Color, color);
     this.obj.scale.set(size, size, size);
 
     this.obj.children.forEach(ring => ring.morphTargetInfluences[0] = 0);

@@ -104,7 +104,7 @@ class SlideshowMap extends mapboxgl.Evented {
     // 添加vancharts的标题和边框
     // 这样会导致在同一个container被vancharts和mapbox init了2遍
     // 看上去效果对就不管了……
-    this.vanChart = this.attachTitleAndBorder(options);
+    // this.vanChart = this.attachTitleAndBorder(options);
 
     this.slideshow = new Slideshow(options);
 
@@ -150,6 +150,9 @@ class SlideshowMap extends mapboxgl.Evented {
   }
 
   refreshTitleAndBorder (vanChart, options) {
+    if (!vanChart) {
+      return;
+    }
     if (options.title) {
       options.title.style = options.title.style || {};
       options.title.style.lineHeight = 'normal';
