@@ -36,7 +36,7 @@ const opt1 = {
   center: [118.78 - 0.1, 32.04 - 0.1],
   zoom: 13,
   pitch: 60,
-  interval: 3000,
+  interval: 30000,
 
   'title': {
     // "backgroundColor": "rgba(255,255,255,0.7490196078431373)",
