@@ -387,17 +387,23 @@ const cutCardVerticalSizes = (sizes, dy) => {
  *    descriptionSize: {}
  * }}
  */
-export const calcFittedSize = ({
-  viewportWidth,
-  viewportHeight,
-  width,
-  height,
-  areaName,
-  contents,
-  description,
-  fontFamily,
-  fixed,
-}) => {
+export const calcFittedSize = (props) => {
+  const {
+    viewportWidth,
+    viewportHeight,
+    width,
+    height,
+    areaName,
+    contents,
+    description,
+    fontFamily,
+    fixed,
+    labelScale,
+  } = props;
+
+  if (labelScale !== 1) {
+    return calcFittedSize2(props);
+  }
 
   const withLink = !fixed;
 
@@ -514,4 +520,76 @@ export const getTruncated = (text, width, style) => {
     truncated += '…';
   }
   return truncated
+};
+
+// --------
+
+const calcFittedSize2 = (props) => {
+  const {
+    viewportWidth,
+    viewportHeight,
+    width,
+    height,
+    areaName,
+    contents,
+    description,
+    fontFamily,
+    fixed,
+    labelScale,
+  } = props;
+
+  const withLink = !fixed;
+
+  let linkScale = 1.5;
+
+  const minViewport = Math.min(viewportWidth, viewportHeight);
+  const maxFontSize = Math.round(Math.max(minViewport * FONT_SIZE_RATIO.MAX, MIN_FONT_SIZE));
+
+  const fontSize = labelScale * maxFontSize;
+
+  let sizes = calcCardSize({
+    areaName,
+    contents,
+    description,
+    fontSize,
+    fontFamily
+  });
+
+  let placedSizes = getPlacedSizes({
+    fontSize,
+    sizes,
+    width,
+    height,
+    withLink,
+    linkScale
+  });
+
+  if (withLink) {
+    const dx = placedSizes.frameSize.x + placedSizes.frameSize.width - width;
+    const dy = placedSizes.frameSize.y - height;
+
+    if (dx > 0) {
+      cutCardHorizontalSizes(sizes, dx);
+    }
+
+    if (dy > 0) {
+      cutCardVerticalSizes(sizes, dy);
+    }
+
+    if (dx > 0 || dy > 0) {
+      placedSizes = getPlacedSizes({
+        fontSize,
+        sizes,
+        width,
+        height,
+        withLink,
+        linkScale
+      });
+    }
+  }
+
+  return {
+    ...placedSizes,
+    fontSize
+  }
 };

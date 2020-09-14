@@ -7,6 +7,8 @@ const opt1 = {
   container: 'map',
   // style: 'mapbox://styles/mapbox/dark-v9',
   style: 'black',
+  // style: 'http://support.supermap.com.cn:8090/iserver/services/map-china400/wms111/China?&service=WMS&request=GetMap&layers=0%2C0.0%2C0.1%2C0.73%2C0.76%2C0.77%2C0.78%2C0.79&styles=&format=image%2Fjpeg&transparent=false&version=1.1.1&height=256&width=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}',
+  // style: 'https://demo.mapserver.org/cgi-bin/wms?&service=WMS&request=GetMap&layers=bluemarble,cities&styles=&format=image%2Fjpeg&transparent=false&version=1.1.1&height=256&width=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}',
   // style: {
   //   "version": 8,
   //   "sources": {
@@ -14,7 +16,7 @@ const opt1 = {
   //       "type": "raster",
   //       'tiles': [
   //         // 'https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
-  //         'https://tilemap.geoq.cn/database/ytt_basemap/layergroup/a2b1bbaf4829217716e36b70c1d54b6f/0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50/{z}/{x}/{y}.png',
+  //         // 'https://tilemap.geoq.cn/database/ytt_basemap/layergroup/a2b1bbaf4829217716e36b70c1d54b6f/0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50/{z}/{x}/{y}.png',
   //         // 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   //         // 'http://wprd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=2&style=6',
   //         // 'http://t3.tianditu.cn/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={z}&TileRow={y}&TileCol={x}&style=default&format=tiles'
@@ -36,7 +38,7 @@ const opt1 = {
   center: [118.78 - 0.1, 32.04 - 0.1],
   zoom: 13,
   pitch: 60,
-  interval: 30000,
+  interval: 3000,
 
   'title': {
     // "backgroundColor": "rgba(255,255,255,0.7490196078431373)",
@@ -64,8 +66,8 @@ const opt1 = {
     size: 5,
     opacity: 0.8,
 
-    color: '#e55',
-    labelScale: 1,
+    color: '#00fffc',
+    labelScale: 1.2,
 
     // it's not center
     lngLat: [118.77680629491806, 32.0620757594658],
@@ -83,9 +85,9 @@ const opt1 = {
       '楼层信息: 地上89层，地下3层',
       '开工日期: 2005年5月底',
       '竣工日期: 2010年9月28日',
-      // '1',
-      // '2',
-      // '3',
+      // '1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+      '2',
+      '3',
       // '3',
       // '3',
       // '3',
@@ -107,7 +109,7 @@ const opt1 = {
     zoom: 14.21,
     pitch: 50,
     color: '#0f0',
-    labelScale: 1,
+    labelScale: 1.2,
     areaName: '江苏省无锡市',
     contents: [
       'AAAAAAAAAAAAAAAAAAAAA',

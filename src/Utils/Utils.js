@@ -60,10 +60,10 @@ export function degreeify(rad) {
 
 export const getColorStr = color => new THREE.Color(color).getStyle();
 
-const DefaultColorHue = (function () {
+const DefaultColorHSL = (function () {
   const hsl = {};
   new THREE.Color(MainColor).getHSL(hsl);
-  return hsl.h;
+  return hsl;
 })();
 
 export const getRotatedColor = (refColor, color) => {
@@ -73,9 +73,21 @@ export const getRotatedColor = (refColor, color) => {
   }
 
   const colorHSL = new THREE.Color(color).getHSL({});
-  const hueOffset = colorHSL.h - DefaultColorHue;
+  const hueOffset = colorHSL.h - DefaultColorHSL.h;
 
   const c = new THREE.Color(refColor);
   c.offsetHSL(hueOffset, 0, 0);
   return c;
 }
+
+// const _colors = [];
+// for (let i = DefaultColorHSL.h * 360; i < 360 + DefaultColorHSL.h * 360; i += 15) {
+//   const c = new THREE.Color();
+//   c.setHSL(i / 360, DefaultColorHSL.s, DefaultColorHSL.l);
+
+//   const colorHex = c.getHexString();
+//   console.log(`%cbox ${colorHex}`, 'background: #' + colorHex, c.getHSL({}));
+//   _colors.push(colorHex);
+// }
+
+// console.log(JSON.stringify(_colors));
